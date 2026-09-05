@@ -1,0 +1,39 @@
+---
+/**
+ * Small mono uppercase label used above headings ("REALTIME VOICE INFRASTRUCTURE FOR AI",
+ * "VOICE", "TELEPHONY", "EU-COMPLIANT BY DESIGN"...). Purely presentational -- callers supply the
+ * (already-translated) text via the default slot. README §Design Tokens / §Tipografía: mono 12px,
+ * letter-spacing 2px, uppercase; color is `signal` (green) by default, but Telephony's eyebrow is
+ * amber ("letsylabs Homepage.dc.html" line 230) and the Vision block plus other muted usages need
+ * a neutral tone, hence the `tone` prop.
+ */
+export type EyebrowTone = 'signal' | 'tel' | 'event' | 'muted';
+
+interface Props {
+  tone?: EyebrowTone;
+  class?: string;
+}
+
+const { tone = 'signal', class: className } = Astro.props;
+---
+
+<div class:list={['eyebrow', `eyebrow-${tone}`, className]}>
+  <slot />
+</div>
+
+<style>
+  /* Base .eyebrow (font/size/tracking/uppercase) lives in src/styles/tokens.css; this file only
+     adds the tone → color mapping (the base utility class defaults to `signal`). */
+  .eyebrow-signal {
+    color: var(--signal);
+  }
+  .eyebrow-tel {
+    color: var(--tel);
+  }
+  .eyebrow-event {
+    color: var(--event);
+  }
+  .eyebrow-muted {
+    color: var(--muted);
+  }
+</style>

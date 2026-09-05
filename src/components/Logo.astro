@@ -1,0 +1,113 @@
+---
+/**
+ * Animated symbol + wordmark shared by SiteNav and SiteFooter (README §SiteNav / §SiteFooter,
+ * SiteNav.dc.html / SiteFooter.dc.html lines 19-28): three 5px green nodes joined by a
+ * 1px rgba(255,255,255,0.25) line, with a white dot (green glow) sweeping 0→30px on a 3s loop
+ * (`logoPulse`). `variant="nav"` sets the wordmark to 19px (the header); `variant="footer"` to 17px.
+ * `prefers-reduced-motion` freezes the animation via the global rule in tokens.css.
+ */
+export type LogoVariant = 'nav' | 'footer';
+
+interface Props {
+  variant?: LogoVariant;
+  href?: string;
+  class?: string;
+}
+
+const { variant = 'nav', href = '/', class: className } = Astro.props;
+const wordmarkFontSize = variant === 'nav' ? '19px' : '17px';
+---
+
+<a href={href} class:list={['logo', className]} aria-label="letsylabs">
+  <span class="logo-symbol" aria-hidden="true">
+    <span class="logo-line"></span>
+    <span class="logo-node logo-node-1"></span>
+    <span class="logo-node logo-node-2"></span>
+    <span class="logo-node logo-node-3"></span>
+    <span class="logo-pulse"></span>
+  </span>
+  <span class="logo-wordmark" style={`font-size:${wordmarkFontSize}`}>letsylabs</span>
+</a>
+
+<style>
+  @keyframes logoPulse {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(30px);
+      opacity: 0;
+    }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .logo-symbol {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  .logo-line {
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .logo-node {
+    position: absolute;
+    top: 1px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .logo-node-1 {
+    left: 0;
+  }
+
+  .logo-node-2 {
+    left: 16px;
+  }
+
+  .logo-node-3 {
+    left: 32px;
+  }
+
+  .logo-pulse {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 0 6px var(--signal);
+    animation: logoPulse 3s linear infinite;
+  }
+
+  .logo-wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wordmark);
+  }
+</style>

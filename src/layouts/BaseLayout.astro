@@ -1,7 +1,9 @@
 ---
 import '../styles/tokens.css';
-import { locales, t, type Locale } from '../i18n';
+import { locales } from '../i18n';
 import { localizePath } from '../i18n/routing';
+import LangSwitch from '../components/LangSwitch.astro';
+import type { Locale } from '../i18n';
 
 interface Props {
   locale: Locale;
@@ -21,41 +23,13 @@ const pathname = Astro.url.pathname;
     <link rel="alternate" hreflang="x-default" href={localizePath(pathname, 'en')} />
   </head>
   <body>
-    <nav class="lang-switch" aria-label="Language">
-      {
-        locales.map((loc) => (
-          <a href={localizePath(pathname, loc)} aria-current={loc === locale ? 'page' : undefined}>
-            {t(locale, loc === 'en' ? 'common.languageSwitch.en' : 'common.languageSwitch.es')}
-          </a>
-        ))
-      }
-    </nav>
+    <div class="lang-switch-bar"><LangSwitch locale={locale} pathname={pathname} /></div>
     <slot />
   </body>
 </html>
 
 <style>
-  .lang-switch {
-    display: flex;
-    gap: 4px;
+  .lang-switch-bar {
     padding: 16px 32px;
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .lang-switch a {
-    padding: 4px 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-badge);
-    text-decoration: none;
-    color: var(--muted);
-  }
-
-  .lang-switch a[aria-current='page'] {
-    color: var(--ink);
-    background: var(--surface-2);
-    border-color: var(--line-strong);
   }
 </style>

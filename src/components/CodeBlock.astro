@@ -1,0 +1,148 @@
+---
+/**
+ * Code block / terminal shell (README §Componentes compartidos / §Code block, §Screens 1.7):
+ * `surface` background, `line` border, radius 12px; header with 3 dots (red/amber/green @ 70%),
+ * a mono language/host label, and an optional copy button that flips to "copied ✓" for 1.6s.
+ *
+ * Covers both handoff variants with one component: pass `copyText` for a syntax-highlighted code
+ * snippet with a copy button (the hero/Developers "CodeBlock"); omit it for a log-style
+ * "Terminal" (the Self-host `docker compose up -d` block has no copy button in the handoff).
+ *
+ * The syntax theme itself (strings `signal`, keywords `event`, numbers `tel`, comments `muted`) is
+ * global CSS (`.tok-string` / `.tok-keyword` / `.tok-number` / `.tok-comment` in
+ * src/styles/tokens.css) because slotted content belongs to the *caller's* template scope, not
+ * this component's Astro-scoped styles -- callers wrap spans in those classes inside the default
+ * slot's `<pre>`.
+ *
+ * Copy-to-clipboard is a plain `<script>` (src/scripts/code-block.ts), not a React island: it is
+ * pure progressive enhancement (a button whose only job is copying text) and the block's content is
+ * fully visible without JavaScript either way, per the repo's "islas React solo donde hay estado"
+ * rule -- this state (idle/copied) is trivial and DOM-local, not shared/reactive UI state.
+ */
+interface Props {
+  language: string;
+  copyText?: string;
+  copyIdleLabel?: string;
+  copyDoneLabel?: string;
+  ariaLabel?: string;
+  class?: string;
+}
+
+const {
+  language,
+  copyText,
+  copyIdleLabel = 'copy',
+  copyDoneLabel = 'copied ✓',
+  ariaLabel,
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={['code-block', className]} role="group" aria-label={ariaLabel}>
+  <div class="code-block-header">
+    <span class="code-block-dot code-block-dot-red"></span>
+    <span class="code-block-dot code-block-dot-amber"></span>
+    <span class="code-block-dot code-block-dot-green"></span>
+    <span class="code-block-label">{language}</span>
+    {
+      copyText !== undefined && (
+        <button
+          type="button"
+          class="code-block-copy"
+          data-copy-button
+          data-copy-text={copyText}
+          data-copy-idle-label={copyIdleLabel}
+          data-copy-done-label={copyDoneLabel}
+        >
+          {copyIdleLabel}
+        </button>
+      )
+    }
+  </div>
+  <div class="code-block-body">
+    <slot />
+  </div>
+</div>
+
+<script>
+  import { initCopyButtons } from '../scripts/code-block';
+  initCopyButtons(document);
+</script>
+
+<style>
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-terminal);
+  }
+
+  .code-block-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .code-block-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+
+  .code-block-dot-red {
+    background: var(--alert);
+  }
+
+  .code-block-dot-amber {
+    background: var(--tel);
+  }
+
+  .code-block-dot-green {
+    background: var(--signal);
+  }
+
+  .code-block-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  .code-block-copy {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition:
+      color var(--transition-hover),
+      border-color var(--transition-hover);
+  }
+
+  .code-block-copy:hover {
+    color: var(--ink);
+    border-color: rgba(74, 242, 161, 0.4);
+  }
+
+  .code-block-body {
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    line-height: var(--leading-mono);
+  }
+
+  .code-block-body :global(pre) {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--ink);
+  }
+</style>

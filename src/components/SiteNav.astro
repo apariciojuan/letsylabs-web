@@ -1,0 +1,400 @@
+---
+/**
+ * Shared site header (README §SiteNav / SiteNav.dc.html, brief W-2 entregable 3): fixed 64px,
+ * `rgba(7,9,13,0.78)` + `backdrop-filter: blur(14px)`, bottom `line` border. Animated logo, nav
+ * links with an `active` state, a "Product" mega menu (2 columns: AVAILABLE / PLATFORM VISION),
+ * Docs/Sign in/CTA (CTA label flips on `PUBLIC_GA_LAUNCHED`), the EN/ES switch, and a <768px
+ * drawer.
+ *
+ * `active` is derived automatically from the current route (`navSectionFor`, src/lib/nav-links.ts)
+ * rather than taken as an explicit prop like the `SiteNav.dc.html` prototype's `active` enum -- this
+ * is real Astro routing, not a prototype toggle, so deriving it from `Astro.url` cannot drift out of
+ * sync with the page it's rendered on.
+ *
+ * Mega menu: opens on hover, keyboard focus AND click, all wired by `src/scripts/nav.ts`'s
+ * `initMegaMenus()` -- see that module's doc comment for why this is JS-required rather than a
+ * CSS-only `:hover`/`:focus-within` fallback (a real bug found and fixed while writing
+ * e2e/site-nav.spec.ts: a plain click always fires a genuine `mouseenter` first, which a CSS hover
+ * rule can't be overridden-closed against). The mobile drawer (<768px) is JS-required for the same
+ * underlying reason (no pure-CSS way to give it a real Esc-to-close either) -- see nav.ts's doc
+ * comment, and task-W-2-report.md for the explicit decision.
+ *
+ * All copy resolves through `t()` -- see the `nav.*` keys in src/i18n/{en,es}.json. Every ES value
+ * without an official translation in the handoff is `TODO-ES: <english>` (listed in the report).
+ */
+import Badge from './Badge.astro';
+import Button from './Button.astro';
+import LangSwitch from './LangSwitch.astro';
+import Logo from './Logo.astro';
+import { t, type Locale } from '../i18n';
+import { localizePath, stripLocalePrefix } from '../i18n/routing';
+import { ctaLabelKey, navSectionFor, ROUTES, type NavSection } from '../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const pathname = Astro.url.pathname;
+const canonicalPath = stripLocalePrefix(pathname);
+const activeSection: NavSection | null = navSectionFor(canonicalPath);
+
+function isActive(section: NavSection): 'page' | undefined {
+  return activeSection === section ? 'page' : undefined;
+}
+
+function href(route: string): string {
+  return localizePath(route, locale);
+}
+
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+const ctaLabel = t(locale, ctaLabelKey(gaLaunched));
+
+const megaMenuItems = [
+  {
+    route: ROUTES.voice,
+    titleKey: 'nav.megaMenu.voiceTitle',
+    descriptionKey: 'nav.megaMenu.voiceDescription',
+  },
+  {
+    route: ROUTES.telephony,
+    titleKey: 'nav.megaMenu.telephonyTitle',
+    descriptionKey: 'nav.megaMenu.telephonyDescription',
+  },
+  {
+    route: ROUTES.compliance,
+    titleKey: 'nav.megaMenu.complianceTitle',
+    descriptionKey: 'nav.megaMenu.complianceDescription',
+  },
+  {
+    route: ROUTES.selfHost,
+    titleKey: 'nav.megaMenu.selfHostTitle',
+    descriptionKey: 'nav.megaMenu.selfHostDescription',
+  },
+] as const;
+
+const platformVisionKeys = [
+  'nav.megaMenu.vision',
+  'nav.megaMenu.avatars',
+  'nav.megaMenu.edgeRobotics',
+] as const;
+---
+
+<header class="site-nav" data-site-nav>
+  <div class="site-nav-inner container">
+    <Logo variant="nav" href={href('/')} />
+
+    <nav class="site-nav-links" aria-label={t(locale, 'nav.product')}>
+      <div class="nav-product" data-mega-menu-container>
+        <button
+          type="button"
+          class:list={['nav-link', 'nav-product-trigger', { 'is-active': activeSection === 'product' }]}
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="mega-menu-product"
+          data-mega-menu-trigger
+        >
+          {t(locale, 'nav.product')}
+          <span aria-hidden="true">▾</span>
+        </button>
+        <div id="mega-menu-product" class="mega-menu" data-mega-menu-panel>
+          <div class="mega-menu-column">
+            <div class="mega-menu-label mega-menu-label-available">
+              {t(locale, 'nav.megaMenu.availableLabel')}
+            </div>
+            <div class="mega-menu-items">
+              {
+                megaMenuItems.map((item) => (
+                  <a href={href(item.route)} class="mega-menu-item">
+                    <span class="mega-menu-item-title">{t(locale, item.titleKey)}</span>
+                    <span class="mega-menu-item-description">{t(locale, item.descriptionKey)}</span>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+          <div class="mega-menu-column">
+            <div class="mega-menu-label">{t(locale, 'nav.megaMenu.platformVisionLabel')}</div>
+            <div class="mega-menu-items">
+              {
+                platformVisionKeys.map((key) => (
+                  <div class="mega-menu-vision-row">
+                    <span class="mega-menu-vision-label">{t(locale, key)}</span>
+                    <Badge variant="coming-soon">{t(locale, 'nav.megaMenu.comingSoon')}</Badge>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <a
+        href={href(ROUTES.openSource)}
+        class:list={['nav-link', { 'is-active': activeSection === 'developers' }]}
+        aria-current={isActive('developers')}>{t(locale, 'nav.developers')}</a
+      >
+      <a
+        href={href(ROUTES.pricing)}
+        class:list={['nav-link', { 'is-active': activeSection === 'pricing' }]}
+        aria-current={isActive('pricing')}>{t(locale, 'nav.pricing')}</a
+      >
+      <a
+        href={href(ROUTES.company)}
+        class:list={['nav-link', { 'is-active': activeSection === 'company' }]}
+        aria-current={isActive('company')}>{t(locale, 'nav.company')}</a
+      >
+    </nav>
+
+    <div class="site-nav-actions">
+      <a href={href(ROUTES.openSource)} class="nav-utility-link">{t(locale, 'nav.docs')}</a>
+      <a href={href(ROUTES.pricing)} class="nav-utility-link">{t(locale, 'nav.signIn')}</a>
+      <LangSwitch locale={locale} pathname={pathname} />
+      <Button href={href(ROUTES.pricing)} size="sm">{ctaLabel}</Button>
+    </div>
+
+    <button
+      type="button"
+      class="nav-drawer-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav-drawer"
+      aria-label={t(locale, 'nav.mobileMenuOpen')}
+      data-drawer-toggle
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+  </div>
+
+  <nav id="site-nav-drawer" class="site-nav-drawer" data-drawer-panel aria-label={t(locale, 'nav.product')}>
+    <a href={href(ROUTES.voice)} class="drawer-link">{t(locale, 'nav.megaMenu.voiceTitle')}</a>
+    <a href={href(ROUTES.telephony)} class="drawer-link">{t(locale, 'nav.megaMenu.telephonyTitle')}</a>
+    <a href={href(ROUTES.compliance)} class="drawer-link">{t(locale, 'nav.megaMenu.complianceTitle')}</a>
+    <a href={href(ROUTES.selfHost)} class="drawer-link">{t(locale, 'nav.megaMenu.selfHostTitle')}</a>
+    <a href={href(ROUTES.openSource)} class="drawer-link">{t(locale, 'nav.developers')}</a>
+    <a href={href(ROUTES.pricing)} class="drawer-link">{t(locale, 'nav.pricing')}</a>
+    <a href={href(ROUTES.company)} class="drawer-link">{t(locale, 'nav.company')}</a>
+    <div class="drawer-footer">
+      <LangSwitch locale={locale} pathname={pathname} />
+      <Button href={href(ROUTES.pricing)} size="sm">{ctaLabel}</Button>
+    </div>
+  </nav>
+</header>
+
+<script>
+  import { initNav } from '../scripts/nav';
+  initNav(document);
+</script>
+
+<style>
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: var(--header-height);
+    background: rgba(7, 9, 13, 0.78);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-body);
+  }
+
+  .site-nav-inner {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .nav-product {
+    position: relative;
+  }
+
+  .nav-link {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    padding: 8px 12px;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .nav-link:hover,
+  .nav-link.is-active {
+    color: var(--ink);
+  }
+
+  .mega-menu {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 520px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    box-shadow: var(--shadow-dropdown);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-hover);
+  }
+
+  /*
+   * `.is-open` (added/removed by nav.ts's initMegaMenus) is the ONLY visibility trigger -- no
+   * `:hover`/`:focus-within` fallback. See the file-level doc comment above and nav.ts's doc
+   * comment for why: a click always fires a real `mouseenter` first, which a CSS `:hover` rule
+   * cannot be "force-closed" against from JS while the mouse is still physically over the trigger.
+   */
+  .mega-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mega-menu-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .mega-menu-label-available {
+    color: var(--signal);
+  }
+
+  .mega-menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mega-menu-item {
+    color: var(--ink);
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    display: block;
+    text-decoration: none;
+    transition: background var(--transition-hover);
+  }
+
+  .mega-menu-item:hover {
+    background: var(--surface-2);
+  }
+
+  .mega-menu-item-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .mega-menu-item-description {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .mega-menu-vision-row {
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .mega-menu-vision-label {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .site-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-utility-link {
+    color: var(--muted);
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .nav-utility-link:hover {
+    color: var(--ink);
+  }
+
+  .nav-drawer-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .site-nav-drawer {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    padding: 20px 32px 32px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .site-nav-drawer.is-open {
+    display: flex;
+  }
+
+  .drawer-link {
+    color: var(--ink);
+    font-size: 16px;
+    text-decoration: none;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .drawer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 767px) {
+    .site-nav-links,
+    .site-nav-actions {
+      display: none;
+    }
+
+    .nav-drawer-toggle {
+      display: block;
+    }
+  }
+</style>

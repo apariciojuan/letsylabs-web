@@ -2,10 +2,67 @@
   "common": {
     "languageSwitch": {
       "en": "EN",
-      "es": "ES"
+      "es": "ES",
+      "groupLabel": "Language"
     }
   },
   "home": {
     "h1": "Bootstrap placeholder — content pending."
+  },
+  "nav": {
+    "product": "Product",
+    "developers": "Developers",
+    "pricing": "Pricing",
+    "company": "Company",
+    "docs": "Docs",
+    "signIn": "Sign in",
+    "ctaPreGa": "Get early access",
+    "ctaPostGa": "Start building",
+    "mobileMenuOpen": "Open menu",
+    "mobileMenuClose": "Close menu",
+    "megaMenu": {
+      "availableLabel": "AVAILABLE",
+      "platformVisionLabel": "PLATFORM VISION",
+      "comingSoon": "COMING SOON",
+      "voiceTitle": "Voice",
+      "voiceDescription": "Realtime STT, TTS, turn-taking",
+      "telephonyTitle": "Telephony",
+      "telephonyDescription": "Your trunk, programmable calls",
+      "complianceTitle": "Compliance",
+      "complianceDescription": "Ley 10/2025 & AI Act, built in",
+      "selfHostTitle": "Self-host",
+      "selfHostDescription": "Your servers, one command",
+      "vision": "Vision",
+      "avatars": "Avatars",
+      "edgeRobotics": "Edge & Robotics"
+    }
+  },
+  "footer": {
+    "taglineLine1": "Realtime voice infrastructure for AI.",
+    "taglineLine2": "EU-compliant by design.",
+    "madeInEu": "Made in the EU 🇪🇺",
+    "copyright": "© 2026 letsylabs",
+    "email": "hello@letsylabs.com",
+    "columns": {
+      "product": "PRODUCT",
+      "developers": "DEVELOPERS",
+      "company": "COMPANY",
+      "legal": "LEGAL"
+    },
+    "links": {
+      "voice": "Voice",
+      "telephony": "Telephony",
+      "compliance": "Compliance",
+      "selfHost": "Self-host",
+      "pricing": "Pricing",
+      "openSource": "Open source",
+      "docs": "Docs",
+      "playground": "Playground",
+      "playgroundBadge": "POST-GA",
+      "about": "About",
+      "contact": "Contact",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
   }
 }

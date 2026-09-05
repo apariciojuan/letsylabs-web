@@ -1,0 +1,55 @@
+---
+/**
+ * Status pill (README §Componentes compartidos / §Badges): mono 10-11px uppercase,
+ * letter-spacing 1px, radius 4px, 1px border. Five variants, matching the CLAIMS_MATRIX honesty
+ * rules -- AVAILABLE is the only "present tense" variant; every other one signals a future state.
+ * Presentational: label text is the default slot (caller-supplied, already translated).
+ */
+export type BadgeVariant = 'available' | 'coming-soon' | 'preview' | 'beta' | 'post-ga';
+
+interface Props {
+  variant?: BadgeVariant;
+  class?: string;
+}
+
+const { variant = 'coming-soon', class: className } = Astro.props;
+---
+
+<span class:list={['badge', `badge-${variant}`, className]}><slot /></span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    line-height: 1;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-badge);
+    padding: 3px 8px;
+    color: var(--muted);
+  }
+
+  .badge-available {
+    color: var(--signal);
+    border-color: rgba(74, 242, 161, 0.35);
+  }
+
+  .badge-preview {
+    color: var(--event);
+    border-color: rgba(88, 196, 246, 0.35);
+  }
+
+  .badge-beta {
+    color: var(--tel);
+    border-color: rgba(255, 180, 84, 0.35);
+  }
+
+  .badge-coming-soon,
+  .badge-post-ga {
+    color: var(--muted);
+    border-color: var(--line-strong);
+  }
+</style>

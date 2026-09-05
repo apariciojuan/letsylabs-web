@@ -1,0 +1,64 @@
+---
+/**
+ * EN/ES pill selector that preserves the current route (extracted from BaseLayout.astro per brief
+ * W-2 entregable 2; used there, in SiteNav and in SiteFooter). Restyled to match the pill look in
+ * SiteNav.dc.html / SiteFooter.dc.html (border `line`, active item background `surface-2`) rather
+ * than BaseLayout's original plain-link bar.
+ *
+ * Regression fix: BaseLayout's original markup hard-coded `aria-label="Language"` in English on
+ * both locales -- a "Todo literal por i18n" violation from W-1. This version resolves the group
+ * label through `t()` for both `en` and `es`.
+ */
+import { locales, t, type Locale } from '../i18n';
+import { localizePath } from '../i18n/routing';
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+  class?: string;
+}
+
+const { locale, pathname, class: className } = Astro.props;
+---
+
+<div
+  class:list={['lang-switch', className]}
+  role="group"
+  aria-label={t(locale, 'common.languageSwitch.groupLabel')}
+>
+  {
+    locales.map((loc) => (
+      <a
+        href={localizePath(pathname, loc)}
+        class="lang-switch-item"
+        aria-current={loc === locale ? 'page' : undefined}
+      >
+        {t(locale, loc === 'en' ? 'common.languageSwitch.en' : 'common.languageSwitch.es')}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .lang-switch {
+    display: inline-flex;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2px;
+  }
+
+  .lang-switch-item {
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--muted);
+  }
+
+  .lang-switch-item[aria-current='page'] {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+</style>

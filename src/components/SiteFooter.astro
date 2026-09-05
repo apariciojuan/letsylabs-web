@@ -1,0 +1,183 @@
+---
+/**
+ * Shared site footer (README §SiteFooter / SiteFooter.dc.html, brief W-2 entregable 4): 4 link
+ * columns (PRODUCT / DEVELOPERS / COMPANY / LEGAL, mono 10px labels) + a brand column (animated
+ * logo, tagline, "Made in the EU 🇪🇺"), the EN/ES switch, and a bottom bar
+ * (© 2026 letsylabs · hello@letsylabs.com).
+ *
+ * Links point at the sitemap's routes (docs/plans/web/00_plan_web.md §3 /
+ * letsylabs_web_spec_diseno.md §3) even though none of those pages exist yet -- Astro does not
+ * validate link targets at build time, and the brief explicitly asks for this ("Astro no rompe por
+ * links; anota en el report las rutas pendientes"). Pending routes are listed in
+ * task-W-2-report.md, including the open question about /compliance's ES-first routing (W-5.1).
+ *
+ * All copy resolves through `t()` (`footer.*` keys in src/i18n/{en,es}.json); the handoff never
+ * gives Spanish text for this chrome, so every ES value is `TODO-ES: <english>` (listed in the
+ * report) except the copyright line and the email address, which are language-invariant facts, not
+ * copy to translate.
+ */
+import LangSwitch from './LangSwitch.astro';
+import Logo from './Logo.astro';
+import { t, type Locale } from '../i18n';
+import { localizePath } from '../i18n/routing';
+import { ROUTES } from '../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const pathname = Astro.url.pathname;
+
+function href(route: string): string {
+  return localizePath(route, locale);
+}
+---
+
+<footer class="site-footer">
+  <div class="site-footer-columns container">
+    <div class="footer-brand">
+      <Logo variant="footer" href={href('/')} />
+      <p class="footer-tagline">
+        {t(locale, 'footer.taglineLine1')}<br />{t(locale, 'footer.taglineLine2')}
+      </p>
+      <span class="footer-made-in-eu">{t(locale, 'footer.madeInEu')}</span>
+    </div>
+
+    <nav class="footer-column" aria-label={t(locale, 'footer.columns.product')}>
+      <div class="footer-column-label">{t(locale, 'footer.columns.product')}</div>
+      <a href={href(ROUTES.voice)}>{t(locale, 'footer.links.voice')}</a>
+      <a href={href(ROUTES.telephony)}>{t(locale, 'footer.links.telephony')}</a>
+      <a href={href(ROUTES.compliance)}>{t(locale, 'footer.links.compliance')}</a>
+      <a href={href(ROUTES.selfHost)}>{t(locale, 'footer.links.selfHost')}</a>
+      <a href={href(ROUTES.pricing)}>{t(locale, 'footer.links.pricing')}</a>
+    </nav>
+
+    <nav class="footer-column" aria-label={t(locale, 'footer.columns.developers')}>
+      <div class="footer-column-label">{t(locale, 'footer.columns.developers')}</div>
+      <a href={href(ROUTES.openSource)}>{t(locale, 'footer.links.openSource')}</a>
+      <a href={href(ROUTES.openSource)}>{t(locale, 'footer.links.docs')}</a>
+      <span class="footer-link-disabled">
+        {t(locale, 'footer.links.playground')}
+        <span class="footer-link-badge">{t(locale, 'footer.links.playgroundBadge')}</span>
+      </span>
+    </nav>
+
+    <nav class="footer-column" aria-label={t(locale, 'footer.columns.company')}>
+      <div class="footer-column-label">{t(locale, 'footer.columns.company')}</div>
+      <a href={href(ROUTES.company)}>{t(locale, 'footer.links.about')}</a>
+      <a href="mailto:hello@letsylabs.com">{t(locale, 'footer.links.contact')}</a>
+    </nav>
+
+    <nav class="footer-column" aria-label={t(locale, 'footer.columns.legal')}>
+      <div class="footer-column-label">{t(locale, 'footer.columns.legal')}</div>
+      <a href={href(ROUTES.compliance)}>{t(locale, 'footer.links.compliance')}</a>
+      <a href={href(ROUTES.company)}>{t(locale, 'footer.links.privacy')}</a>
+      <a href={href(ROUTES.company)}>{t(locale, 'footer.links.terms')}</a>
+    </nav>
+  </div>
+
+  <div class="footer-lang-switch container">
+    <LangSwitch locale={locale} pathname={pathname} />
+  </div>
+
+  <div class="site-footer-bottom">
+    <div class="container site-footer-bottom-inner">
+      <span>{t(locale, 'footer.copyright')}</span>
+      <span>{t(locale, 'footer.email')}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--ink);
+  }
+
+  .site-footer-columns {
+    padding: 56px 32px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+  }
+
+  .footer-brand {
+    flex: 1 1 240px;
+    min-width: 220px;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: var(--leading-body);
+    margin: 14px 0 18px;
+  }
+
+  .footer-made-in-eu {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .footer-column {
+    flex: 1 1 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .footer-column-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  .footer-column a,
+  .footer-link-disabled {
+    color: var(--muted);
+    font-size: 13.5px;
+    text-decoration: none;
+  }
+
+  .footer-column a:hover {
+    color: var(--ink);
+  }
+
+  .footer-link-disabled {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-link-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: var(--tracking-badge);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-badge);
+    padding: 1px 5px;
+  }
+
+  .footer-lang-switch {
+    padding: 0 32px 32px;
+  }
+
+  .site-footer-bottom {
+    border-top: 1px solid var(--line);
+  }
+
+  .site-footer-bottom-inner {
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+</style>

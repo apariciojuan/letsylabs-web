@@ -2,10 +2,67 @@
   "common": {
     "languageSwitch": {
       "en": "EN",
-      "es": "ES"
+      "es": "ES",
+      "groupLabel": "Idioma"
     }
   },
   "home": {
     "h1": "Marcador de arranque — contenido pendiente."
+  },
+  "nav": {
+    "product": "TODO-ES: Product",
+    "developers": "TODO-ES: Developers",
+    "pricing": "TODO-ES: Pricing",
+    "company": "TODO-ES: Company",
+    "docs": "TODO-ES: Docs",
+    "signIn": "TODO-ES: Sign in",
+    "ctaPreGa": "TODO-ES: Get early access",
+    "ctaPostGa": "TODO-ES: Start building",
+    "mobileMenuOpen": "Abrir menú",
+    "mobileMenuClose": "Cerrar menú",
+    "megaMenu": {
+      "availableLabel": "TODO-ES: AVAILABLE",
+      "platformVisionLabel": "TODO-ES: PLATFORM VISION",
+      "comingSoon": "TODO-ES: COMING SOON",
+      "voiceTitle": "TODO-ES: Voice",
+      "voiceDescription": "TODO-ES: Realtime STT, TTS, turn-taking",
+      "telephonyTitle": "TODO-ES: Telephony",
+      "telephonyDescription": "TODO-ES: Your trunk, programmable calls",
+      "complianceTitle": "TODO-ES: Compliance",
+      "complianceDescription": "TODO-ES: Ley 10/2025 & AI Act, built in",
+      "selfHostTitle": "TODO-ES: Self-host",
+      "selfHostDescription": "TODO-ES: Your servers, one command",
+      "vision": "TODO-ES: Vision",
+      "avatars": "TODO-ES: Avatars",
+      "edgeRobotics": "TODO-ES: Edge & Robotics"
+    }
+  },
+  "footer": {
+    "taglineLine1": "TODO-ES: Realtime voice infrastructure for AI.",
+    "taglineLine2": "TODO-ES: EU-compliant by design.",
+    "madeInEu": "TODO-ES: Made in the EU 🇪🇺",
+    "copyright": "© 2026 letsylabs",
+    "email": "hello@letsylabs.com",
+    "columns": {
+      "product": "TODO-ES: PRODUCT",
+      "developers": "TODO-ES: DEVELOPERS",
+      "company": "TODO-ES: COMPANY",
+      "legal": "TODO-ES: LEGAL"
+    },
+    "links": {
+      "voice": "TODO-ES: Voice",
+      "telephony": "TODO-ES: Telephony",
+      "compliance": "TODO-ES: Compliance",
+      "selfHost": "TODO-ES: Self-host",
+      "pricing": "TODO-ES: Pricing",
+      "openSource": "TODO-ES: Open source",
+      "docs": "TODO-ES: Docs",
+      "playground": "TODO-ES: Playground",
+      "playgroundBadge": "TODO-ES: POST-GA",
+      "about": "TODO-ES: About",
+      "contact": "TODO-ES: Contact",
+      "privacy": "TODO-ES: Privacy",
+      "terms": "TODO-ES: Terms"
+    }
   }
 }

@@ -98,6 +98,19 @@
   --leading-body: 1.6;
   --leading-mono: 1.7;
 
+  /*
+   * Letter-spacing per level. Exact per-usage values read off "letsylabs Homepage.dc.html" and
+   * SiteNav.dc.html/SiteFooter.dc.html (not the README's general "-0.5px (wordmark) a -1.5px (H1
+   * grandes)" guidance, which is a range, not a per-level table). Brief W-2 entregable 1.
+   */
+  --tracking-wordmark: -0.5px; /* nav/footer "letsylabs" wordmark */
+  --tracking-h1-hero: -1.5px; /* hero H1 (Homepage.dc.html line 89) */
+  --tracking-h2-section: -0.8px; /* section H2s, e.g. lines 154, 186, 231, 258, 296, 332, 358 */
+  --tracking-h2-minor: -0.6px; /* smaller H2s, e.g. the Vision block, line 411 */
+  --tracking-eyebrow: 2px; /* eyebrow mono labels, e.g. line 87 */
+  --tracking-label: 1.5px; /* mono column/section labels: PRODUCT, AVAILABLE, PLATFORM VISION */
+  --tracking-badge: 1px; /* small mono badges/pills: COMING SOON, POST-GA, AVAILABLE AT GA */
+
   /* Spacing / layout (README §Espaciado y forma) */
   --container-max-width: 1180px;
   --container-padding-inline: 32px;
@@ -118,6 +131,16 @@
   /* Motion */
   --transition-hover: 150ms ease;
   --transition-reveal: 380ms ease-out;
+
+  /*
+   * Hero-style radial gradients (README §Design Tokens: "Gradientes: solo radiales del signal al
+   * 4-6% detrás de heros ... rgba(74,242,161,0.05-0.06) ... el hero de Telephony usa
+   * rgba(255,180,84,0.05)"). Position varies per usage (Homepage hero: 72% 10%; final CTA:
+   * 50% 100%), so the ellipse/opacity are fixed here and position is overridden per instance via
+   * --radial-x/--radial-y custom properties on the element using .radial-signal/.radial-tel.
+   */
+  --radial-signal-opacity: 0.06;
+  --radial-tel-opacity: 0.05;
 }
 
 /* Minimal reset */
@@ -156,13 +179,26 @@ h4 {
 h1 {
   font-size: var(--text-h1-hero);
   line-height: var(--leading-h1);
-  letter-spacing: -1.5px;
+  letter-spacing: var(--tracking-h1-hero);
 }
 
 h2 {
   font-size: var(--text-h2-section);
   line-height: var(--leading-h2);
-  letter-spacing: -0.5px;
+  /*
+   * BUGFIX (W-2 adversarial read of the handoff): this used to be hard-coded to -0.5px, which is
+   * the README's *wordmark* tracking, not the section-H2 tracking. Every section H2 in
+   * "letsylabs Homepage.dc.html" (lines 154, 186, 231, 258, 296, 332, 358) uses -0.8px. Regression
+   * test: src/styles/tokens.test.ts asserts --tracking-h2-section is -0.8px, and
+   * SectionHeading.test.ts asserts the rendered <h2> carries it.
+   */
+  letter-spacing: var(--tracking-h2-section);
+}
+
+/* Smaller H2 variant (e.g. the Homepage "Vision" block, line 411): SectionHeading level="minor". */
+h2.h2-minor {
+  font-size: var(--text-h2-minor);
+  letter-spacing: var(--tracking-h2-minor);
 }
 
 p {
@@ -172,6 +208,135 @@ p {
 
 a {
   color: inherit;
+}
+
+/* Layout utilities (brief W-2 entregable 1). */
+.container {
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-inline);
+}
+
+.section {
+  padding-block: var(--section-padding-block);
+}
+
+.section-lg {
+  padding-block: var(--section-padding-block-lg);
+}
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+/*
+ * Hero-style radial gradients (README §Design Tokens). Position is per-instance via the
+ * --radial-x/--radial-y custom properties (defaults center); ellipse size and opacity are fixed to
+ * the handoff's values. `.radial-signal` = default green hero glow; `.radial-tel` = the Telephony
+ * hero's amber variant.
+ */
+.radial-signal,
+.radial-tel {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.radial-signal {
+  background: radial-gradient(
+    ellipse 800px 500px at var(--radial-x, 50%) var(--radial-y, 50%),
+    rgba(74, 242, 161, var(--radial-signal-opacity)),
+    transparent 70%
+  );
+}
+
+.radial-tel {
+  background: radial-gradient(
+    ellipse 800px 500px at var(--radial-x, 50%) var(--radial-y, 50%),
+    rgba(255, 180, 84, var(--radial-tel-opacity)),
+    transparent 70%
+  );
+}
+
+/*
+ * CodeBlock syntax theme (README §Componentes compartidos / §Code block): strings/values `signal`,
+ * keywords/flags/keys `event`, numbers `tel`, comments `muted`. Global (not scoped to
+ * CodeBlock.astro) because the highlighted markup is authored by callers inside CodeBlock's
+ * default slot, which belongs to the caller's template scope, not the component's.
+ */
+.tok-string {
+  color: var(--signal);
+}
+
+.tok-keyword {
+  color: var(--event);
+}
+
+.tok-number {
+  color: var(--tel);
+}
+
+.tok-comment {
+  color: var(--muted);
+}
+
+/*
+ * Motion primitives referenced by src/scripts/site-fx.ts's doc comment and used by page-level
+ * markup (W-3+): `marquee` for the ticker (translateX -50%, duplicated content, 32s linear loop);
+ * `telpulse`/`telpulseback` for a straight-line CSS dot pulse (e.g. Telephony's two opposite-
+ * direction call diagrams) as an alternative to the SVG `getPointAtLength` pulse for curved paths.
+ * The global `prefers-reduced-motion` rule above already freezes every animation on the page,
+ * including these.
+ */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes telpulse {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 6px);
+    opacity: 0;
+  }
+}
+
+@keyframes telpulseback {
+  0% {
+    left: calc(100% - 6px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 0;
+    opacity: 0;
+  }
 }
 
 img,

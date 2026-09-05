@@ -1,0 +1,31 @@
+---
+/**
+ * H1/H2 heading with the handoff's exact type scale per level (README §Tipografía):
+ * - "hero": the page's single H1 (clamp 36-66px, tracking -1.5px) -- global `h1` rule in tokens.css.
+ * - "section": the default section H2 (clamp 30-40px, tracking -0.8px) -- global `h2` rule.
+ * - "minor": smaller H2s like the Homepage "Vision" block (clamp 24-34px, tracking -0.6px) -- the
+ *   `.h2-minor` modifier class in tokens.css.
+ * Presentational only: text comes from the default slot (already resolved via i18n by the caller).
+ */
+export type SectionHeadingLevel = 'hero' | 'section' | 'minor';
+
+interface Props {
+  level?: SectionHeadingLevel;
+  centered?: boolean;
+  class?: string;
+}
+
+const { level = 'section', centered = false, class: className } = Astro.props;
+const Tag = level === 'hero' ? 'h1' : 'h2';
+const levelClass = level === 'minor' ? 'h2-minor' : undefined;
+---
+
+<Tag class:list={[levelClass, { 'section-heading-centered': centered }, className]}>
+  <slot />
+</Tag>
+
+<style>
+  .section-heading-centered {
+    text-align: center;
+  }
+</style>

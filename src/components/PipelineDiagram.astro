@@ -1,0 +1,266 @@
+---
+/**
+ * Reusable static pipeline diagram (brief W-2.6): nodes + connecting lines + an optional traveling
+ * pulse dot, in 3 sizes, with accents that always mean the same thing (signal=voice/agent,
+ * tel=telephony, event=eventing/STT/trace -- CLAUDE.md rule "prohibido el morado IA"). Astro-only,
+ * zero client JS: the pulse is driven by CSS `offset-path`/`offset-distance` (an animated
+ * `transform`, same family as the repo's "solo canvas/CSS transform" motion rule), not
+ * `getPointAtLength` + rAF -- that JS-driven version is `PipelineDiagramInteractive.tsx`, reserved
+ * for pages that need source/destination re-routing (the Homepage pipeline block, W-3).
+ *
+ * `role="img"` + `aria-label` + a visually-hidden `description` cover README §7's "diagramas con
+ * descripción textual" requirement -- assistive tech gets the same information a sighted user infers
+ * from the diagram's shape.
+ *
+ * Browser-support note (documented in task-W-2-report.md): CSS `offset-path` on SVG shapes has
+ * uneven cross-browser support. Every pulse-enabled edge's dot has a static `cx`/`cy` fallback at
+ * the path's start (`pulseStart`), so a browser without `offset-path` support shows a still dot
+ * sitting on the route rather than one mispositioned at the SVG origin.
+ */
+export type PipelineAccent = 'signal' | 'tel' | 'event';
+export type PipelineSize = 'sm' | 'md' | 'lg';
+
+export interface PipelineDiagramNode {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+}
+
+export interface PipelineDiagramEdge {
+  id: string;
+  path: string;
+  accent?: PipelineAccent;
+  pulse?: boolean;
+  pulseStart?: { x: number; y: number };
+  pulseMs?: number;
+}
+
+interface Props {
+  viewBox?: string;
+  nodes: PipelineDiagramNode[];
+  edges: PipelineDiagramEdge[];
+  centerBox?: { x: number; y: number; width: number; height: number; label: string; subLabel?: string };
+  size?: PipelineSize;
+  ariaLabel: string;
+  description?: string;
+  class?: string;
+}
+
+const {
+  viewBox = '0 0 800 400',
+  nodes,
+  edges,
+  centerBox,
+  size = 'md',
+  ariaLabel,
+  description,
+  class: className,
+} = Astro.props;
+
+const NODE_WIDTH = 150;
+const NODE_HEIGHT = 44;
+---
+
+<figure class:list={['pipeline-diagram', `pipeline-diagram-${size}`, className]}>
+  <svg viewBox={viewBox} role="img" aria-label={ariaLabel} class="pipeline-diagram-svg">
+    {
+      edges.map((edge) => (
+        <path d={edge.path} class:list={['pipeline-edge', edge.accent && `pipeline-edge-${edge.accent}`]} />
+      ))
+    }
+    {
+      centerBox && (
+        <>
+          <rect
+            x={centerBox.x}
+            y={centerBox.y}
+            width={centerBox.width}
+            height={centerBox.height}
+            rx="12"
+            class="pipeline-runtime-box"
+          />
+          <text
+            x={centerBox.x + centerBox.width / 2}
+            y={centerBox.y + centerBox.height * 0.42}
+            class="pipeline-runtime-label"
+          >
+            {centerBox.label}
+          </text>
+          {centerBox.subLabel && (
+            <text
+              x={centerBox.x + centerBox.width / 2}
+              y={centerBox.y + centerBox.height * 0.72}
+              class="pipeline-runtime-sublabel"
+            >
+              {centerBox.subLabel}
+            </text>
+          )}
+        </>
+      )
+    }
+    {
+      nodes.map((node) => (
+        <g>
+          <rect
+            x={node.x}
+            y={node.y}
+            width={node.width ?? NODE_WIDTH}
+            height={node.height ?? NODE_HEIGHT}
+            rx="8"
+            class="pipeline-node"
+          />
+          <text
+            x={node.x + (node.width ?? NODE_WIDTH) / 2}
+            y={node.y + (node.height ?? NODE_HEIGHT) / 2}
+            class="pipeline-node-label"
+          >
+            {node.label}
+          </text>
+        </g>
+      ))
+    }
+    {
+      edges
+        .filter((edge) => edge.pulse)
+        .map((edge) => (
+          <circle
+            r="4"
+            cx={edge.pulseStart?.x ?? 0}
+            cy={edge.pulseStart?.y ?? 0}
+            class:list={['pipeline-pulse-dot', edge.accent && `pipeline-pulse-dot-${edge.accent}`]}
+            style={`offset-path:path('${edge.path}');--pipeline-pulse-ms:${edge.pulseMs ?? 2600}ms`}
+          />
+        ))
+    }
+  </svg>
+  {description && <figcaption class="sr-only">{description}</figcaption>}
+</figure>
+
+<style>
+  .pipeline-diagram {
+    margin: 0;
+  }
+
+  .pipeline-diagram-sm {
+    max-width: 420px;
+  }
+
+  .pipeline-diagram-md {
+    max-width: 640px;
+  }
+
+  .pipeline-diagram-lg {
+    max-width: 860px;
+  }
+
+  .pipeline-diagram-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .pipeline-edge {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.09);
+    stroke-width: 1.5;
+  }
+
+  .pipeline-edge-signal {
+    stroke: rgba(74, 242, 161, 0.65);
+  }
+
+  .pipeline-edge-tel {
+    stroke: rgba(255, 180, 84, 0.65);
+  }
+
+  .pipeline-edge-event {
+    stroke: rgba(88, 196, 246, 0.65);
+  }
+
+  .pipeline-runtime-box {
+    fill: var(--surface);
+    stroke: rgba(74, 242, 161, 0.4);
+    stroke-width: 1;
+  }
+
+  .pipeline-runtime-label {
+    fill: var(--ink);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    text-anchor: middle;
+  }
+
+  .pipeline-runtime-sublabel {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-anchor: middle;
+  }
+
+  .pipeline-node {
+    fill: var(--surface);
+    stroke: rgba(255, 255, 255, 0.14);
+    stroke-width: 1;
+  }
+
+  .pipeline-node-label {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .pipeline-pulse-dot {
+    fill: var(--signal);
+    filter: drop-shadow(0 0 6px var(--signal));
+    offset-rotate: 0deg;
+    animation: pipeline-pulse var(--pipeline-pulse-ms, 2600ms) linear infinite;
+  }
+
+  .pipeline-pulse-dot-signal {
+    fill: var(--signal);
+    filter: drop-shadow(0 0 6px var(--signal));
+  }
+
+  .pipeline-pulse-dot-tel {
+    fill: var(--tel);
+    filter: drop-shadow(0 0 6px var(--tel));
+  }
+
+  .pipeline-pulse-dot-event {
+    fill: var(--event);
+    filter: drop-shadow(0 0 6px var(--event));
+  }
+
+  @keyframes pipeline-pulse {
+    from {
+      offset-distance: 0%;
+    }
+    to {
+      offset-distance: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pipeline-pulse-dot {
+      display: none;
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

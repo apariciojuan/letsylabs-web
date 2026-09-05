@@ -1,0 +1,320 @@
+---
+/**
+ * DEV-ONLY visual QA harness (brief W-2 entregable 7). Mounts every shared component from this
+ * task against sample data so the controller can pixel-compare it to SiteNav.dc.html,
+ * SiteFooter.dc.html and the relevant sections of "letsylabs Homepage.dc.html", and so
+ * e2e/*.spec.ts (mega menu, drawer, reduced motion, pipeline re-routing) has real markup to drive.
+ *
+ * Never ships in the production build: astro.config.mjs's `stripDevPages` integration deletes
+ * `dist/dev/` after `astro build` (verified by `scripts/check_no_dev_pages.sh`). Reachable during
+ * `astro dev` (and therefore during the `e2e` compose profile, which runs against the dev server,
+ * not `dist/`).
+ *
+ * Not localized: this is an internal QA tool, not a page a site visitor ever reaches, so its own
+ * labels are plain English rather than i18n'd -- the components it mounts (SiteNav/SiteFooter) still
+ * fully exercise i18n on their own copy.
+ */
+import '../../styles/tokens.css';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import EventTimeline from '../../components/EventTimeline.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import PipelineDiagram from '../../components/PipelineDiagram.astro';
+import PipelineDiagramInteractive from '../../components/PipelineDiagramInteractive';
+import SectionHeading from '../../components/SectionHeading.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteNav from '../../components/SiteNav.astro';
+
+const pipelineNodes = [
+  { id: 'phone', label: 'Phone', x: 105, y: 16 },
+  { id: 'browser', label: 'Browser', x: 325, y: 16 },
+  { id: 'app', label: 'Your app', x: 545, y: 16 },
+];
+const pipelineEdges = [
+  {
+    id: 'phone-runtime',
+    path: 'M 180 60 C 180 105 400 105 400 150',
+    accent: 'signal' as const,
+    pulse: true,
+    pulseStart: { x: 180, y: 60 },
+  },
+  { id: 'browser-runtime', path: 'M 400 60 C 400 105 400 105 400 150' },
+  { id: 'app-runtime', path: 'M 620 60 C 620 105 400 105 400 150' },
+  { id: 'runtime-agent', path: 'M 400 240 C 400 295 130 295 130 340' },
+  { id: 'runtime-openai', path: 'M 400 240 C 400 295 310 295 310 340' },
+];
+const pipelineCenterBox = {
+  x: 230,
+  y: 150,
+  width: 340,
+  height: 90,
+  label: 'letsylabs runtime',
+  subLabel: 'VAD · STT · turns · TTS · trace',
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>DEV — component gallery (not built)</title>
+  </head>
+  <body>
+    <SiteNav locale="en" />
+
+    <main class="dev-gallery">
+      <section class="container dev-section" data-reveal>
+        <SectionHeading level="hero">Component gallery (dev only)</SectionHeading>
+        <p class="dev-note">Not part of the production build -- see scripts/check_no_dev_pages.sh.</p>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Eyebrow / Badge</SectionHeading>
+        <div class="dev-row">
+          <Eyebrow>REALTIME VOICE INFRASTRUCTURE FOR AI</Eyebrow>
+          <Eyebrow tone="tel">TELEPHONY</Eyebrow>
+        </div>
+        <div class="dev-row">
+          <Badge variant="available">AVAILABLE</Badge>
+          <Badge variant="coming-soon">COMING SOON</Badge>
+          <Badge variant="preview">PREVIEW</Badge>
+          <Badge variant="beta">BETA</Badge>
+          <Badge variant="post-ga">POST-GA</Badge>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Buttons</SectionHeading>
+        <div class="dev-row">
+          <Button>Get early access</Button>
+          <Button variant="ghost">Read the docs</Button>
+          <Button size="sm">Get early access</Button>
+          <Button arrow={false}>Submit</Button>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Cards</SectionHeading>
+        <div class="dev-row">
+          <Card>
+            <div class="dev-card-event">stt.partial</div>
+            <div class="dev-card-title">Realtime STT</div>
+            <p class="dev-card-copy">Partial transcripts in under 300ms.</p>
+          </Card>
+          <Card tone="amber">
+            <div class="dev-card-event">telephony.trunk</div>
+            <div class="dev-card-title">Bring your trunk</div>
+            <p class="dev-card-copy">Asterisk · 3CX · SIP carrier.</p>
+          </Card>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>CodeBlock / Terminal</SectionHeading>
+        <div class="dev-row dev-row-code">
+          <CodeBlock language="bash" copyText={'curl -X POST https://api.letsylabs.com/v1/sessions'}>
+            <Fragment
+              set:html={`<pre>curl <span class="tok-keyword">-X</span> POST https://api.letsylabs.com/v1/sessions \\
+  <span class="tok-keyword">-H</span> <span class="tok-string">"Authorization: Bearer $LETSY_KEY"</span>
+
+<span class="tok-comment"># 01JD... session created</span></pre>`}
+            />
+          </CodeBlock>
+          <CodeBlock language="your-server">
+            <Fragment
+              set:html={`<div>$ docker compose up -d</div><div>letsy-gateway <span class="tok-string">Started 0.4s</span></div>`}
+            />
+          </CodeBlock>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Event timeline</SectionHeading>
+        <EventTimeline
+          ariaLabel="Sample call trace"
+          events={[
+            { ts: '00:00', type: 'call.answered', accent: 'event' },
+            { type: 'disclosure.played', accent: 'signal' },
+            { type: 'stt.final', detail: '"quiero hablar con una persona"', accent: 'event' },
+            { type: 'call.transfer.human', accent: 'tel' },
+            { type: 'call.ended' },
+          ]}
+        />
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Pipeline diagram -- static (sm / md / lg)</SectionHeading>
+        <div class="dev-row dev-row-pipelines">
+          <PipelineDiagram
+            size="sm"
+            nodes={pipelineNodes}
+            edges={pipelineEdges}
+            centerBox={pipelineCenterBox}
+            ariaLabel="Sample pipeline (small)"
+            description="Phone, Browser and Your app flow into the letsylabs runtime, then to your agent or OpenAI."
+          />
+          <PipelineDiagram
+            size="md"
+            nodes={pipelineNodes}
+            edges={pipelineEdges}
+            centerBox={pipelineCenterBox}
+            ariaLabel="Sample pipeline (medium)"
+            description="Phone, Browser and Your app flow into the letsylabs runtime, then to your agent or OpenAI."
+          />
+          <PipelineDiagram
+            size="lg"
+            nodes={pipelineNodes}
+            edges={pipelineEdges}
+            centerBox={pipelineCenterBox}
+            ariaLabel="Sample pipeline (large)"
+            description="Phone, Browser and Your app flow into the letsylabs runtime, then to your agent or OpenAI."
+          />
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>Pipeline diagram -- interactive (React island)</SectionHeading>
+        <PipelineDiagramInteractive
+          client:load
+          sources={[
+            { id: 'phone', label: 'Phone' },
+            { id: 'browser', label: 'Browser' },
+            { id: 'app', label: 'Your app' },
+          ]}
+          destinations={[
+            { id: 'agent', label: 'Your agent' },
+            { id: 'openai', label: 'OpenAI' },
+            { id: 'ollama', label: 'Ollama' },
+            { id: 'anyllm', label: 'Any LLM' },
+          ]}
+          centerLabel="letsylabs runtime"
+          centerSubLabel="VAD · STT · turns · TTS · trace"
+          hint="CLICK A SOURCE AND A DESTINATION TO REROUTE"
+          ariaLabel="Interactive pipeline diagram: audio sources connect through the letsylabs runtime to your agent or any LLM"
+        />
+      </section>
+
+      <section class="container dev-section" data-reveal data-delay="0">
+        <SectionHeading>site-fx: reveal (data-reveal / data-delay)</SectionHeading>
+        <div class="dev-reveal-grid">
+          <div class="dev-reveal-item" data-reveal data-delay="0">reveal A (delay 0ms)</div>
+          <div class="dev-reveal-item" data-reveal data-delay="120">reveal B (delay 120ms)</div>
+          <div class="dev-reveal-item" data-reveal data-delay="240">reveal C (delay 240ms)</div>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>site-fx: counters (data-counter)</SectionHeading>
+        <div class="dev-row">
+          <div class="dev-counter" data-counter data-target="1" data-prefix="<" data-suffix="s">&lt;1s</div>
+          <div class="dev-counter" data-counter data-target="20" data-suffix="ms">20ms</div>
+          <div class="dev-counter" data-counter data-target="100" data-suffix="%">100%</div>
+        </div>
+      </section>
+
+      <section class="container dev-section">
+        <SectionHeading>site-fx: SVG pulse (data-pulse-path / data-pulse-dot)</SectionHeading>
+        <svg
+          viewBox="0 0 400 80"
+          width="400"
+          height="80"
+          role="img"
+          aria-label="Sample signal pulse travelling along a line"
+        >
+          <path
+            d="M 20 40 L 380 40"
+            data-pulse-path="dev-pulse"
+            data-pulse-ms="1800"
+            stroke="rgba(255,255,255,0.15)"
+            stroke-width="1.5"
+            fill="none"></path>
+          <circle data-pulse-dot="dev-pulse" r="4" fill="#4AF2A1"></circle>
+        </svg>
+      </section>
+    </main>
+
+    <SiteFooter locale="en" />
+
+    <script>
+      import { initFX } from '../../scripts/site-fx';
+      initFX(document);
+    </script>
+
+    <style>
+      .dev-gallery {
+        padding-top: calc(var(--header-height) + 32px);
+      }
+
+      .dev-section {
+        padding-block: 32px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .dev-note {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 8px;
+      }
+
+      .dev-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 20px;
+        align-items: flex-start;
+      }
+
+      .dev-row-code > :global(.code-block) {
+        max-width: 420px;
+      }
+
+      .dev-row-pipelines > :global(.pipeline-diagram) {
+        flex: 1 1 260px;
+      }
+
+      .dev-card-event {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--event);
+        margin-bottom: 10px;
+      }
+
+      .dev-card-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .dev-card-copy {
+        font-size: 14px;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .dev-reveal-grid {
+        display: flex;
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .dev-reveal-item {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+      }
+
+      .dev-counter {
+        font-family: var(--font-mono);
+        font-size: 34px;
+        font-weight: 500;
+        color: var(--signal);
+      }
+    </style>
+  </body>
+</html>

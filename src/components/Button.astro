@@ -1,0 +1,105 @@
+---
+/**
+ * Primary/ghost CTA button (README §Componentes compartidos / §Botones): filled `signal`/`bg` text
+ * primary, transparent ghost with a `line-strong` border, both with a `▸` arrow that shifts 3px on
+ * hover. Renders as `<a>` when `href` is given, `<button>` otherwise (submit forms use
+ * `type="submit"`). `size="sm"` matches the SiteNav CTA (padding 9px 16px, 14px); the default
+ * `size="md"` matches the hero/CTA-section buttons (padding 13px 22px, 15px).
+ */
+export type ButtonVariant = 'primary' | 'ghost';
+export type ButtonSize = 'sm' | 'md';
+
+interface Props {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  href?: string;
+  type?: 'button' | 'submit';
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  arrow = true,
+  class: className,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class:list={['btn', `btn-${variant}`, `btn-${size}`, className]}
+  href={href}
+  type={href ? undefined : type}
+>
+  <span class="btn-label"><slot /></span>
+  {
+    arrow && (
+      <span class="btn-arrow" aria-hidden="true">
+        ▸
+      </span>
+    )
+  }
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      background var(--transition-hover),
+      border-color var(--transition-hover),
+      color var(--transition-hover);
+  }
+
+  .btn-md {
+    font-size: 15px;
+    padding: 13px 22px;
+    gap: 8px;
+  }
+
+  .btn-sm {
+    font-size: 14px;
+    padding: 9px 16px;
+    gap: 6px;
+  }
+
+  .btn-arrow {
+    display: inline-block;
+    transition: transform var(--transition-hover);
+  }
+
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  .btn-primary {
+    background: var(--signal);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: var(--signal-hover);
+    color: var(--bg);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+
+  .btn-ghost:hover {
+    border-color: rgba(74, 242, 161, 0.5);
+    color: var(--ink);
+  }
+</style>

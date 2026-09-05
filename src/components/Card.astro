@@ -1,0 +1,48 @@
+---
+/**
+ * Surface card (README §Espaciado y forma / §2.6): `surface` background, `line` border, radius
+ * 12px, padding 24-28px. Hover (150ms): border → accent at 40%, background → `surface-2`. The
+ * accent is `signal` (green) by default; `tone="amber"` is the Telephony-page variant (`tel`).
+ * `hoverable=false` renders a static card (no hover transition) for non-interactive contexts.
+ */
+export type CardTone = 'default' | 'amber';
+
+interface Props {
+  tone?: CardTone;
+  hoverable?: boolean;
+  class?: string;
+}
+
+const { tone = 'default', hoverable = true, class: className } = Astro.props;
+---
+
+<div class:list={['card', `card-${tone}`, { 'card-hoverable': hoverable }, className]}>
+  <slot />
+</div>
+
+<style>
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+  }
+
+  .card-hoverable {
+    transition:
+      border-color var(--transition-hover),
+      background var(--transition-hover);
+  }
+
+  .card-hoverable:hover {
+    background: var(--surface-2);
+  }
+
+  .card-default.card-hoverable:hover {
+    border-color: rgba(74, 242, 161, 0.4);
+  }
+
+  .card-amber.card-hoverable:hover {
+    border-color: rgba(255, 180, 84, 0.4);
+  }
+</style>

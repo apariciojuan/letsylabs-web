@@ -1,0 +1,102 @@
+---
+/**
+ * Mono event-log rows (README §Componentes compartidos / §Timeline de eventos): each row reads
+ * `ts · type · detail`, with a vertical line on the left (`event` cyan @ 40%) and a small dot per
+ * row colored by its own accent. Reused (per the README) by the Homepage ticket, the /voice trace
+ * card and the /compliance call timeline -- so `ts` and `detail` are both optional (the ticker only
+ * has `type · latency`, the compliance timeline is mostly bare `type` names).
+ *
+ * There is no dedicated `*.dc.html` prototype for this exact component (it only exists inline,
+ * differently laid out, in each of those three screens) -- built here from the README's textual
+ * description as the shared, reusable version; visually verified on the dev QA page
+ * (src/pages/dev/components.astro) rather than pixel-diffed against a single prototype file.
+ */
+export type EventAccent = 'signal' | 'tel' | 'event' | 'muted';
+
+export interface TimelineEvent {
+  ts?: string;
+  type: string;
+  detail?: string;
+  accent?: EventAccent;
+}
+
+interface Props {
+  events: TimelineEvent[];
+  ariaLabel?: string;
+  class?: string;
+}
+
+const { events, ariaLabel, class: className } = Astro.props;
+---
+
+<ol class:list={['event-timeline', className]} aria-label={ariaLabel}>
+  {
+    events.map((event) => (
+      <li class="event-timeline-row">
+        <span
+          class:list={['event-timeline-dot', `event-timeline-dot-${event.accent ?? 'muted'}`]}
+          aria-hidden="true"
+        />
+        <span class="event-timeline-text">
+          {[event.ts, event.type, event.detail].filter((part) => part).join(' · ')}
+        </span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .event-timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .event-timeline::before {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: rgba(88, 196, 246, 0.4);
+  }
+
+  .event-timeline-row {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .event-timeline-dot {
+    position: absolute;
+    left: -20px;
+    top: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  .event-timeline-dot-signal {
+    background: var(--signal);
+  }
+
+  .event-timeline-dot-tel {
+    background: var(--tel);
+  }
+
+  .event-timeline-dot-event {
+    background: var(--event);
+  }
+
+  .event-timeline-text {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    color: var(--muted);
+  }
+</style>
