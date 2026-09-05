@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+
+# Content-addressable store lives in its own named volume (see compose.dev.yml), not inside the
+# bind-mounted source tree, so it survives `docker compose down` without polluting git status.
+storeDir: /pnpm-store

@@ -1,0 +1,201 @@
+/*
+ * letsylabs design tokens — colors, type scale, spacing/shape.
+ * Source of truth: web/design_handoff_letsylabs_web/README.md (§Design Tokens, §Tipografía,
+ * §Espaciado y forma). Values here MUST match that table exactly (brief W-1, entregable 3).
+ *
+ * Self-hosted fonts: Space Grotesk 500/600, Inter 400/500, JetBrains Mono 400/500 — SIL Open Font
+ * License 1.1 (see public/fonts/LICENSE.txt). Downloaded from the Google Fonts API
+ * (fonts.googleapis.com/css2, legacy user-agent to get a single TrueType file per weight) inside the
+ * bootstrap container; served from /fonts to avoid the third-party request (D-CONT-8 / repo rule
+ * "cero scripts/recursos de terceros").
+ */
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-500.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-600.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-500.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-500.ttf') format('truetype');
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Colors (README §Design Tokens) */
+  --bg: #07090d;
+  --surface: #0d1117;
+  --surface-2: #131a23;
+  --ink: #e8edf2;
+  --muted: #8b96a5;
+  --signal: #4af2a1;
+  --signal-hover: #6ff5b5;
+  --link-hover: #8df7c5;
+  --tel: #ffb454;
+  --event: #58c4f6;
+  --alert: #ff6b6b;
+  --line: rgba(255, 255, 255, 0.08);
+  /* README gives a 0.12-0.14 range; the Buttons section pins the ghost-button border to the top of
+     that range (rgba(255,255,255,0.14)), so that is the single value used here. */
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  /* Font families */
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale (README §Tipografía) */
+  --text-h1-hero: clamp(2.125rem, 4.4vw, 3.875rem); /* 34-36px -> 58-66px, lh 1.12 */
+  --text-h2-section: clamp(1.875rem, 3.4vw, 2.5rem); /* 30px -> 40px, lh 1.15 */
+  --text-h2-minor: clamp(1.5625rem, 3vw, 2rem); /* 24-26px -> 30-34px */
+  --text-body: 1rem; /* 16-17px, lh 1.6 */
+  --text-secondary: 0.875rem; /* 13.5-15px */
+  --text-mono: 0.8125rem; /* 11-15px, code blocks 13px lh 1.7-1.75 */
+  --text-eyebrow: 0.75rem; /* mono, 12px, letter-spacing 2px, uppercase */
+  --text-label: 0.625rem; /* mono labels 10-11px, letter-spacing 1-1.5px, uppercase */
+
+  --leading-h1: 1.12;
+  --leading-h2: 1.15;
+  --leading-body: 1.6;
+  --leading-mono: 1.7;
+
+  /* Spacing / layout (README §Espaciado y forma) */
+  --container-max-width: 1180px;
+  --container-padding-inline: 32px;
+  --section-padding-block: 64px;
+  --section-padding-block-lg: 104px;
+  --header-height: 64px;
+
+  /* Radii */
+  --radius-sm: 8px; /* buttons, inputs, diagram nodes */
+  --radius-md: 12px; /* cards, terminals, dropdowns */
+  --radius-badge: 4px;
+  --radius-lg: 16px; /* "your infrastructure" dashed container */
+
+  /* Shadows */
+  --shadow-dropdown: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-terminal: 0 24px 80px rgba(0, 0, 0, 0.45);
+
+  /* Motion */
+  --transition-hover: 150ms ease;
+  --transition-reveal: 380ms ease-out;
+}
+
+/* Minimal reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+h1 {
+  font-size: var(--text-h1-hero);
+  line-height: var(--leading-h1);
+  letter-spacing: -1.5px;
+}
+
+h2 {
+  font-size: var(--text-h2-section);
+  line-height: var(--leading-h2);
+  letter-spacing: -0.5px;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Global reduced-motion fallback (per-component overrides may add more specific rules later). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

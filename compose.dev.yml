@@ -1,0 +1,76 @@
+name: letsy-web
+
+x-web-base: &web-base
+  build:
+    context: .
+    dockerfile: .devcontainer/Dockerfile
+    args: { UID: '${UID:-1000}', GID: '${GID:-1000}' }
+  image: letsy-web-dev:local
+  working_dir: /workspace
+  volumes:
+    - .:/workspace # source: bind mount -> HMR sees every edit
+    - node_modules:/workspace/node_modules
+    - pnpm-store:/pnpm-store # location pinned by pnpm-workspace.yaml's storeDir, not an env var
+  env_file: [.env]
+  networks: [letsy-dev]
+
+services:
+  web: # dev server with HMR (CU-CONT-7)
+    <<: *web-base
+    command: corepack pnpm dev
+    ports:
+      - '4321:4321'
+    mem_limit: 2g
+    memswap_limit: 2g
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:4321/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  dev: # one-shot commands (install, typecheck, lint, test, build, i18n:check...) and devcontainer shell
+    <<: *web-base
+    command: sleep infinity
+    mem_limit: 2g
+    memswap_limit: 2g
+    healthcheck:
+      test: ['CMD', 'node', '--version']
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+  e2e: # Playwright, same tag as @playwright/test in package.json (1.62.1)
+    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    profiles: [e2e]
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - node_modules:/workspace/node_modules
+      - pnpm-store:/pnpm-store
+    environment:
+      PLAYWRIGHT_BASE_URL: http://web:4321
+    env_file: [.env]
+    networks: [letsy-dev]
+    command: corepack pnpm e2e
+    mem_limit: 2g
+    memswap_limit: 2g
+    healthcheck:
+      test: ['CMD', 'node', '--version']
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  node_modules: {}
+  pnpm-store: {}
+
+networks:
+  letsy-dev:
+    external: true # created once by scripts/dev/ensure_network.sh (H6)

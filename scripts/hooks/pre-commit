@@ -1,0 +1,26 @@
+#!/bin/sh
+# Git pre-commit hook: delegates to lefthook inside the dev container (nothing runs on the host,
+# docs/specs/workspace_contenedores_dev.md §2 D-CONT-6). Install once per clone:
+#   git config core.hooksPath scripts/hooks
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+
+# Fleco 5 (spec §8): commits that only touch *.md never need the container.
+STAGED=$(git diff --cached --name-only)
+if [ -n "$STAGED" ] && ! printf '%s\n' "$STAGED" | grep -qv '\.md$'; then
+  echo "pre-commit: only Markdown files staged -- skipping the container."
+  exit 0
+fi
+
+if ! docker info >/dev/null 2>&1; then
+  echo "pre-commit: Docker is not running; commits require the dev container (CLAUDE.md §8.4)." >&2
+  exit 1
+fi
+
+scripts/dev/ensure_network.sh
+
+# The container has no Docker CLI and no socket (spec §2 H4): render the compose file here and let
+# the ratchet read the JSON from the bind mount (.compose.rendered.json is git-ignored).
+docker compose -f compose.dev.yml config --format json > .compose.rendered.json
+
+exec docker compose -f compose.dev.yml run --rm -T dev lefthook run pre-commit

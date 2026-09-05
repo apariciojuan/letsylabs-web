@@ -1,0 +1,11 @@
+{
+  "common": {
+    "languageSwitch": {
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "home": {
+    "h1": "Marcador de arranque — contenido pendiente."
+  }
+}

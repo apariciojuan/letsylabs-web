@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#4AF2A1;text-decoration:none}a:hover{color:#8DF7C5}
+::selection{background:rgba(74,242,161,0.25)}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes bar{0%,100%{transform:scaleY(0.18)}50%{transform:scaleY(1)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;min-height:100vh">
+<dc-import name="SiteNav" active="voice" hint-size="100%,64px"></dc-import>
+<main style="padding-top:64px">
+
+<section data-screen-label="Voice hero" style="position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 800px 500px at 50% 0%, rgba(74,242,161,0.05), transparent 70%);pointer-events:none"></div>
+  <div style="max-width:1180px;margin:0 auto;padding:96px 32px 64px;position:relative;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:#4AF2A1;margin-bottom:20px">VOICE</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.2vw,58px);line-height:1.12;letter-spacing:-1.2px;margin:0 auto 20px;max-width:820px;text-wrap:pretty">Realtime speech infrastructure for your applications.</h1>
+    <p style="font-size:17px;line-height:1.6;color:#8B96A5;margin:0 auto 32px;max-width:600px;text-wrap:pretty">STT, TTS, turn-taking and tracing as one runtime. Your agent stays yours.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="Pricing.dc.html" style="background:#4AF2A1;color:#07090D;font-size:15px;font-weight:500;padding:13px 22px;border-radius:8px;display:inline-flex;align-items:center;gap:8px" style-hover="background:#6FF5B5;color:#07090D">Get early access <span>▸</span></a>
+      <a href="OpenSource.dc.html" style="border:1px solid rgba(255,255,255,0.14);color:#E8EDF2;font-size:15px;font-weight:500;padding:13px 22px;border-radius:8px;display:inline-flex;align-items:center;gap:8px" style-hover="border-color:rgba(74,242,161,0.5);color:#E8EDF2">Read the docs <span>▸</span></a>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="How it works" style="max-width:1180px;margin:0 auto;padding:48px 32px 72px">
+  <div data-reveal style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#8B96A5;margin-bottom:12px">EVERY SEGMENT MEASURED — LATENCIES PER HOP</div>
+  <div data-reveal data-delay="100" style="max-width:900px;margin:0 auto">
+    <svg viewBox="0 0 860 130" style="width:100%;height:auto;display:block" role="img" aria-label="Voice pipeline with per-hop latencies: audio in, VAD, STT, your agent, TTS, audio out">
+      <path data-pulse-path="voice" data-pulse-ms="3400" d="M 80 55 L 780 55" style="fill:none;stroke:rgba(74,242,161,0.25);stroke-width:1.5"></path>
+      <g><rect x="20" y="33" width="120" height="44" rx="8" style="fill:#0D1117;stroke:rgba(255,255,255,0.14);stroke-width:1"></rect><text x="80" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:13px;text-anchor:middle;dominant-baseline:central">audio in</text></g>
+      <g><rect x="176" y="33" width="100" height="44" rx="8" style="fill:#0D1117;stroke:rgba(255,255,255,0.14);stroke-width:1"></rect><text x="226" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:13px;text-anchor:middle;dominant-baseline:central">VAD</text><text x="226" y="98" style="fill:#8B96A5;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle">20ms frames</text></g>
+      <g><rect x="312" y="33" width="100" height="44" rx="8" style="fill:#0D1117;stroke:rgba(88,196,246,0.5);stroke-width:1"></rect><text x="362" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:13px;text-anchor:middle;dominant-baseline:central">STT</text><text x="362" y="98" style="fill:#58C4F6;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle">&lt;300ms partial</text></g>
+      <g><rect x="448" y="33" width="130" height="44" rx="8" style="fill:#0D1117;stroke:rgba(74,242,161,0.5);stroke-width:1"></rect><text x="513" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:13px;text-anchor:middle;dominant-baseline:central">your agent</text><text x="513" y="98" style="fill:#4AF2A1;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle">HTTP + SSE</text></g>
+      <g><rect x="614" y="33" width="100" height="44" rx="8" style="fill:#0D1117;stroke:rgba(74,242,161,0.5);stroke-width:1"></rect><text x="664" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:13px;text-anchor:middle;dominant-baseline:central">TTS</text><text x="664" y="98" style="fill:#4AF2A1;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle">96ms first audio</text></g>
+      <g><rect x="750" y="33" width="90" height="44" rx="8" style="fill:#0D1117;stroke:rgba(255,255,255,0.14);stroke-width:1"></rect><text x="795" y="55" style="fill:#E8EDF2;font-family:'JetBrains Mono',monospace;font-size:12px;text-anchor:middle;dominant-baseline:central">audio out</text></g>
+      <circle data-pulse-dot="voice" cx="80" cy="55" r="4" style="fill:#4AF2A1;filter:drop-shadow(0 0 6px #4AF2A1)"></circle>
+    </svg>
+  </div>
+</section>
+
+<section data-screen-label="Capabilities" style="max-width:1180px;margin:0 auto;padding:0 32px 72px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;transition:border-color 150ms,background 150ms" style-hover="border-color:rgba(74,242,161,0.4);background:#131A23">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#58C4F6;margin-bottom:10px">stt.partial · stt.final</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:10px">Realtime STT</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">Partial and final transcripts as the caller speaks. Spanish first, multilingual by design. Open-weight models available for self-host.</p>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;transition:border-color 150ms,background 150ms" style-hover="border-color:rgba(74,242,161,0.4);background:#131A23">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:10px">tts.first_audio</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:10px">Streaming TTS</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0 0 14px">Speech streams per sentence, not per response. Voices are platform resources — switch providers or bring cloned voices without changing code.</p>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:#8B96A5;border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:2px 7px">VOICE CLONING: COMING</span>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;transition:border-color 150ms,background 150ms" style-hover="border-color:rgba(74,242,161,0.4);background:#131A23">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:10px">turn.barge_in</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:10px">Turn-taking &amp; barge-in</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0 0 16px">The caller interrupts, the agent stops. The runtime detects the turn and cancels TTS mid-sentence — your code never juggles timers.</p>
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px">
+        <span style="color:#4AF2A1">agent speaking</span>
+        <span style="display:inline-flex;gap:2px;height:16px;align-items:center">
+          <span style="width:2px;height:100%;background:#FFB454;animation:bar 0.9s ease-in-out infinite;transform-origin:center"></span>
+          <span style="width:2px;height:100%;background:#FFB454;animation:bar 0.9s ease-in-out infinite;animation-delay:120ms;transform-origin:center"></span>
+          <span style="width:2px;height:100%;background:#FFB454;animation:bar 0.9s ease-in-out infinite;animation-delay:240ms;transform-origin:center"></span>
+        </span>
+        <span style="color:#FFB454">caller barges in</span>
+        <span style="color:#8B96A5">→ tts.cancel · 61ms</span>
+      </div>
+    </div>
+    <div data-reveal data-delay="180" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;transition:border-color 150ms,background 150ms" style-hover="border-color:rgba(74,242,161,0.4);background:#131A23">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#58C4F6;margin-bottom:10px">latency.turn</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:10px">Latency tracing</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0 0 16px">Every conversation leaves a timeline you can query. Per-hop latencies, per-turn totals, exportable.</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;border-left:1px solid rgba(88,196,246,0.4);padding-left:14px;color:#8B96A5">
+        <div><span style="color:#58C4F6">●</span> 00:03.1 · stt.final <span style="float:right">142ms</span></div>
+        <div><span style="color:#4AF2A1">●</span> 00:03.3 · agent.first_token <span style="float:right">210ms</span></div>
+        <div><span style="color:#4AF2A1">●</span> 00:03.4 · tts.first_audio <span style="float:right">96ms</span></div>
+        <div><span style="color:#58C4F6">●</span> 00:03.4 · latency.turn <span style="float:right;color:#E8EDF2">448ms</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Use cases" style="max-width:1180px;margin:0 auto;padding:0 32px 72px">
+  <div data-reveal style="max-width:640px;margin-bottom:32px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-0.6px;margin:0">What it's for.</h2>
+  </div>
+  <div data-reveal data-delay="80" style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden">
+    <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(255,255,255,0.08);background:#0D1117"><div style="padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5">USE CASE</div><div style="padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5">WHAT LETSYLABS DOES</div></div>
+    <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="padding:16px 20px;font-size:14px;font-weight:500">AI agents</div><div style="padding:16px 20px;font-size:14px;color:#8B96A5">Full voice loop — your agent thinks, the runtime listens and speaks.</div></div>
+    <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="padding:16px 20px;font-size:14px;font-weight:500">Call automation</div><div style="padding:16px 20px;font-size:14px;color:#8B96A5">Inbound and outbound calls as programmable sessions with DTMF and transfers.</div></div>
+    <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="padding:16px 20px;font-size:14px;font-weight:500">Live transcription</div><div style="padding:16px 20px;font-size:14px;color:#8B96A5">Partials in under 300 ms, finals with punctuation, per-speaker.</div></div>
+    <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="padding:16px 20px;font-size:14px;font-weight:500">Assistants</div><div style="padding:16px 20px;font-size:14px;color:#8B96A5">Web and in-app voice with barge-in that feels human.</div></div>
+    <div style="display:grid;grid-template-columns:220px 1fr"><div style="padding:16px 20px;font-size:14px;font-weight:500">Accessibility</div><div style="padding:16px 20px;font-size:14px;color:#8B96A5">Low-latency speech in and out for interfaces that talk.</div></div>
+  </div>
+</section>
+
+<section data-screen-label="Endpoints" style="max-width:1180px;margin:0 auto;padding:0 32px 88px">
+  <div data-reveal style="max-width:720px;background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px 28px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:2.2">
+    <div><span style="color:#4AF2A1">POST</span> /v1/sessions <span style="color:#8B96A5;float:right">create a session</span></div>
+    <div><span style="color:#58C4F6">WS</span> &nbsp;&nbsp;wss://…/audio <span style="color:#8B96A5;float:right">stream audio + events</span></div>
+    <div><span style="color:#4AF2A1">GET</span> &nbsp;/v1/sessions/:id/trace <span style="color:#8B96A5;float:right">query the timeline</span></div>
+  </div>
+  <div data-reveal data-delay="100" style="margin-top:32px">
+    <a href="OpenSource.dc.html" style="font-size:15px;font-weight:500;display:inline-flex;align-items:center;gap:8px">Read the docs <span>→</span></a>
+  </div>
+</section>
+
+</main>
+<dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { import('./site-fx.js').then(m => { this.fx = m.initFX(); }); }
+  componentWillUnmount() { if (this.fx) this.fx.stop(); }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

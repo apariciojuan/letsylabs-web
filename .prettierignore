@@ -1,0 +1,8 @@
+dist
+.astro
+node_modules
+.pnpm-store
+pnpm-lock.yaml
+public/fonts
+.compose.rendered.json
+design_handoff_letsylabs_web

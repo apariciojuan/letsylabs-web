@@ -1,0 +1,20 @@
+{
+  "services": {
+    "web": {
+      "image": "letsy-web-dev:local",
+      "mem_limit": 2147483648,
+      "memswap_limit": 2147483648,
+      "healthcheck": {
+        "test": ["CMD", "node", "--version"]
+      }
+    },
+    "e2e": {
+      "image": "mcr.microsoft.com/playwright:v1.62.1-noble",
+      "mem_limit": 2147483648,
+      "memswap_limit": 2147483648,
+      "healthcheck": {
+        "test": ["CMD", "node", "--version"]
+      }
+    }
+  }
+}

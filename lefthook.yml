@@ -1,0 +1,24 @@
+# Runs INSIDE the dev container (see scripts/hooks/pre-commit). Budget: < 30 s. Heavy checks (test,
+# build, e2e, Lighthouse) live in the manual verification pass / CI, not in this hook.
+pre-commit:
+  parallel: false
+  commands:
+    lint:
+      glob: '*.{js,mjs,cjs,ts,tsx,astro}'
+      run: corepack pnpm lint
+    format:
+      glob: '*.{js,mjs,cjs,ts,tsx,astro,css,json,md}'
+      run: corepack pnpm format:check
+    typecheck:
+      glob: '*.{ts,tsx,astro}'
+      run: corepack pnpm typecheck
+    i18n-check:
+      glob: 'src/i18n/*.json'
+      run: corepack pnpm i18n:check
+    compose-ratchet:
+      glob: '{compose*.yml,.devcontainer/Dockerfile}'
+      run: scripts/check_compose.sh .compose.rendered.json
+    third-party-ratchet:
+      # dist/ is git-ignored (never staged), so this has no glob gate; it is a fast no-op when
+      # dist/ doesn't exist and only bites once a stale build directory is present locally.
+      run: scripts/check_third_party.sh dist

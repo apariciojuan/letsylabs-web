@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#4AF2A1;text-decoration:none}a:hover{color:#8DF7C5}
+::selection{background:rgba(74,242,161,0.25)}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;min-height:100vh">
+<dc-import name="SiteNav" active="company" hint-size="100%,64px"></dc-import>
+<main style="padding-top:64px">
+
+<section data-screen-label="Company hero" style="position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 800px 500px at 50% 0%, rgba(74,242,161,0.05), transparent 70%);pointer-events:none"></div>
+  <div style="max-width:900px;margin:0 auto;padding:112px 32px 72px;position:relative;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:#4AF2A1;margin-bottom:24px">COMPANY</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(30px,3.8vw,50px);line-height:1.18;letter-spacing:-1px;margin:0;text-wrap:pretty">We build the interaction layer between intelligent software and the real world — starting with voice, from Spain, for Europe.</h1>
+  </div>
+</section>
+
+<section data-screen-label="Principios" style="max-width:1180px;margin:0 auto;padding:24px 32px 72px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:1000px;margin:0 auto">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:12px">01</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px">Bring your own intelligence</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#8B96A5;margin:0">We never compete with your agent. The thinking is yours; the plumbing is ours.</p>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:12px">02</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px">Compliance is infrastructure</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#8B96A5;margin:0">The law isn't a feature request. Disclosure, handoff and audit ship in the runtime.</p>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:12px">03</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px">Sovereignty is real</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#8B96A5;margin:0">Self-host everything, open-weight models included. Trust it because you can verify it.</p>
+    </div>
+    <div data-reveal data-delay="180" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4AF2A1;margin-bottom:12px">04</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px">No smoke</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#8B96A5;margin:0">No fake logos, no invented testimonials, no certifications we don't hold. Badges say "coming" when things are coming.</p>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Contacto" style="max-width:1180px;margin:0 auto;padding:0 32px 96px;text-align:center">
+  <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#8B96A5">The team, when they're ready. Until then: <a href="mailto:hello@letsylabs.com">hello@letsylabs.com</a></div>
+</section>
+
+</main>
+<dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { import('./site-fx.js').then(m => { this.fx = m.initFX(); }); }
+  componentWillUnmount() { if (this.fx) this.fx.stop(); }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

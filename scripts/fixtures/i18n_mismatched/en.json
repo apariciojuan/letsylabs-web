@@ -1,0 +1,12 @@
+{
+  "common": {
+    "languageSwitch": {
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "home": {
+    "h1": "Fixture placeholder.",
+    "tags": ["a", "b", "c"]
+  }
+}

@@ -1,0 +1,61 @@
+---
+import '../styles/tokens.css';
+import { locales, t, type Locale } from '../i18n';
+import { localizePath } from '../i18n/routing';
+
+interface Props {
+  locale: Locale;
+  title: string;
+}
+
+const { locale, title } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    {locales.map((loc) => <link rel="alternate" hreflang={loc} href={localizePath(pathname, loc)} />)}
+    <link rel="alternate" hreflang="x-default" href={localizePath(pathname, 'en')} />
+  </head>
+  <body>
+    <nav class="lang-switch" aria-label="Language">
+      {
+        locales.map((loc) => (
+          <a href={localizePath(pathname, loc)} aria-current={loc === locale ? 'page' : undefined}>
+            {t(locale, loc === 'en' ? 'common.languageSwitch.en' : 'common.languageSwitch.es')}
+          </a>
+        ))
+      }
+    </nav>
+    <slot />
+  </body>
+</html>
+
+<style>
+  .lang-switch {
+    display: flex;
+    gap: 4px;
+    padding: 16px 32px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .lang-switch a {
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-badge);
+    text-decoration: none;
+    color: var(--muted);
+  }
+
+  .lang-switch a[aria-current='page'] {
+    color: var(--ink);
+    background: var(--surface-2);
+    border-color: var(--line-strong);
+  }
+</style>

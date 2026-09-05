@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#4AF2A1;text-decoration:none}a:hover{color:#8DF7C5}
+::selection{background:rgba(74,242,161,0.25)}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;min-height:100vh">
+<dc-import name="SiteNav" active="pricing" hint-size="100%,64px"></dc-import>
+<main style="padding-top:64px">
+
+<section data-screen-label="Pricing hero" style="position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 800px 500px at 50% 0%, rgba(74,242,161,0.05), transparent 70%);pointer-events:none"></div>
+  <div style="max-width:1180px;margin:0 auto;padding:96px 32px 56px;position:relative;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:#4AF2A1;margin-bottom:20px">PRICING</div>
+    <sc-if value="{{ preGa }}" hint-placeholder-val="{{ true }}">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.2vw,58px);line-height:1.12;letter-spacing:-1.2px;margin:0 auto 20px;max-width:820px;text-wrap:pretty">Pricing lands with GA.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#8B96A5;margin:0 auto 8px;max-width:600px;text-wrap:pretty">March 2027. Early-access pilots get founding terms.</p>
+    </sc-if>
+    <sc-if value="{{ postGa }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.2vw,58px);line-height:1.12;letter-spacing:-1.2px;margin:0 auto 20px;max-width:820px;text-wrap:pretty">Pay for minutes, not promises.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#8B96A5;margin:0 auto 8px;max-width:600px;text-wrap:pretty">Bring your own carrier — telephony minutes are yours.</p>
+    </sc-if>
+  </div>
+</section>
+
+<sc-if value="{{ preGa }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Waitlist" style="max-width:1180px;margin:0 auto;padding:16px 32px 88px">
+  <form data-reveal onSubmit="{{ submitWaitlist }}" style="display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto">
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <input type="email" required placeholder="you@company.com" style="flex:2;min-width:200px;background:#0D1117;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:12px 14px;color:#E8EDF2;font-family:Inter,sans-serif;font-size:14px;outline:none" style-focus="border-color:#4AF2A1">
+      <input type="text" placeholder="Country" style="flex:1;min-width:110px;background:#0D1117;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:12px 14px;color:#E8EDF2;font-family:Inter,sans-serif;font-size:14px;outline:none" style-focus="border-color:#4AF2A1">
+    </div>
+    <input type="text" placeholder="What are you building?" style="background:#0D1117;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:12px 14px;color:#E8EDF2;font-family:Inter,sans-serif;font-size:14px;outline:none" style-focus="border-color:#4AF2A1">
+    <div>
+      <button type="submit" style="background:#4AF2A1;color:#07090D;border:none;font-size:15px;font-weight:500;font-family:Inter,sans-serif;padding:13px 22px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:8px" style-hover="background:#6FF5B5">{{ waitlistLabel }} <span>▸</span></button>
+    </div>
+  </form>
+</section>
+</sc-if>
+
+<sc-if value="{{ postGa }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Planes" style="max-width:1180px;margin:0 auto;padding:16px 32px 56px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;max-width:1000px;margin:0 auto">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:30px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:6px">Primitives</div>
+      <div style="font-size:13.5px;color:#8B96A5;margin-bottom:20px">STT + TTS + orchestration, à la carte.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:30px;color:#4AF2A1">{PRICE}<span style="font-size:13px;color:#8B96A5"> €/min</span></div>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(74,242,161,0.5);border-radius:12px;padding:30px;position:relative">
+      <span style="position:absolute;top:-9px;left:24px;background:#07090D;padding:0 8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:#4AF2A1">MOST COMMON</span>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:6px">Voice Agent</div>
+      <div style="font-size:13.5px;color:#8B96A5;margin-bottom:20px">The full voice loop, per conversation minute.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:30px;color:#4AF2A1">{PRICE}<span style="font-size:13px;color:#8B96A5"> €/min</span></div>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:30px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:6px">Self-hosted</div>
+      <div style="font-size:13.5px;color:#8B96A5;margin-bottom:20px">Per deployment, per month. Your infra.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:18px;color:#E8EDF2;padding-top:8px"><a href="mailto:hello@letsylabs.com">Talk to us →</a></div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<section data-screen-label="FAQ facturación" style="max-width:1180px;margin:0 auto;padding:0 32px 88px">
+  <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">Do telephony minutes cost extra?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">You bring your own carrier — those minutes are between you and them. We bill the runtime, not the pipe.</p>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">What do early-access pilots get?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">Founding terms locked at GA, direct access to the team, and influence on the roadmap.</p>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">Is the LLM included?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">No — bring your own intelligence. You connect your agent or LLM; we never mark up model tokens.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+<dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;gaLaunched&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { sent: false };
+  componentDidMount() { import('./site-fx.js').then(m => { this.fx = m.initFX(); }); }
+  componentWillUnmount() { if (this.fx) this.fx.stop(); }
+  renderVals() {
+    const ga = this.props.gaLaunched ?? false;
+    return {
+      preGa: !ga, postGa: ga,
+      waitlistLabel: this.state.sent ? "You're on the list ✓" : 'Get early access',
+      submitWaitlist: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

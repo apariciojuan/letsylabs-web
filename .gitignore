@@ -1,0 +1,40 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# pnpm local content-addressable store (created inside the ephemeral bootstrap container)
+.pnpm-store/
+
+# editor/agent tooling
+.vscode/
+.claude/
+
+# compose render artifact (git-ignored per workspace_contenedores_dev.md §4.7)
+.compose.rendered.json
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

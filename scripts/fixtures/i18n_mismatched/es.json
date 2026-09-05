@@ -1,0 +1,11 @@
+{
+  "common": {
+    "languageSwitch": {
+      "en": "EN"
+    }
+  },
+  "home": {
+    "h1": "Marcador de fixture.",
+    "tags": ["a", "b"]
+  }
+}

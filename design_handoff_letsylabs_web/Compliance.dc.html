@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#4AF2A1;text-decoration:none}a:hover{color:#8DF7C5}
+::selection{background:rgba(74,242,161,0.25)}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="background:#07090D;color:#E8EDF2;font-family:Inter,sans-serif;min-height:100vh">
+<dc-import name="SiteNav" active="compliance" hint-size="100%,64px"></dc-import>
+<main style="padding-top:64px">
+
+<section data-screen-label="Compliance hero" style="position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,0.08)">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 800px 500px at 50% 0%, rgba(74,242,161,0.06), transparent 70%);pointer-events:none"></div>
+  <div style="max-width:1180px;margin:0 auto;padding:96px 32px 72px;position:relative;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:#4AF2A1;margin-bottom:20px">CUMPLIMIENTO EUROPEO DE SERIE</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.2vw,58px);line-height:1.12;letter-spacing:-1.2px;margin:0 auto 20px;max-width:860px;text-wrap:pretty">Cumple la Ley 10/2025 sin construir nada.</h1>
+    <p style="font-size:17px;line-height:1.6;color:#8B96A5;margin:0 auto 32px;max-width:680px;text-wrap:pretty">Aviso de IA, transferencia garantizada a humano, marcado de audio sintético y registro auditable por llamada — como parte de la infraestructura, no como proyecto aparte.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="mailto:hello@letsylabs.com" style="background:#4AF2A1;color:#07090D;font-size:15px;font-weight:500;padding:13px 22px;border-radius:8px;display:inline-flex;align-items:center;gap:8px" style-hover="background:#6FF5B5;color:#07090D">Habla con nosotros <span>▸</span></a>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B96A5;margin-top:20px">Página disponible en español · English version at GA</div>
+  </div>
+</section>
+
+<section data-screen-label="Qué exige la ley" style="max-width:1180px;margin:0 auto;padding:80px 32px 40px">
+  <div data-reveal style="max-width:640px;margin-bottom:40px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-0.6px;margin:0 0 12px">Qué exige la ley — y cómo lo resolvemos.</h2>
+    <p style="font-size:15px;line-height:1.6;color:#8B96A5;margin:0">Cuatro obligaciones llanas. Cada una llega resuelta como infraestructura.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5;margin-bottom:12px">LA LEY EXIGE <span style="color:#58C4F6">· {ARTÍCULO}</span></div>
+      <div style="font-size:14.5px;line-height:1.55;margin-bottom:16px">Identificarse como IA al inicio de la llamada.</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#4AF2A1;margin-bottom:8px">LETSYLABS</div>
+        <div style="font-size:13.5px;line-height:1.55;color:#8B96A5">Aviso automático de IA al descolgar, registrado como evento <span style="font-family:'JetBrains Mono',monospace;color:#58C4F6">disclosure.played</span>.</div>
+      </div>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5;margin-bottom:12px">LA LEY EXIGE <span style="color:#58C4F6">· {ARTÍCULO}</span></div>
+      <div style="font-size:14.5px;line-height:1.55;margin-bottom:16px">Ofrecer transferencia a una persona.</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#4AF2A1;margin-bottom:8px">LETSYLABS</div>
+        <div style="font-size:13.5px;line-height:1.55;color:#8B96A5">Handoff garantizado a humano por petición o por regla — <span style="font-family:'JetBrains Mono',monospace;color:#58C4F6">call.transfer.human</span>.</div>
+      </div>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5;margin-bottom:12px">LA LEY EXIGE <span style="color:#58C4F6">· {ARTÍCULO}</span></div>
+      <div style="font-size:14.5px;line-height:1.55;margin-bottom:16px">Marcar el audio generado como sintético.</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#4AF2A1;margin-bottom:8px">LETSYLABS</div>
+        <div style="font-size:13.5px;line-height:1.55;color:#8B96A5">Marcado de audio sintético en el propio stream de TTS, sin configurar nada.</div>
+      </div>
+    </div>
+    <div data-reveal data-delay="180" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:26px;transition:border-color 150ms" style-hover="border-color:rgba(74,242,161,0.4)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#8B96A5;margin-bottom:12px">LA LEY EXIGE <span style="color:#58C4F6">· {ARTÍCULO}</span></div>
+      <div style="font-size:14.5px;line-height:1.55;margin-bottom:16px">Conservar constancia de lo ocurrido.</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#4AF2A1;margin-bottom:8px">LETSYLABS</div>
+        <div style="font-size:13.5px;line-height:1.55;color:#8B96A5">Registro auditable certificado y exportable por llamada, con retención configurable.</div>
+      </div>
+    </div>
+  </div>
+  <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B96A5;margin-top:20px">{ARTÍCULO} — la referencia legal exacta la redacta el equipo jurídico.</div>
+</section>
+
+<section data-screen-label="Timeline de llamada conforme" style="max-width:1180px;margin:0 auto;padding:64px 32px">
+  <div data-reveal style="max-width:640px;margin-bottom:36px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-0.6px;margin:0 0 12px">Una llamada conforme, evento a evento.</h2>
+    <p style="font-size:15px;line-height:1.6;color:#8B96A5;margin:0">Esto es lo que queda registrado en cada llamada. La seriedad no la ponen los sellos: la pone la traza.</p>
+  </div>
+  <div data-reveal data-delay="80" style="max-width:760px;background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px 32px">
+    <div style="border-left:1px solid rgba(88,196,246,0.4);padding-left:22px;display:flex;flex-direction:column;gap:0">
+      <div data-reveal style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#58C4F6"></span><span style="color:#8B96A5;min-width:72px">00:00.0</span><span style="color:#E8EDF2;min-width:200px">call.answered</span><span style="color:#8B96A5">entrante · +34 …</span></div>
+      <div data-reveal data-delay="60" style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#4AF2A1"></span><span style="color:#8B96A5;min-width:72px">00:00.4</span><span style="color:#E8EDF2;min-width:200px">disclosure.played</span><span style="color:#8B96A5">"Le atiende un sistema de IA…"</span></div>
+      <div data-reveal data-delay="120" style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#58C4F6"></span><span style="color:#8B96A5;min-width:72px">00:08.2</span><span style="color:#E8EDF2;min-width:200px">stt.final</span><span style="color:#8B96A5">"quiero hablar con una persona"</span></div>
+      <div data-reveal data-delay="180" style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#FFB454"></span><span style="color:#8B96A5;min-width:72px">00:08.9</span><span style="color:#E8EDF2;min-width:200px">call.transfer.human</span><span style="color:#8B96A5">cola: soporte · ok</span></div>
+      <div data-reveal data-delay="240" style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#58C4F6"></span><span style="color:#8B96A5;min-width:72px">03:12.6</span><span style="color:#E8EDF2;min-width:200px">call.ended</span><span style="color:#8B96A5">duración 3m 12s</span></div>
+      <div data-reveal data-delay="300" style="position:relative;padding:9px 0;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;gap:18px;flex-wrap:wrap"><span style="position:absolute;left:-26.5px;top:15px;width:8px;height:8px;border-radius:50%;background:#4AF2A1"></span><span style="color:#8B96A5;min-width:72px">03:12.7</span><span style="color:#E8EDF2;min-width:200px">trace.sealed</span><span style="color:#8B96A5">registro certificado · exportable</span></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Registro exportable" style="max-width:1180px;margin:0 auto;padding:16px 32px 64px;display:flex;flex-wrap:wrap;gap:48px;align-items:center">
+  <div data-reveal style="flex:1 1 380px;min-width:300px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,2.6vw,30px);letter-spacing:-0.6px;margin:0 0 14px">El registro, listo para el auditor.</h2>
+    <p style="font-size:15px;line-height:1.6;color:#8B96A5;margin:0 0 20px;text-wrap:pretty">Cada llamada se exporta como un documento firmado: eventos, avisos, transferencias y retención aplicada. Un comando, un fichero.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8B96A5">
+      <div><span style="color:#4AF2A1;font-family:'JetBrains Mono',monospace">✔</span> Borrado y rectificación por llamada</div>
+      <div><span style="color:#4AF2A1;font-family:'JetBrains Mono',monospace">✔</span> Retención configurable por política</div>
+      <div><span style="color:#4AF2A1;font-family:'JetBrains Mono',monospace">✔</span> AI Act art. 50 para el resto de la UE</div>
+    </div>
+  </div>
+  <div data-reveal data-delay="100" style="flex:1 1 400px;min-width:300px">
+    <div style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B96A5">GET /v1/sessions/01JD…/trace?format=audit</span>
+      </div>
+      <pre style="margin:0;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:#E8EDF2;white-space:pre-wrap">{
+  <span style="color:#58C4F6">"session"</span>: <span style="color:#4AF2A1">"01JD…"</span>,
+  <span style="color:#58C4F6">"disclosure"</span>: { <span style="color:#58C4F6">"played_at"</span>: <span style="color:#4AF2A1">"00:00.4"</span>, <span style="color:#58C4F6">"verified"</span>: true },
+  <span style="color:#58C4F6">"human_handoff"</span>: { <span style="color:#58C4F6">"offered"</span>: true, <span style="color:#58C4F6">"completed"</span>: true },
+  <span style="color:#58C4F6">"synthetic_audio_marked"</span>: true,
+  <span style="color:#58C4F6">"events"</span>: <span style="color:#FFB454">47</span>,
+  <span style="color:#58C4F6">"signature"</span>: <span style="color:#4AF2A1">"ed25519:9f2c…"</span>
+}</pre>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="FAQ legal" style="max-width:1180px;margin:0 auto;padding:0 32px 72px">
+  <div data-reveal style="max-width:640px;margin-bottom:28px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,2.6vw,30px);letter-spacing:-0.6px;margin:0">FAQ legal breve.</h2>
+  </div>
+  <div style="max-width:760px;display:flex;flex-direction:column;gap:12px">
+    <div data-reveal style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">¿Esto me hace cumplir automáticamente?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">No. Te da las herramientas técnicas resueltas; el cumplimiento final depende de tu implementación y tus procesos.</p>
+    </div>
+    <div data-reveal data-delay="60" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">¿Aplica fuera de España?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">El AI Act (art. 50) exige transparencia similar en toda la UE. Los mismos mecanismos sirven para ambos marcos.</p>
+    </div>
+    <div data-reveal data-delay="120" style="background:#0D1117;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px">
+      <div style="font-size:15px;font-weight:500;margin-bottom:8px">¿Y si ya tengo mi propio sistema de avisos?</div>
+      <p style="font-size:14px;line-height:1.6;color:#8B96A5;margin:0">Puedes desactivar los nuestros por sesión. El registro auditable sigue funcionando igual.</p>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="CTA compliance" style="border-top:1px solid rgba(255,255,255,0.08)">
+  <div style="max-width:760px;margin:0 auto;padding:72px 32px;text-align:center">
+    <h2 data-reveal style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-0.6px;margin:0 0 28px;text-wrap:pretty">¿Llamadas con IA en España o la UE? Hablemos.</h2>
+    <a data-reveal data-delay="80" href="mailto:hello@letsylabs.com" style="background:#4AF2A1;color:#07090D;font-size:15px;font-weight:500;padding:13px 22px;border-radius:8px;display:inline-flex;align-items:center;gap:8px" style-hover="background:#6FF5B5;color:#07090D">Habla con nosotros <span>▸</span></a>
+    <p data-reveal data-delay="140" style="font-size:12px;line-height:1.6;color:#8B96A5;margin:32px auto 0;max-width:520px">letsylabs proporciona herramientas técnicas; el cumplimiento final depende de tu implementación. No es asesoramiento jurídico.</p>
+  </div>
+</section>
+
+</main>
+<dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { import('./site-fx.js').then(m => { this.fx = m.initFX(); }); }
+  componentWillUnmount() { if (this.fx) this.fx.stop(); }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

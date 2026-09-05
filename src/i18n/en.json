@@ -1,0 +1,11 @@
+{
+  "common": {
+    "languageSwitch": {
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "home": {
+    "h1": "Bootstrap placeholder — content pending."
+  }
+}

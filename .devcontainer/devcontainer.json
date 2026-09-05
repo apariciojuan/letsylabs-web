@@ -1,0 +1,13 @@
+{
+  "name": "letsy-web",
+  "dockerComposeFile": ["../compose.dev.yml"],
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "initializeCommand": "sh scripts/dev/ensure_network.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["astro-build.astro-vscode", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}
