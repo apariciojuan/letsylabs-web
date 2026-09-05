@@ -30,3 +30,15 @@ describe('i18n_check: mismatched fixture (regression for CU-WEB-4)', () => {
     expect(problems.join('\n')).toContain('home.tags[]:3');
   });
 });
+
+describe('i18n_check: scalar type mismatch (regression for adversarial review W-1 H5)', () => {
+  it('reports a key whose value type differs between catalogs', () => {
+    const en = readJson('scripts/fixtures/i18n_type_mismatch/en.json');
+    const es = readJson('scripts/fixtures/i18n_type_mismatch/es.json');
+    const problems = checkParity(en, es);
+
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.join('\n')).toContain('home.ready=boolean');
+    expect(problems.join('\n')).toContain('home.ready=string');
+  });
+});

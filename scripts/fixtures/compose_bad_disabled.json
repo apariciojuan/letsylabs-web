@@ -1,0 +1,9 @@
+{
+  "services": {
+    "web": {
+      "mem_limit": "2147483648",
+      "memswap_limit": "2147483648",
+      "healthcheck": { "test": ["CMD", "true"], "disable": true }
+    }
+  }
+}

@@ -17,7 +17,10 @@ x-web-base: &web-base
 services:
   web: # dev server with HMR (CU-CONT-7)
     <<: *web-base
-    command: corepack pnpm dev
+    # A container killed without `astro dev stop` (down, OOM, Docker restart) leaves .astro/dev.json
+    # (bind mount) claiming another server is running; a fresh container has its own PID namespace,
+    # so the lock is always stale here (adversarial review W-1 H3).
+    command: sh -c "rm -f .astro/dev.json && exec corepack pnpm dev"
     ports:
       - '4321:4321'
     mem_limit: 2g

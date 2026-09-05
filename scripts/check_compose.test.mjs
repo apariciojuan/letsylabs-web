@@ -16,7 +16,22 @@ describe('check_compose.sh (CU-CONT-9 ratchet)', () => {
     const result = run('fixtures/compose_bad.json');
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("service 'web' has no mem_limit");
-    expect(result.stderr).toContain("service 'web' has no healthcheck");
+    expect(result.stderr).toContain("service 'web' has no active healthcheck");
+  });
+
+  // Regression for adversarial review W-1 H1: a disabled healthcheck used to pass as "present".
+  it('fails (exit 1) when the healthcheck is present but disabled', () => {
+    const result = run('fixtures/compose_bad_disabled.json');
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('no active healthcheck');
+  });
+
+  // Regression for adversarial review W-1 H1: mem_limit 0 (= unlimited) used to pass as "present".
+  it('fails (exit 1) when mem_limit/memswap_limit are 0', () => {
+    const result = run('fixtures/compose_bad_zero.json');
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("service 'web' has no mem_limit");
+    expect(result.stderr).toContain("service 'web' has no memswap_limit");
   });
 
   it('passes (exit 0) when every service declares all three', () => {

@@ -110,3 +110,10 @@ scripts/         ratchets (i18n, compose, terceros) + hooks de git
 Bootstrap (W-1): scaffold, i18n, tokens/tipografía, calidad (ESLint/Prettier/Vitest/Playwright),
 contenedores y `CLAIMS_MATRIX.md` inicial. Sin páginas ni copy del handoff todavía — solo un H1 de
 prueba en `/` y `/es/` para probar el catálogo i18n end-to-end.
+
+## Recuperación: «Another astro dev server is already running»
+
+Si el contenedor `web` murió sin `astro dev stop` (un `down` a media sesión, OOM, reinicio de Docker),
+Astro deja `.astro/dev.json` en el bind mount y se niega a arrancar. El servicio `web` borra ese lock al
+arrancar (`compose.dev.yml`), así que basta con `docker compose -f compose.dev.yml up -d web`. Si lanzas
+`astro dev` a mano dentro de `dev`, borra antes `.astro/dev.json`.

@@ -1,0 +1,9 @@
+{
+  "services": {
+    "web": {
+      "mem_limit": "0",
+      "memswap_limit": 0,
+      "healthcheck": { "test": ["CMD", "true"] }
+    }
+  }
+}

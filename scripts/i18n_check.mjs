@@ -27,7 +27,9 @@ export function collectPaths(value, prefix = '') {
       return [nextPrefix, ...collectPaths(value[key], nextPrefix)];
     });
   }
-  return [];
+  // Scalar leaf: record its type too, so `true` in one catalog and "sí" in the other is a diff
+  // (adversarial review W-1 H5).
+  return [`${prefix}=${value === null ? 'null' : typeof value}`];
 }
 
 /** Returns a list of human-readable problems, or an empty array if the two catalogs are in parity. */
