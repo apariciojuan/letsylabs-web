@@ -219,7 +219,6 @@
     },
     "finalCta": {
       "h2": "Build voice AI that holds up in production — and in an audit.",
-      "ctaTalkToUs": "Talk to us",
       "note": "GA lands March 2027 · early-access pilots get founding terms"
     }
   },
@@ -558,9 +557,6 @@
         "sub": "Bring your own carrier — telephony minutes are yours."
       }
     },
-    "waitlist": {
-      "cta": "Get early access"
-    },
     "plans": {
       "mostCommon": "MOST COMMON",
       "priceSuffix": " €/min",
@@ -623,5 +619,37 @@
     "contact": {
       "text": "The team, when they're ready. Until then: "
     }
+  },
+  "earlyAccessForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@company.com",
+    "countryLabel": "Country",
+    "countryPlaceholder": "Country (optional)",
+    "buildingLabel": "What are you building?",
+    "buildingPlaceholder": "What are you building? (optional)",
+    "honeypotLabel": "Leave this field empty",
+    "submitCta": "Get early access",
+    "talkToUsCta": "Talk to us",
+    "successMessage": "You're on the list ✓",
+    "errorMessage": "Something went wrong — email us instead",
+    "mailtoOnlyNote": "No online form yet — this opens your email client instead.",
+    "privacyLinkLabel": "Privacy policy"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy policy — letsylabs",
+      "description": "How letsylabs collects, stores and processes personal data."
+    },
+    "h1": "Privacy policy"
+  },
+  "terms": {
+    "meta": {
+      "title": "Terms — letsylabs",
+      "description": "Terms of service for using letsylabs' products and services."
+    },
+    "h1": "Terms"
+  },
+  "legal": {
+    "pendingReviewNote": "Pending legal review"
   }
 }

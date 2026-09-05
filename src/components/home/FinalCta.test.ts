@@ -2,15 +2,18 @@ import { describe, expect, it } from 'vitest';
 import { renderToBody } from '../../test/render-astro';
 import en from '../../i18n/en.json';
 import es from '../../i18n/es.json';
+import { buildMailto } from '../../scripts/early-access-form';
 import FinalCta from './FinalCta.astro';
 
 describe('FinalCta', () => {
-  it('renders the English H2, both mailto: CTAs and the GA note', async () => {
+  it('renders the English H2, the EarlyAccessForm mailto-only CTA and the GA note', async () => {
+    // No PUBLIC_WAITLIST_ENDPOINT set in the test env (same as the local `pnpm build` battery,
+    // D-W7-6) -- EarlyAccessForm fails closed to its mailto-only branch, no <form>.
     const body = await renderToBody(FinalCta, { props: { locale: 'en' } });
     expect(body.querySelector('h2')?.textContent).toBe(en.home.finalCta.h2);
+    expect(body.querySelector('form')).toBeNull();
     const links = Array.from(body.querySelectorAll('a')).map((a) => a.getAttribute('href'));
-    expect(links).toContain('mailto:hello@letsylabs.com?subject=Early%20access');
-    expect(links).toContain('mailto:hello@letsylabs.com');
+    expect(links).toContain(buildMailto('en'));
     expect(body.textContent).toContain(en.home.finalCta.note);
   });
 
@@ -19,9 +22,8 @@ describe('FinalCta', () => {
     expect(body.querySelector('h2')?.textContent).toBe(es.home.finalCta.h2);
   });
 
-  it('leaves the W-7 form marker comment where the real form will mount, and no <form> yet', async () => {
+  it('mounts EarlyAccessForm (the .early-access-form wrapper is present)', async () => {
     const body = await renderToBody(FinalCta, { props: { locale: 'en' } });
-    expect(body.querySelector('form')).toBeNull();
-    expect(body.innerHTML).toContain('W-7: EarlyAccessForm mounts here');
+    expect(body.querySelector('.early-access-form')).not.toBeNull();
   });
 });

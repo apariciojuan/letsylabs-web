@@ -219,7 +219,6 @@
     },
     "finalCta": {
       "h2": "Construye IA de voz que aguante en producción — y en una auditoría.",
-      "ctaTalkToUs": "Habla con nosotros",
       "note": "GA llega en marzo de 2027 · los pilotos de acceso anticipado obtienen condiciones fundacionales"
     }
   },
@@ -566,9 +565,6 @@
         "sub": "Trae tu propio operador — los minutos de telefonía son tuyos."
       }
     },
-    "waitlist": {
-      "cta": "Acceso anticipado"
-    },
     "plans": {
       "mostCommon": "MÁS COMÚN",
       "priceSuffix": " €/min",
@@ -631,5 +627,37 @@
     "contact": {
       "text": "El equipo, cuando esté listo. Hasta entonces: "
     }
+  },
+  "earlyAccessForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "tú@empresa.com",
+    "countryLabel": "País",
+    "countryPlaceholder": "País (opcional)",
+    "buildingLabel": "¿Qué estás construyendo?",
+    "buildingPlaceholder": "¿Qué estás construyendo? (opcional)",
+    "honeypotLabel": "Deja este campo vacío",
+    "submitCta": "Acceso anticipado",
+    "talkToUsCta": "Habla con nosotros",
+    "successMessage": "Estás en la lista ✓",
+    "errorMessage": "Algo ha fallado — escríbenos",
+    "mailtoOnlyNote": "Todavía no hay formulario en línea — esto abre tu cliente de correo.",
+    "privacyLinkLabel": "Política de privacidad"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Política de privacidad — letsylabs",
+      "description": "Cómo letsylabs recopila, almacena y trata los datos personales."
+    },
+    "h1": "Política de privacidad"
+  },
+  "terms": {
+    "meta": {
+      "title": "Términos — letsylabs",
+      "description": "Términos de servicio para el uso de los productos y servicios de letsylabs."
+    },
+    "h1": "Términos"
+  },
+  "legal": {
+    "pendingReviewNote": "Pendiente de revisión legal"
   }
 }

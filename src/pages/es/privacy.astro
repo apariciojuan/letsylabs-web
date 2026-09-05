@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LegalPage from '../../components/LegalPage.astro';
+import { t } from '../../i18n';
+---
+
+<BaseLayout
+  locale="es"
+  title={t('es', 'privacy.meta.title')}
+  description={t('es', 'privacy.meta.description')}
+>
+  <LegalPage locale="es" heading={t('es', 'privacy.h1')} placeholderToken="PRIVACY_POLICY" />
+</BaseLayout>

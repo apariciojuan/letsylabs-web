@@ -3,10 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { renderToBody } from '../../test/render-astro';
 import en from '../../i18n/en.json';
 import es from '../../i18n/es.json';
+import { buildMailto } from '../../scripts/early-access-form';
 import PricingPage from './PricingPage.astro';
 
 describe('PricingPage (gaLaunched=false, the default/pre-GA state)', () => {
-  it('renders the pre-GA H1/sub and the mailto waitlist hueco, no plans', async () => {
+  it('without waitlistEndpoint (D-W7-6 fail-closed default), shows the mailto waitlist hueco, no plans', async () => {
     const body = await renderToBody(PricingPage, { props: { locale: 'en', gaLaunched: false } });
     expect(getByRole(body, 'heading', { level: 1 }).textContent?.trim()).toBe(
       en.pricing.hero.preGa.h1,
@@ -15,16 +16,21 @@ describe('PricingPage (gaLaunched=false, the default/pre-GA state)', () => {
 
     const waitlist = body.querySelector('.pr-waitlist');
     expect(waitlist).not.toBeNull();
-    const cta = waitlist?.querySelector('a');
-    expect(cta?.getAttribute('href')).toBe('mailto:hello@letsylabs.com?subject=Early%20access');
-    expect(cta?.querySelector('.btn-label')?.textContent?.trim()).toBe(en.pricing.waitlist.cta);
+    expect(waitlist?.querySelector('form')).toBeNull();
+    const cta = waitlist?.querySelector('.eaf-mailto-only a');
+    expect(cta?.getAttribute('href')).toBe(buildMailto('en'));
 
     expect(body.querySelector('.pr-plans')).toBeNull();
   });
 
-  it('never renders a real <form> (the real form is W-7)', async () => {
-    const body = await renderToBody(PricingPage, { props: { locale: 'en', gaLaunched: false } });
-    expect(body.querySelector('form')).toBeNull();
+  it('with waitlistEndpoint set (brief W-7), mounts the real EarlyAccessForm <form>', async () => {
+    const body = await renderToBody(PricingPage, {
+      props: { locale: 'en', gaLaunched: false, waitlistEndpoint: 'https://formspree.io/f/mock' },
+    });
+    const form = body.querySelector('.pr-waitlist form');
+    expect(form).not.toBeNull();
+    expect(form?.getAttribute('action')).toBe('https://formspree.io/f/mock');
+    expect(form?.querySelector('input[name="email"]')).not.toBeNull();
   });
 
   it('renders the Spanish copy', async () => {

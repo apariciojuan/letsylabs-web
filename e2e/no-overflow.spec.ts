@@ -31,6 +31,12 @@ const pages = [
   '/es/pricing',
   '/company',
   '/es/company',
+  // Brief W-7: EarlyAccessForm mounted in FinalCta (already covered above via '/' and '/es/') and
+  // the minimal /privacy, /terms pages (LegalPage).
+  '/privacy',
+  '/es/privacy',
+  '/terms',
+  '/es/terms',
 ];
 
 for (const width of breakpoints) {

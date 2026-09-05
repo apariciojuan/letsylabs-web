@@ -19,6 +19,7 @@
     "e2e": "playwright test",
     "i18n:check": "node scripts/i18n_check.mjs",
     "placeholders:check": "node scripts/check_placeholders.mjs dist",
+    "headers:check": "node scripts/check_headers.mjs dist",
     "format": "prettier --write ."
   },
   "dependencies": {

@@ -35,18 +35,20 @@ test.describe('pricing/company render their content without JavaScript', () => {
     });
   }
 
-  test('/pricing (pre-GA) shows the mailto waitlist hueco and the FAQ, no plans', async ({
+  // Brief W-7: the Waitlist section now mounts the real EarlyAccessForm. The e2e battery's `web`
+  // service always has PUBLIC_WAITLIST_ENDPOINT=/__dev/waitlist set (compose.dev.yml), so this shows
+  // the real <form>, not the mailto-only fail-closed branch (that's covered directly by
+  // PricingPage.test.ts, whose Vitest env has no endpoint, and by early-access-form.spec.ts's own
+  // dedicated CU-W7-1..4 coverage of the form's behavior).
+  test('/pricing (pre-GA) shows the real waitlist <form> and the FAQ, no plans', async ({
     browser,
   }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto('/pricing');
-    const waitlistLink = page.locator('.pr-waitlist a');
-    await expect(waitlistLink).toBeVisible();
-    await expect(waitlistLink).toHaveAttribute(
-      'href',
-      'mailto:hello@letsylabs.com?subject=Early%20access',
-    );
+    const form = page.locator('.pr-waitlist form[data-early-access-form]');
+    await expect(form).toBeVisible();
+    await expect(form).toHaveAttribute('action', '/__dev/waitlist');
     await expect(page.locator('.pr-plans')).toHaveCount(0);
     await expect(page.locator('.pr-faq-grid .card')).toHaveCount(3);
     await context.close();

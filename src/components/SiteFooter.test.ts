@@ -26,6 +26,15 @@ describe('SiteFooter', () => {
     expect(getByText(product, 'Autoalojado').getAttribute('href')).toBe('/es/self-host');
   });
 
+  // Brief W-7: privacy/terms used to point at ROUTES.company as a placeholder (W-2); now that
+  // /privacy and /terms exist (LegalPage) the footer must link to the real, locale-aware routes.
+  it('links LEGAL column entries (Privacy/Terms) to /privacy and /terms, not to #', async () => {
+    const body = await renderFooter('es', '/es/');
+    const legal = getByRole(body, 'navigation', { name: 'LEGAL' });
+    expect(getByText(legal, 'Privacidad').getAttribute('href')).toBe('/es/privacy');
+    expect(getByText(legal, 'Términos').getAttribute('href')).toBe('/es/terms');
+  });
+
   it('renders the bottom bar with the copyright and email (language-invariant, no TODO-ES)', async () => {
     const body = await renderFooter('es');
     const bottom = body.querySelector('.site-footer-bottom-inner');

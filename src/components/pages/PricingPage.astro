@@ -7,14 +7,16 @@
  * route files (`src/pages/pricing.astro`, `src/pages/es/pricing.astro`) are the ones that read
  * `PUBLIC_GA_LAUNCHED` and pass it down.
  *
- * Pre-GA: hero + a Waitlist section (a `mailto:` hueco, same decision as the Homepage's
- * `FinalCta.astro` in W-3 -- the real form lands in W-7). Post-GA: hero + a 3-column Plans section
+ * Pre-GA: hero + a Waitlist section, now mounting the real `EarlyAccessForm` (brief W-7) -- same
+ * fail-closed prop pattern as `gaLaunched`: `waitlistEndpoint` is received as a prop (read from
+ * `PUBLIC_WAITLIST_ENDPOINT` by `src/pages/pricing.astro`/`es/pricing.astro`), not read from
+ * `import.meta.env` here, so `PricingPage.test.ts` can render both states directly. Post-GA: hero + a 3-column Plans section
  * (Primitives / Voice Agent — highlighted, no hover, floating "MOST COMMON" tag / Self-hosted — a
  * plain "Talk to us" mailto link, not a price). Both states share the same FAQ section below.
  * `{PRICE}` renders through `Placeholder` (brief W-6 decision) rather than a real number.
  */
-import Button from '../Button.astro';
 import Card from '../Card.astro';
+import EarlyAccessForm from '../EarlyAccessForm.astro';
 import PageHero from '../PageHero.astro';
 import Placeholder from '../Placeholder.astro';
 import { t, type Locale } from '../../i18n';
@@ -22,9 +24,10 @@ import { t, type Locale } from '../../i18n';
 interface Props {
   locale: Locale;
   gaLaunched: boolean;
+  waitlistEndpoint?: string;
 }
 
-const { locale, gaLaunched } = Astro.props;
+const { locale, gaLaunched, waitlistEndpoint } = Astro.props;
 
 const FAQ_KEYS = ['telephony', 'earlyAccess', 'llm'] as const;
 ---
@@ -44,10 +47,7 @@ const FAQ_KEYS = ['telephony', 'earlyAccess', 'llm'] as const;
   !gaLaunched && (
     <section class="pr-waitlist container">
       <div class="pr-waitlist-inner" data-reveal>
-        {/* W-7: EarlyAccessForm mounts here */}
-        <Button href="mailto:hello@letsylabs.com?subject=Early%20access">
-          {t(locale, 'pricing.waitlist.cta')}
-        </Button>
+        <EarlyAccessForm locale={locale} endpoint={waitlistEndpoint} />
       </div>
     </section>
   )

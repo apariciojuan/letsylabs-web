@@ -41,6 +41,7 @@ Todos se ejecutan con `docker compose -f compose.dev.yml run --rm dev corepack p
 | `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                            |
 | `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                   |
 | `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder` |
+| `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` (brief W-7)      |
 
 Ratchets adicionales (no son scripts de `package.json`, se invocan directos):
 
@@ -59,6 +60,36 @@ docker compose -f compose.dev.yml up -d web
 docker compose -f compose.dev.yml --profile e2e run --rm e2e corepack pnpm e2e
 docker compose -f compose.dev.yml down
 ```
+
+### Variables de entorno de build
+
+Ambas leídas por `import.meta.env.*` (Vite/Astro exponen todo lo prefijado `PUBLIC_`), documentadas
+en `.env.example`:
+
+| Variable                   | Qué hace                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_GA_LAUNCHED`       | `true`/`false` (default `false`). Cambia el CTA global ("Get early access" → "Start building") y el layout de `/pricing`.                                                                                                                                                                                                                                                                           |
+| `PUBLIC_WAITLIST_ENDPOINT` | Destino del formulario de acceso anticipado (`EarlyAccessForm`, brief W-7). Vacío/no definido (default) ⇒ **fail-closed**: no se renderiza `<form>`, solo el CTA `mailto:`. En producción, una URL `https://` absoluta (Formspree) — `astro build` **falla** si no lo es. El servicio `web` de `compose.dev.yml` la fija a `/__dev/waitlist` (mock de desarrollo, `scripts/dev/waitlist-mock.mjs`). |
+
+### Cabeceras de seguridad
+
+Brief W-7 (D-W7-4): `astro build` escribe `dist/_headers` (convención de Netlify/Cloudflare Pages,
+`scripts/security-headers.mjs`) con CSP estricta (`script-src 'self'`, cero scripts inline), HSTS,
+`X-Frame-Options: DENY`, `Referrer-Policy` y `Permissions-Policy`. Si el hosting final NO es
+Netlify/Cloudflare Pages, aplica la política equivalente en la config del servidor -- por ejemplo,
+nginx:
+
+```nginx
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' <origen del endpoint, si lo hay>; form-action 'self' <origen del endpoint, si lo hay>; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests" always;
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "DENY" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+```
+
+`<origen del endpoint, si lo hay>` = el origen (esquema+host) de `PUBLIC_WAITLIST_ENDPOINT` en ese
+build; omítelo por completo si la variable está vacía (fail-closed, D-W7-1).
 
 ### Métricas y límites
 

@@ -19,6 +19,12 @@ export const ROUTES = {
   openSource: '/open-source',
   pricing: '/pricing',
   company: '/company',
+  // Minimal legal pages (brief W-7, spec D-W7-3): exist so the footer never links to `#`/a 404, and
+  // so `scripts/check_placeholders.mjs` watches their `{PRIVACY_POLICY}`/`{TERMS}` holes until the
+  // real legal text (🔴 flecos) replaces them. Not part of any SiteNav section (navSectionFor below
+  // deliberately does not classify them -- they are LEGAL footer links, not a top-level section).
+  privacy: '/privacy',
+  terms: '/terms',
 } as const;
 
 export type NavSection = 'product' | 'developers' | 'pricing' | 'company';

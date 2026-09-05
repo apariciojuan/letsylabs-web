@@ -1,0 +1,60 @@
+---
+/**
+ * Minimal legal page shell (brief W-7, spec D-W7-3): `/privacy` and `/terms` exist only so the
+ * footer (W-2) never links to `#`/a 404, and so `scripts/check_placeholders.mjs` (the honest-hole
+ * ratchet, W-6) keeps watching them until the real legal text (🔴 fleco §5 of the spec: "Texto legal
+ * del aviso de privacidad y de /privacy · /terms") replaces the `Placeholder`. A single H1 + one
+ * marked hole + a "pending legal review" note -- there is nothing else to say honestly yet.
+ */
+import Placeholder from './Placeholder.astro';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  heading: string;
+  placeholderToken: string;
+}
+
+const { locale, heading, placeholderToken } = Astro.props;
+---
+
+<section class="legal-page container">
+  <div class="legal-page-inner">
+    <h1 class="legal-page-h1">{heading}</h1>
+    <p class="legal-page-body">
+      <Placeholder token={placeholderToken} label={t(locale, 'common.placeholder.pendingValue')} />
+    </p>
+    <p class="legal-page-note">{t(locale, 'legal.pendingReviewNote')}</p>
+  </div>
+</section>
+
+<style>
+  .legal-page {
+    padding: 96px 32px 120px;
+  }
+
+  .legal-page-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .legal-page-h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    letter-spacing: -0.8px;
+    margin: 0 0 24px;
+  }
+
+  .legal-page-body {
+    margin: 0 0 16px;
+  }
+
+  .legal-page-note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

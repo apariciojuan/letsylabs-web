@@ -1,0 +1,225 @@
+---
+/**
+ * Early-access form (brief W-7, spec `docs/specs/web_formulario_seguridad.md` D-W7-1/D-W7-2): the
+ * real form that replaces the provisional `mailto:`-only CTAs W-3 (Homepage's `FinalCta`) and W-6
+ * (`/pricing`'s pre-GA Waitlist section) shipped with a marker comment ("the real form lands in
+ * W-7").
+ *
+ * **Fail-closed (D-W7-1).** `endpoint` is received as a PROP, never read from `import.meta.env`
+ * inside this component -- the CALLER does that (`FinalCta.astro` already reads
+ * `PUBLIC_GA_LAUNCHED` the same way; `PricingPage.astro` receives it as a prop too, for the same
+ * reason its own `gaLaunched` prop exists: so `EarlyAccessForm.test.ts` can render both states
+ * directly, without faking Vite's env at test time). Empty/undefined `endpoint` renders NO `<form>`
+ * at all -- only the `mailto:` CTA (D-W7-2) + a short note. A `<form>` posting nowhere real would be
+ * a demo/stub (CLAUDE.md §4.1).
+ *
+ * **Honeypot** `_gotcha` (Formspree's convention: a field by that name is silently discarded, never
+ * delivered to the destination): hidden with `position:absolute;left:-9999px` (never `display:none`,
+ * which some screen readers still announce as present), `tabindex="-1"`, `autocomplete="off"`,
+ * `aria-hidden="true"` on the wrapping label. A human never sees or reaches it; a bot that fills
+ * every field fills it too.
+ *
+ * The submit behavior (fetch interception, honeypot check, success/error states) lives in
+ * `src/scripts/early-access-form.ts` (`initEarlyAccessForm`), loaded as a real ES module -- Astro
+ * compiles a `<script>` block like the one below into an external `dist/_astro/*.js` file, never
+ * inline, which D-W7-4's strict `script-src 'self'` (zero inline scripts in the shipped HTML)
+ * requires. `EarlyAccessForm.test.ts` covers this component's markup for both states directly;
+ * `early-access-form.test.ts` covers the script's own behavior; `e2e/early-access-form.spec.ts`
+ * covers the two wired together end to end (mock endpoint, real POST, no-JS path).
+ */
+import Button from './Button.astro';
+import Placeholder from './Placeholder.astro';
+import { t, type Locale } from '../i18n';
+import { localizePath } from '../i18n/routing';
+import { ROUTES } from '../lib/nav-links';
+import { buildMailto } from '../scripts/early-access-form';
+
+interface Props {
+  locale: Locale;
+  endpoint?: string;
+}
+
+const { locale, endpoint } = Astro.props;
+const hasEndpoint = Boolean(endpoint);
+const mailto = buildMailto(locale);
+const privacyHref = localizePath(ROUTES.privacy, locale);
+---
+
+<div class="early-access-form">
+  {
+    hasEndpoint && (
+      <form class="eaf-form" action={endpoint} method="POST" data-early-access-form>
+        <div class="eaf-row">
+          <label class="eaf-field eaf-field-email">
+            <span class="eaf-label">{t(locale, 'earlyAccessForm.emailLabel')}</span>
+            <input
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder={t(locale, 'earlyAccessForm.emailPlaceholder')}
+            />
+          </label>
+          <label class="eaf-field eaf-field-country">
+            <span class="eaf-label">{t(locale, 'earlyAccessForm.countryLabel')}</span>
+            <input
+              type="text"
+              name="country"
+              autocomplete="country-name"
+              placeholder={t(locale, 'earlyAccessForm.countryPlaceholder')}
+            />
+          </label>
+        </div>
+        <label class="eaf-field">
+          <span class="eaf-label">{t(locale, 'earlyAccessForm.buildingLabel')}</span>
+          <input
+            type="text"
+            name="building"
+            placeholder={t(locale, 'earlyAccessForm.buildingPlaceholder')}
+          />
+        </label>
+        <label class="eaf-honeypot" aria-hidden="true">
+          {t(locale, 'earlyAccessForm.honeypotLabel')}
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+        </label>
+        <div class="eaf-actions">
+          <Button type="submit">{t(locale, 'earlyAccessForm.submitCta')}</Button>
+          <Button href={mailto} variant="ghost" class="eaf-mailto-link">
+            {t(locale, 'earlyAccessForm.talkToUsCta')}
+          </Button>
+        </div>
+        <p
+          class="eaf-status"
+          role="status"
+          aria-live="polite"
+          data-early-access-status
+          data-success-message={t(locale, 'earlyAccessForm.successMessage')}
+          data-error-message={t(locale, 'earlyAccessForm.errorMessage')}
+        />
+      </form>
+    )
+  }
+  {
+    !hasEndpoint && (
+      <div class="eaf-mailto-only">
+        <Button href={mailto}>{t(locale, 'earlyAccessForm.submitCta')}</Button>
+        <p class="eaf-note">{t(locale, 'earlyAccessForm.mailtoOnlyNote')}</p>
+      </div>
+    )
+  }
+  <p class="eaf-privacy">
+    <Placeholder token="PRIVACY_NOTICE" label={t(locale, 'common.placeholder.pendingValue')} />{' '}
+    <a href={privacyHref}>{t(locale, 'earlyAccessForm.privacyLinkLabel')}</a>
+  </p>
+</div>
+
+<script>
+  import { initEarlyAccessForm } from '../scripts/early-access-form';
+  initEarlyAccessForm(document);
+</script>
+
+<style>
+  .early-access-form {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .eaf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .eaf-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .eaf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .eaf-field-email {
+    flex: 2;
+    min-width: 200px;
+  }
+
+  .eaf-field-country {
+    flex: 1;
+    min-width: 110px;
+  }
+
+  .eaf-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+  }
+
+  .eaf-field input {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .eaf-field input:focus {
+    outline: none;
+    border-color: var(--signal);
+  }
+
+  /* Off-screen, not display:none -- some screen readers still announce a display:none field as
+     present; aria-hidden on the wrapping label is the actual assistive-tech signal. */
+  .eaf-honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .eaf-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .eaf-status {
+    min-height: 1.2em;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    margin: 4px 0 0;
+  }
+
+  .eaf-mailto-only {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eaf-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .eaf-privacy {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 16px 0 0;
+    text-align: center;
+  }
+
+  .eaf-privacy a {
+    color: var(--muted);
+  }
+</style>

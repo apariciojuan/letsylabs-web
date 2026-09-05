@@ -26,3 +26,7 @@ pre-commit:
       # Same convention as third-party-ratchet above: no glob gate, fast no-op without a stale
       # dist/ build directory.
       run: corepack pnpm placeholders:check
+    headers-ratchet:
+      # Same convention as third-party-ratchet/placeholders-ratchet above: no glob gate, fast
+      # no-op without a stale dist/ build directory (brief W-7).
+      run: corepack pnpm headers:check

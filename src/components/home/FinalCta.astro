@@ -1,34 +1,28 @@
 ---
 /**
- * Final CTA (brief W-3, W3-3a / "letsylabs Homepage.dc.html" lines 428-445). Decision
- * (docs/plans/web/03_homepage.md): the real early-access `<form>` lands in W-7 (`EarlyAccessForm`,
- * a POST to an env-configured endpoint) -- a `<form>` that appears to submit with nowhere to send
- * data would violate CLAUDE.md §4.1 ("producto final, no demo"). Until then this CTA row is two
- * `mailto:` links (primary + ghost "Talk to us") plus the GA note, with a marker comment at the spot
- * W-7 mounts the real form.
+ * Final CTA (brief W-3, W3-3a / "letsylabs Homepage.dc.html" lines 428-445; real form wired in
+ * W-7). Reads `PUBLIC_WAITLIST_ENDPOINT` itself -- same pattern already used here for
+ * `PUBLIC_GA_LAUNCHED` -- and hands it to `EarlyAccessForm` as a prop, which fail-closed renders
+ * only a `mailto:` CTA when it's empty (D-W7-1). `EarlyAccessForm.test.ts` is where both states get
+ * exercised directly (via that prop, no env faking needed); this component's own test only needs
+ * the default (no endpoint) state Vitest's env gives it, same as before W-7.
  */
-import Button from '../Button.astro';
+import EarlyAccessForm from '../EarlyAccessForm.astro';
 import { t, type Locale } from '../../i18n';
-import { ctaLabelKey } from '../../lib/nav-links';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
-const ctaLabel = t(locale, ctaLabelKey(gaLaunched));
+const endpoint = import.meta.env.PUBLIC_WAITLIST_ENDPOINT;
 ---
 
 <section id="cta" class="final-cta radial-signal" style="--radial-x:50%;--radial-y:100%">
   <div class="final-cta-inner container">
     <h2 class="final-cta-h2" data-reveal>{t(locale, 'home.finalCta.h2')}</h2>
-    <!-- W-7: EarlyAccessForm mounts here -->
-    <div class="final-cta-actions" data-reveal data-delay="100">
-      <Button href="mailto:hello@letsylabs.com?subject=Early%20access">{ctaLabel}</Button>
-      <Button href="mailto:hello@letsylabs.com" variant="ghost">
-        {t(locale, 'home.finalCta.ctaTalkToUs')}
-      </Button>
+    <div data-reveal data-delay="100">
+      <EarlyAccessForm locale={locale} endpoint={endpoint} />
     </div>
     <div class="final-cta-note">{t(locale, 'home.finalCta.note')}</div>
   </div>

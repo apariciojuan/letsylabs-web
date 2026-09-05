@@ -21,6 +21,12 @@ services:
     # (bind mount) claiming another server is running; a fresh container has its own PID namespace,
     # so the lock is always stale here (adversarial review W-1 H3).
     command: sh -c "rm -f .astro/dev.json && exec corepack pnpm dev"
+    environment:
+      # Brief W-7 (D-W7-6): dev-only mock of Formspree, served by scripts/dev/waitlist-mock.mjs
+      # (a Vite plugin, `apply: 'serve'` -- never present in `astro build`). Overrides whatever
+      # (or nothing) .env sets for the `dev`/`e2e` one-shot services, so EarlyAccessForm renders
+      # its real <form> here without a live Formspree account.
+      PUBLIC_WAITLIST_ENDPOINT: /__dev/waitlist
     ports:
       - '4321:4321'
     mem_limit: 2g

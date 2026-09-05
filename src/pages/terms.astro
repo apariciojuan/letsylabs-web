@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { t } from '../i18n';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'terms.meta.title')}
+  description={t('en', 'terms.meta.description')}
+>
+  <LegalPage locale="en" heading={t('en', 'terms.h1')} placeholderToken="TERMS" />
+</BaseLayout>

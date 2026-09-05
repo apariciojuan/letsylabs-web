@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OK fixture</title>
+  </head>
+  <body>
+    <h1>OK</h1>
+    <script type="module" src="/_astro/index.abc123.js"></script>
+    <script>
+      (() => {
+        var e = async (t) => {
+          await (
+            await t()
+          )();
+        };
+        (self.Astro || (self.Astro = {})).load = e;
+        window.dispatchEvent(new Event('astro:load'));
+      })();
+    </script>
+    <script>
+      class AstroIsland extends HTMLElement {}
+      customElements.get('astro-island') || customElements.define('astro-island', AstroIsland);
+    </script>
+  </body>
+</html>
