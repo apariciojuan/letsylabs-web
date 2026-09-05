@@ -2,12 +2,15 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HomePage from '../../components/home/HomePage.astro';
 import { t } from '../../i18n';
+import { siteOrigin } from '../../lib/seo';
+import { softwareApplicationSchema } from '../../lib/schema';
 ---
 
 <BaseLayout
   locale="es"
   title={t('es', 'home.meta.title')}
   description={t('es', 'home.meta.description')}
+  jsonLd={softwareApplicationSchema('es', siteOrigin(Astro.site))}
 >
   <HomePage locale="es" />
 </BaseLayout>

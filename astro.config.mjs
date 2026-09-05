@@ -12,6 +12,13 @@ import { waitlistMockPlugin } from './scripts/dev/waitlist-mock.mjs';
 // same as PUBLIC_GA_LAUNCHED already relies on -- no extra .env loading needed here.
 const waitlistEndpoint = process.env.PUBLIC_WAITLIST_ENDPOINT ?? '';
 
+// Canonical origin for every absolute URL the build emits (brief W-8, .env.example's own comment):
+// canonical link, hreflang alternates, og:url, sitemap.xml, schema.org JSON-LD. `Astro.site` is what
+// makes `astro:sitemap`-style absolute-URL helpers (here, our own src/lib/seo.ts) resolve without
+// each call site hardcoding a domain. Provisional default matches .env.example until the real domain
+// (workspace 🔴) is confirmed.
+const siteUrl = process.env.PUBLIC_SITE_URL ?? 'https://letsylabs.com';
+
 /**
  * `src/pages/dev/components.astro` is a dev-only visual QA harness (brief W-2 entregable 7): it
  * mounts every shared component against the design handoff for a visual pass, and e2e specs drive
@@ -35,6 +42,7 @@ function stripDevPages() {
 
 // https://astro.build/config
 export default defineConfig({
+  site: siteUrl,
   integrations: [react(), stripDevPages(), securityHeaders({ endpoint: waitlistEndpoint })],
   i18n: {
     defaultLocale: 'en',

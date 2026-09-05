@@ -6,8 +6,15 @@
  * translation catalog itself: `t(locale, key)` looks up a dot-path key in src/i18n/{en,es}.json,
  * typed against the shape of en.json so a typo in a key is a compile-time error.
  */
-import en from './en.json';
-import es from './es.json';
+// Import attributes (brief W-8): `scripts/*.mjs` ratchets run under plain `node`, which requires an
+// explicit `type: "json"` attribute on a JSON import per the ECMAScript/Node ESM spec -- without it
+// the import throws `ERR_IMPORT_ATTRIBUTE_MISSING`. Vite (and therefore Astro/Vitest) has always
+// accepted this same syntax, so adding it here does not change how the app itself builds/tests; it
+// only makes this module ALSO importable from a plain-Node script (`check_seo.mjs`, `check_og.mjs`,
+// `scripts/og/render.mjs`'s catalog loading is separate and reads the JSON directly, see its own
+// comment) without duplicating the catalog-loading logic there.
+import en from './en.json' with { type: 'json' };
+import es from './es.json' with { type: 'json' };
 
 export type Locale = 'en' | 'es';
 

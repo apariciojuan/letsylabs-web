@@ -170,8 +170,16 @@ const privacyHref = localizePath(ROUTES.privacy, locale);
     color: var(--ink);
   }
 
+  /*
+   * BUGFIX (brief W-8, a11y AA sweep): this rule used to ALSO disable the browser's native focus
+   * ring on every `:focus` (mouse click included), with nothing keyboard-visible put back in its
+   * place -- a WCAG 2.4.7 violation on the one real `<form>` this site has. The border-color
+   * highlight below is a nice-to-have on any focus; the global `:focus-visible` rule in tokens.css
+   * (2px solid signal-green ring) now supplies the actual keyboard-focus indicator, same as every
+   * other interactive element on the site. Regression test: EarlyAccessForm.test.ts asserts this
+   * stylesheet never disables the focus ring again.
+   */
   .eaf-field input:focus {
-    outline: none;
     border-color: var(--signal);
   }
 

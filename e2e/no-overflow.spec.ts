@@ -1,10 +1,18 @@
 import { expect, test } from '@playwright/test';
+import { SITE_PATHS } from '../src/lib/site-routes.ts';
+import { locales } from '../src/i18n/index.ts';
+import { localizePath } from '../src/i18n/routing.ts';
 
 // Brief W-1 entregable 4 / RWD breakpoints from the handoff README (§Técnica): 380 (mobile),
 // 768 (tablet), 1200 (desktop). No page should force horizontal scroll at any of them.
 const breakpoints = [380, 768, 1200];
-// '/dev/components' added in W-2: it's the only page mounting SiteNav/SiteFooter/PipelineDiagram
-// today, so it is where a regression in their responsive layout would actually show up.
+
+// Brief W-8: derived from `src/lib/site-routes.ts` (the single source of truth also used by
+// sitemap.xml/robots.txt) instead of a hand-maintained list, so a new page added there is swept into
+// this suite automatically rather than silently skipped until someone remembers to add it here too.
+// '/dev/components' is kept as one extra manual entry: it is the dev-only QA harness (never a real
+// route, so it is deliberately NOT in site-routes.ts) that mounts SiteNav/SiteFooter/PipelineDiagram
+// together, where a shared-component responsive regression would actually show up first.
 // The 8 product pages (W-4) each carry a wide table (/voice use-cases, /self-host comparison) and a
 // wrapping node row (/self-host "audio never leaves") that must stay inside their own
 // overflow-x:auto container at 380px, never force the document itself to scroll horizontally.
@@ -14,29 +22,8 @@ const breakpoints = [380, 768, 1200];
 // /compliance (W-5) has the widest single card row of any interior page (the flex-wrap Export
 // section, 380px/400px basis columns) -- must still stay inside its own container at 380px.
 const pages = [
-  '/',
-  '/es/',
+  ...SITE_PATHS.flatMap((path) => locales.map((locale) => localizePath(path, locale))),
   '/dev/components',
-  '/voice',
-  '/es/voice',
-  '/telephony',
-  '/es/telephony',
-  '/compliance',
-  '/es/compliance',
-  '/self-host',
-  '/es/self-host',
-  '/open-source',
-  '/es/open-source',
-  '/pricing',
-  '/es/pricing',
-  '/company',
-  '/es/company',
-  // Brief W-7: EarlyAccessForm mounted in FinalCta (already covered above via '/' and '/es/') and
-  // the minimal /privacy, /terms pages (LegalPage).
-  '/privacy',
-  '/es/privacy',
-  '/terms',
-  '/es/terms',
 ];
 
 for (const width of breakpoints) {

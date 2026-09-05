@@ -42,6 +42,10 @@ Todos se ejecutan con `docker compose -f compose.dev.yml run --rm dev corepack p
 | `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                                                       |
 | `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder`                                     |
 | `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` sin su hash sha256 en `script-src` (brief W-7, W-7b) |
+| `seo:check`          | Título único/descripción/canonical/hreflang absolutos/`og:image`/JSON-LD (solo home) en `dist/` (brief W-8)         |
+| `a11y:check`         | Un solo `<h1>` sin saltos de nivel, `<html lang>` correcto y los 4 landmarks en `dist/` (brief W-8)                 |
+| `og:check`           | Cada imagen OG existe en `dist/og/` a 1200×630 y todo `og:image` referenciado resuelve (brief W-8)                  |
+| `og:render`          | Genera los PNG de `public/og/` (SVG → PNG con el Chromium del perfil `e2e`) — solo cuando cambia un título/página   |
 
 Ratchets adicionales (no son scripts de `package.json`, se invocan directos):
 
@@ -63,8 +67,10 @@ docker compose -f compose.dev.yml down
 
 ### Variables de entorno de build
 
-Ambas leídas por `import.meta.env.*` (Vite/Astro exponen todo lo prefijado `PUBLIC_`), documentadas
-en `.env.example`:
+Todas leídas por `import.meta.env.*` (Vite/Astro exponen todo lo prefijado `PUBLIC_`), documentadas
+en `.env.example`. `PUBLIC_SITE_URL` (nueva en brief W-8): origen absoluto para canonical/hreflang/
+`og:url`/`og:image`/sitemap.xml/JSON-LD (`src/lib/seo.ts`); default `https://letsylabs.com`
+(provisional hasta el 🔴 del dominio), fijado también como fallback en `astro.config.mjs`:
 
 | Variable                   | Qué hace                                                                                                                                                                                                                                                                                                                                                                                            |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

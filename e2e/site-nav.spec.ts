@@ -122,4 +122,30 @@ test.describe('SiteNav mobile drawer (380px)', () => {
     await page.keyboard.press('Tab');
     await expect(focusable.first()).toBeFocused();
   });
+
+  // Brief W-8, CLAUDE.md §6.6 "hit targets móviles ≥44px": the drawer toggle, the EN/ES pills and the
+  // drawer's own CTA button are the only interactive chrome real users tap on a real 380px viewport.
+  test('the drawer toggle, lang pills and CTA button are all >=44px tall on a real mobile viewport', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    const toggleBox = await page.locator('[data-drawer-toggle]').boundingBox();
+    expect(toggleBox?.width).toBeGreaterThanOrEqual(44);
+    expect(toggleBox?.height).toBeGreaterThanOrEqual(44);
+
+    await page.locator('[data-drawer-toggle]').click();
+    const drawer = page.locator('#site-nav-drawer');
+    await expect(drawer).toBeVisible();
+
+    for (const pill of await drawer.locator('.lang-switch-item').all()) {
+      const box = await pill.boundingBox();
+      expect(box?.width).toBeGreaterThanOrEqual(44);
+      expect(box?.height).toBeGreaterThanOrEqual(44);
+    }
+
+    const ctaBox = await drawer.locator('.btn').boundingBox();
+    expect(ctaBox?.height).toBeGreaterThanOrEqual(44);
+  });
 });

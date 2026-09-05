@@ -73,17 +73,20 @@ test.describe('/compliance renders its content without JavaScript', () => {
 });
 
 test.describe('hreflang cross-references /compliance and /es/compliance', () => {
+  // Brief W-8: hreflang hrefs are now ABSOLUTE (src/lib/seo.ts, rooted at PUBLIC_SITE_URL) rather
+  // than the origin-relative paths this test used to assert -- see BaseLayout.test.ts and
+  // e2e/hreflang.spec.ts for the general (site-wide) coverage of this.
   test('/compliance declares hreflang alternates pointing at itself and /es/compliance', async ({
     page,
   }) => {
     await page.goto('/compliance');
     await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
       'href',
-      '/compliance',
+      'https://letsylabs.com/compliance',
     );
     await expect(page.locator('link[rel="alternate"][hreflang="es"]')).toHaveAttribute(
       'href',
-      '/es/compliance',
+      'https://letsylabs.com/es/compliance',
     );
   });
 
@@ -93,11 +96,11 @@ test.describe('hreflang cross-references /compliance and /es/compliance', () => 
     await page.goto('/es/compliance');
     await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
       'href',
-      '/compliance',
+      'https://letsylabs.com/compliance',
     );
     await expect(page.locator('link[rel="alternate"][hreflang="es"]')).toHaveAttribute(
       'href',
-      '/es/compliance',
+      'https://letsylabs.com/es/compliance',
     );
   });
 });

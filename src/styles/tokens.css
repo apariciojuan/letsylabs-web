@@ -8,6 +8,23 @@
  * (fonts.googleapis.com/css2, legacy user-agent to get a single TrueType file per weight) inside the
  * bootstrap container; served from /fonts to avoid the third-party request (D-CONT-8 / repo rule
  * "cero scripts/recursos de terceros").
+ *
+ * DEBT (brief W-8, entregable W8-2a): the brief asks for these converted to woff2, subset to
+ * latin+latin-ext, "solo si puedes hacerlo sin instalar dependencias nuevas". A real WOFF2 encoder is
+ * not just brotli compression (Node's own `zlib.brotliCompressSync` covers that half) -- it also
+ * requires the WOFF2 binary container format itself (table directory, per-table transforms for glyf/
+ * loca, checksums) per the spec (https://www.w3.org/TR/WOFF2/), which no dependency already in this
+ * repo implements, and hand-rolling a from-scratch encoder risked shipping a subtly-broken font file
+ * that renders fine in one browser and fails silently in another -- exactly the "producto final, no
+ * demo" rule this repo holds everyone else to. Registered as debt instead of forcing it:
+ *   - Current weight: 6 TTF files, ~989.5 KB total (Inter 400+500: ~630 KB; JetBrains Mono 400+500:
+ *     ~219 KB; Space Grotesk 500+600: ~135 KB) -- see public/fonts/*.ttf.
+ *   - What IS done here: `font-display: swap` (below, unchanged) so text is never invisible while a
+ *     font loads, plus `<link rel="preload">` for the 2 above-the-fold weights (Space Grotesk 600 for
+ *     every page's H1, Inter 400 for body copy) in BaseLayout.astro.
+ *   - Follow-up (not this task): a real `fonttools`/`woff2_compress`-based conversion, run once in a
+ *     one-shot container image (not a repo dependency), with the resulting .woff2 files committed the
+ *     same way these .ttf files are today.
  */
 
 @font-face {
@@ -389,6 +406,21 @@ img,
 svg {
   max-width: 100%;
   display: block;
+}
+
+/*
+ * Global keyboard focus indicator (brief W-8, CLAUDE.md §6.6 AA rule): every interactive element
+ * gets a visible `signal`-green outline on keyboard focus. `:focus-visible` (not plain `:focus`) so
+ * a mouse click never shows it -- matches every browser's own native heuristic for "was this focus
+ * keyboard-driven". Deliberately placed AFTER every other rule in this file so nothing declared
+ * above it (or in a component's own scoped `<style>`, which Astro always emits with equal or higher
+ * specificity per selector) can silently out-rank it by load order for an EQUAL-specificity
+ * `:focus-visible` selector; a component with its own more specific override is still free to
+ * customize the treatment, per `EarlyAccessForm.astro`'s own `:focus-visible` rule.
+ */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
 }
 
 button,

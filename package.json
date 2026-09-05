@@ -20,6 +20,10 @@
     "i18n:check": "node scripts/i18n_check.mjs",
     "placeholders:check": "node scripts/check_placeholders.mjs dist",
     "headers:check": "node scripts/check_headers.mjs dist",
+    "seo:check": "node scripts/check_seo.mjs dist",
+    "a11y:check": "node scripts/check_a11y.mjs dist",
+    "og:check": "node scripts/check_og.mjs dist",
+    "og:render": "node scripts/og/render.mjs",
     "format": "prettier --write ."
   },
   "dependencies": {

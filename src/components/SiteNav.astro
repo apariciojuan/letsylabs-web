@@ -352,6 +352,9 @@ const platformVisionKeys = [
   }
 
   .nav-drawer-toggle {
+    /* 44px, not the handoff's original 40px (brief W-8, a11y AA sweep, CLAUDE.md §6.6: "hit targets
+       móviles ≥44px"): this button only ever renders below 768px (see the media query below), so
+       raising it does not touch the desktop header at all. */
     display: none;
     background: none;
     border: 1px solid var(--line);
@@ -359,8 +362,8 @@ const platformVisionKeys = [
     color: var(--ink);
     font-size: 18px;
     line-height: 1;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
   }
 
@@ -400,6 +403,19 @@ const platformVisionKeys = [
     justify-content: space-between;
     gap: 16px;
     margin-top: 20px;
+  }
+
+  /*
+   * Hit target (brief W-8, a11y AA sweep): `Button`'s `size="sm"` (padding 9px 16px, 14px text --
+   * matches the handoff's exact desktop header CTA, which this component ALSO renders) works out to
+   * about 35px tall -- fine on desktop, under the 44px mobile minimum in the ONE place this size is
+   * ever shown on a real mobile viewport: the drawer footer, <768px. `min-height` alone (not a padding
+   * change) keeps the button's own padding/label untouched; `Button.astro`'s `.btn` already sets
+   * `align-items: center`, so the label centers in the extra height for free. Scoped to
+   * `.drawer-footer` so the desktop header CTA (same component, same size prop) is unaffected.
+   */
+  .drawer-footer :global(.btn) {
+    min-height: 44px;
   }
 
   @media (max-width: 767px) {

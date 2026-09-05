@@ -86,6 +86,16 @@ describe('findUnhashedInlineScripts (W-7b, D-W7-4)', () => {
   // the SAME hash check as any other inline script. Rojo-antes for this exact case is the CLI test
   // below (fixtures/dist_headers_ok used to pass via the fingerprint exception with no hash at
   // all in `_headers`).
+  // Brief W-8: JSON-LD structured data (`src/lib/schema.ts`, rendered by BaseLayout.astro on the
+  // home page) is a `<script type="application/ld+json">` with no `src` -- CSP's script-src
+  // categorically does not govern non-JS-type script elements (see csp_hash.mjs's doc comment), so
+  // this must pass with NO hash for it in `_headers` at all, same as an external `<script src>`.
+  it('does NOT flag a <script type="application/ld+json"> (CSP does not govern non-JS script types)', () => {
+    const html = '<script type="application/ld+json">{"@type":"SoftwareApplication"}</script>';
+    const headers = "Content-Security-Policy: default-src 'self'; script-src 'self'";
+    expect(findUnhashedInlineScripts(html, headers)).toEqual([]);
+  });
+
   it("flags Astro's own client-hydration bootstrap when its hash is absent, same as any other script", () => {
     const html =
       '<script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script>';

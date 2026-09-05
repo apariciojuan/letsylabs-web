@@ -5,36 +5,81 @@
  * switch now lives inside SiteNav and SiteFooter themselves. `<main id="top">` gets
  * `padding-top: var(--header-height)` to clear the fixed 64px header (README §Espaciado y forma);
  * `#top` is also the hero's anchor target (`<a href="#top">` on the logo).
+ *
+ * SEO metadata (brief W-8, entregable W8-1a): `description` is now REQUIRED -- every one of the 10
+ * real pages already passes one via `t(locale, '<page>.meta.description')` (verified against
+ * `src/lib/site-routes.ts`/`site-routes.test.ts`), so this stops being optional at the type level.
+ * Canonical link, hreflang alternates and `og:url`/`og:image` are now ABSOLUTE (`src/lib/seo.ts`,
+ * rooted at `Astro.site` -- see `astro.config.mjs`'s `site` option, driven by `PUBLIC_SITE_URL`)
+ * rather than the old origin-relative hreflang-only version. `jsonLd` is optional and only ever
+ * passed by the home page (`SoftwareApplication`, `src/lib/schema.ts`) -- see that module's doc
+ * comment for why no other page needs one.
  */
 import '../styles/tokens.css';
 import { locales } from '../i18n';
-import { localizePath } from '../i18n/routing';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import type { Locale } from '../i18n';
+import { alternatesFor, canonicalFor, ogImageFor, ogLocaleFor, siteOrigin } from '../lib/seo';
 
 interface Props {
   locale: Locale;
   title: string;
-  description?: string;
+  description: string;
+  jsonLd?: object;
 }
 
-const { locale, title, description } = Astro.props;
+const { locale, title, description, jsonLd } = Astro.props;
 const pathname = Astro.url.pathname;
+const origin = siteOrigin(Astro.site);
+const canonical = canonicalFor(pathname, origin);
+const alternates = alternatesFor(pathname, origin);
+const ogImage = ogImageFor(pathname, locale, origin);
+const otherLocale: Locale = locale === 'en' ? 'es' : 'en';
 ---
 
 <html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
     {
-      locales.map((loc) => (
-        <link rel="alternate" hreflang={loc} href={localizePath(pathname, loc)} />
-      ))
+      /*
+        Preload the two above-the-fold fonts (brief W-8, entregable W8-2a, LCP < 2s target): every
+        page's <h1> is Space Grotesk 600 (tokens.css's global `h1` rule / PageHero's override) and
+        its surrounding body copy is Inter 400 -- both self-hosted `font-display: swap` @font-face
+        declarations already exist in tokens.css, this only tells the browser to fetch these two
+        BEFORE it would otherwise discover them (through the stylesheet's own @font-face, which the
+        browser cannot start downloading fonts from until it has parsed the CSS). The other 4
+        weights (Space Grotesk 500, Inter 500, both JetBrains Mono) are below-the-fold or
+        UI-chrome-only (nav labels, mono code/labels) and are left to load normally.
+      */
     }
-    <link rel="alternate" hreflang="x-default" href={localizePath(pathname, 'en')} />
+    <link rel="preload" href="/fonts/space-grotesk-600.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    {locales.map((loc) => <link rel="alternate" hreflang={loc} href={alternates[loc]} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={ogLocaleFor(locale)} />
+    <meta property="og:locale:alternate" content={ogLocaleFor(otherLocale)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <SiteNav locale={locale} />

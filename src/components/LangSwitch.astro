@@ -61,4 +61,23 @@ const { locale, pathname, class: className } = Astro.props;
     color: var(--ink);
     background: var(--surface-2);
   }
+
+  /*
+   * Mobile hit target (brief W-8, a11y AA sweep, CLAUDE.md §6.6: "hit targets móviles ≥44px"): this
+   * pill's desktop size (padding 3px 8px, 11px mono text -- README's exact spec) stays untouched
+   * above 768px, where it renders inside the header only. Below 768px this component ALSO renders
+   * inside SiteNav's mobile drawer footer and inside SiteFooter (both real, always-visible mobile
+   * surfaces, unlike the header instance which is hidden there) -- so this widens the tap target
+   * without changing the visual pill's padding/look, same technique as `.drawer-link`'s existing
+   * `min-height: 44px` + centered flex.
+   */
+  @media (max-width: 767px) {
+    .lang-switch-item {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 </style>

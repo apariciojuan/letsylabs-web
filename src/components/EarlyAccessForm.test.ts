@@ -1,9 +1,16 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { renderToBody } from '../test/render-astro';
 import en from '../i18n/en.json';
 import es from '../i18n/es.json';
 import { buildMailto } from '../scripts/early-access-form';
 import EarlyAccessForm from './EarlyAccessForm.astro';
+
+const componentSource = readFileSync(
+  fileURLToPath(new URL('./EarlyAccessForm.astro', import.meta.url)),
+  'utf8',
+);
 
 describe('EarlyAccessForm — no endpoint (CU-W7-2, fail-closed)', () => {
   it('renders NO <form>, only the mailto: primary CTA and a note (EN)', async () => {
@@ -77,5 +84,19 @@ describe('EarlyAccessForm — with endpoint (CU-W7-1/3/4)', () => {
       es.earlyAccessForm.emailPlaceholder,
     );
     expect(form?.textContent).toContain(es.earlyAccessForm.buildingLabel);
+  });
+});
+
+describe('EarlyAccessForm — keyboard focus (brief W-8, bugfix regression)', () => {
+  // BUG (found while auditing a11y for brief W-8): `.eaf-field input:focus` used to also set
+  // `outline: none`, removing the native focus ring for EVERY focus (mouse click included) with
+  // nothing keyboard-visible put back -- a WCAG 2.4.7 violation on this site's one real <form>. Fixed
+  // by dropping the `outline: none` declaration so the global `:focus-visible` rule in tokens.css
+  // (`outline: 2px solid var(--signal)`) supplies the actual keyboard indicator. Asserted against the
+  // component's raw source (rather than a rendered/computed style) because Astro's scoped `<style>`
+  // block is not reliably resolved by jsdom against an external stylesheet in a container-rendered
+  // fragment -- the source text IS the thing that regressed and the thing this pins.
+  it('does not set outline:none on the email/name/country inputs anywhere', () => {
+    expect(componentSource).not.toMatch(/outline:\s*none/);
   });
 });
