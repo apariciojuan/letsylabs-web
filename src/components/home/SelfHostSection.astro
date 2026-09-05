@@ -1,0 +1,139 @@
+---
+/**
+ * Self-host section (brief W-3, W3-2b / "letsylabs Homepage.dc.html" lines 293-327): sovereignty
+ * copy + 2 mini-cards on the left, a `docker compose up -d` terminal (reusing `CodeBlock` as a
+ * Terminal -- no `copyText`, so no copy button, matching the Self-host `.dc.html` variant) with
+ * staggered `data-reveal` lines on the right.
+ *
+ * The terminal's status lines are literal, not i18n: they simulate real `docker compose` output,
+ * the same category of literal technical content as the code snippets and ticker (decision noted in
+ * task-W-3-progress.md; flagged there for the controller in case a translated "Started"/"Iniciado"
+ * is preferred instead).
+ */
+import CodeBlock from '../CodeBlock.astro';
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<section id="selfhost" class="selfhost-section container">
+  <div class="selfhost-copy" data-reveal>
+    <Eyebrow>{t(locale, 'home.selfHost.eyebrow')}</Eyebrow>
+    <SectionHeading class="selfhost-h2">{t(locale, 'home.selfHost.h2')}</SectionHeading>
+    <p class="selfhost-text">{t(locale, 'home.selfHost.text')}</p>
+    <div class="selfhost-cards">
+      <div class="selfhost-card">
+        <div class="selfhost-card-title">
+          {t(locale, 'home.selfHost.cardSelfHosted')}
+          <span class="selfhost-card-tag">{t(locale, 'home.selfHost.cardSelfHostedTag')}</span>
+        </div>
+        <div class="selfhost-card-sub">{t(locale, 'home.selfHost.cardSub')}</div>
+      </div>
+      <div class="selfhost-card">
+        <div class="selfhost-card-title">{t(locale, 'home.selfHost.cardManagedCloud')}</div>
+        <div class="selfhost-card-sub">{t(locale, 'home.selfHost.cardSub')}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="selfhost-terminal-wrap" data-reveal data-delay="120">
+    <CodeBlock language="your-server" ariaLabel={t(locale, 'home.selfHost.terminalAriaLabel')}>
+      <div data-reveal><span class="tok-comment">$</span> docker compose up -d</div>
+      <div data-reveal data-delay="200">
+        <span class="tok-string">✔</span> letsy-gateway <span class="tok-comment">Started 0.4s</span
+        >
+      </div>
+      <div data-reveal data-delay="340">
+        <span class="tok-string">✔</span> letsy-stt{' '}
+        <span class="tok-comment">Started 1.1s · voxtral, open weights</span>
+      </div>
+      <div data-reveal data-delay="480">
+        <span class="tok-string">✔</span> letsy-tts <span class="tok-comment"
+          >Started 1.3s · open weights</span
+        >
+      </div>
+      <div data-reveal data-delay="620">
+        <span class="tok-string">✔</span> letsy-trace <span class="tok-comment">Started 0.6s</span>
+      </div>
+      <div data-reveal data-delay="800">
+        runtime ready <span class="tok-keyword">wss://0.0.0.0:8443/audio</span>{' '}
+        <span class="blink-cursor" aria-hidden="true">▋</span>
+      </div>
+    </CodeBlock>
+  </div>
+</section>
+
+<style>
+  .selfhost-section {
+    padding: 96px 32px 80px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .selfhost-copy {
+    flex: 1 1 440px;
+    min-width: 320px;
+  }
+
+  :global(.selfhost-h2) {
+    margin: 0 0 16px;
+  }
+
+  .selfhost-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 28px;
+  }
+
+  .selfhost-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .selfhost-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+
+  .selfhost-card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .selfhost-card-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .selfhost-card-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .selfhost-terminal-wrap {
+    flex: 1 1 420px;
+    min-width: 320px;
+  }
+
+  :global(.selfhost-terminal-wrap .code-block-body) {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 2;
+  }
+</style>

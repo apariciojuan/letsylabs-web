@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomePage from '../../components/home/HomePage.astro';
 import { t } from '../../i18n';
 ---
 
-<BaseLayout locale="es" title="letsylabs — bootstrap">
-  <h1>{t('es', 'home.h1')}</h1>
+<BaseLayout
+  locale="es"
+  title={t('es', 'home.meta.title')}
+  description={t('es', 'home.meta.description')}
+>
+  <HomePage locale="es" />
 </BaseLayout>

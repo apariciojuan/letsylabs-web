@@ -1,0 +1,106 @@
+---
+/**
+ * Open source section (brief W-3, W3-2b / "letsylabs Homepage.dc.html" lines 329-353): 3
+ * repo-style cards (letsy-types / letsy-vad / letsy-adapters) with Apache-2.0/Rust chips, plus the
+ * "PYTHON BINDINGS: 2027" badge (roadmap, not a promise -- CLAIMS_MATRIX honesty rule).
+ */
+import Badge from '../Badge.astro';
+import Card from '../Card.astro';
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const CARDS = [
+  { key: 'types', delay: 0 },
+  { key: 'vad', delay: 60 },
+  { key: 'adapters', delay: 120 },
+] as const;
+---
+
+<section id="opensource" class="opensource-section container">
+  <div class="opensource-header" data-reveal>
+    <Eyebrow>{t(locale, 'home.openSource.eyebrow')}</Eyebrow>
+    <SectionHeading class="opensource-h2">{t(locale, 'home.openSource.h2')}</SectionHeading>
+    <p class="opensource-text">{t(locale, 'home.openSource.text')}</p>
+  </div>
+  <div class="opensource-grid">
+    {
+      CARDS.map(({ key, delay }) => (
+        <Card hoverable data-reveal data-delay={delay}>
+          <div class="opensource-card-name">{t(locale, `home.openSource.cards.${key}.name`)}</div>
+          <p class="opensource-card-text">{t(locale, `home.openSource.cards.${key}.text`)}</p>
+          <div class="opensource-chips">
+            <span class="opensource-chip">Apache-2.0</span>
+            <span class="opensource-chip">Rust</span>
+          </div>
+        </Card>
+      ))
+    }
+  </div>
+  <div data-reveal>
+    <Badge variant="coming-soon">{t(locale, 'home.openSource.pythonBindings')}</Badge>
+  </div>
+</section>
+
+<style>
+  .opensource-section {
+    padding: 80px 32px;
+  }
+
+  .opensource-header {
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  :global(.opensource-h2) {
+    margin: 0 0 16px;
+  }
+
+  .opensource-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .opensource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .opensource-card-name {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .opensource-card-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+
+  .opensource-chips {
+    display: flex;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+
+  .opensource-chip {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-badge);
+    padding: 2px 7px;
+  }
+</style>

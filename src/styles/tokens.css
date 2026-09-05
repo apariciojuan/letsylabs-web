@@ -127,6 +127,10 @@
   /* Shadows */
   --shadow-dropdown: 0 20px 60px rgba(0, 0, 0, 0.5);
   --shadow-terminal: 0 24px 80px rgba(0, 0, 0, 0.45);
+  /* The hero code block's own shadow is darker (0.5, not 0.45) than every other CodeBlock instance
+     (Self-host's terminal) -- "letsylabs Homepage.dc.html" lines 103 vs. 310. CodeBlock.astro's
+     `shadow` prop picks between the two. */
+  --shadow-hero: 0 24px 80px rgba(0, 0, 0, 0.5);
 
   /* Motion */
   --transition-hover: 150ms ease;
@@ -336,6 +340,48 @@ a {
   100% {
     left: 0;
     opacity: 0;
+  }
+}
+
+/*
+ * Homepage (W-3) motion primitives, same source as above ("letsylabs Homepage.dc.html"):
+ * `blink` — the typing/terminal cursor (▋), step-end so it snaps rather than fades (lines 16, 120,
+ * 223, 323); `bar` — the Voice micro-demo equalizer bars, scaleY 0.18→1 (line 19); `flowline` — the
+ * Vision block's connector line, an animated gradient background-position (line 21). All three are
+ * frozen by the global reduced-motion rule above.
+ */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.blink-cursor {
+  color: var(--signal);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes bar {
+  0%,
+  100% {
+    transform: scaleY(0.18);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes flowline {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 220px 0;
   }
 }
 

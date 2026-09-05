@@ -6,63 +6,218 @@
       "groupLabel": "Idioma"
     }
   },
-  "home": {
-    "h1": "Marcador de arranque — contenido pendiente."
-  },
   "nav": {
-    "product": "TODO-ES: Product",
-    "developers": "TODO-ES: Developers",
-    "pricing": "TODO-ES: Pricing",
-    "company": "TODO-ES: Company",
-    "docs": "TODO-ES: Docs",
-    "signIn": "TODO-ES: Sign in",
-    "ctaPreGa": "TODO-ES: Get early access",
-    "ctaPostGa": "TODO-ES: Start building",
+    "product": "Producto",
+    "developers": "Desarrolladores",
+    "pricing": "Precios",
+    "company": "Empresa",
+    "docs": "Documentación",
+    "signIn": "Iniciar sesión",
+    "ctaPreGa": "Acceso anticipado",
+    "ctaPostGa": "Empieza a construir",
     "mobileMenuOpen": "Abrir menú",
     "mobileMenuClose": "Cerrar menú",
     "megaMenu": {
-      "availableLabel": "TODO-ES: AVAILABLE",
-      "platformVisionLabel": "TODO-ES: PLATFORM VISION",
-      "comingSoon": "TODO-ES: COMING SOON",
-      "voiceTitle": "TODO-ES: Voice",
-      "voiceDescription": "TODO-ES: Realtime STT, TTS, turn-taking",
-      "telephonyTitle": "TODO-ES: Telephony",
-      "telephonyDescription": "TODO-ES: Your trunk, programmable calls",
-      "complianceTitle": "TODO-ES: Compliance",
-      "complianceDescription": "TODO-ES: Ley 10/2025 & AI Act, built in",
-      "selfHostTitle": "TODO-ES: Self-host",
-      "selfHostDescription": "TODO-ES: Your servers, one command",
-      "vision": "TODO-ES: Vision",
-      "avatars": "TODO-ES: Avatars",
-      "edgeRobotics": "TODO-ES: Edge & Robotics"
+      "availableLabel": "DISPONIBLE",
+      "platformVisionLabel": "VISIÓN DE PLATAFORMA",
+      "comingSoon": "PRÓXIMAMENTE",
+      "voiceTitle": "Voz",
+      "voiceDescription": "STT y TTS en tiempo real, turnos de conversación",
+      "telephonyTitle": "Telefonía",
+      "telephonyDescription": "Tu troncal, llamadas programables",
+      "complianceTitle": "Cumplimiento",
+      "complianceDescription": "Ley 10/2025 y AI Act, de serie",
+      "selfHostTitle": "Autoalojado",
+      "selfHostDescription": "Tus servidores, un solo comando",
+      "vision": "Visión",
+      "avatars": "Avatares",
+      "edgeRobotics": "Edge y robótica"
     }
   },
   "footer": {
-    "taglineLine1": "TODO-ES: Realtime voice infrastructure for AI.",
-    "taglineLine2": "TODO-ES: EU-compliant by design.",
-    "madeInEu": "TODO-ES: Made in the EU 🇪🇺",
+    "taglineLine1": "Infraestructura de voz en tiempo real para IA.",
+    "taglineLine2": "Cumplimiento europeo por diseño.",
+    "madeInEu": "Hecho en la UE 🇪🇺",
     "copyright": "© 2026 letsylabs",
     "email": "hello@letsylabs.com",
     "columns": {
-      "product": "TODO-ES: PRODUCT",
-      "developers": "TODO-ES: DEVELOPERS",
-      "company": "TODO-ES: COMPANY",
-      "legal": "TODO-ES: LEGAL"
+      "product": "PRODUCTO",
+      "developers": "DESARROLLADORES",
+      "company": "EMPRESA",
+      "legal": "LEGAL"
     },
     "links": {
-      "voice": "TODO-ES: Voice",
-      "telephony": "TODO-ES: Telephony",
-      "compliance": "TODO-ES: Compliance",
-      "selfHost": "TODO-ES: Self-host",
-      "pricing": "TODO-ES: Pricing",
-      "openSource": "TODO-ES: Open source",
-      "docs": "TODO-ES: Docs",
-      "playground": "TODO-ES: Playground",
-      "playgroundBadge": "TODO-ES: POST-GA",
-      "about": "TODO-ES: About",
-      "contact": "TODO-ES: Contact",
-      "privacy": "TODO-ES: Privacy",
-      "terms": "TODO-ES: Terms"
+      "voice": "Voz",
+      "telephony": "Telefonía",
+      "compliance": "Cumplimiento",
+      "selfHost": "Autoalojado",
+      "pricing": "Precios",
+      "openSource": "Código abierto",
+      "docs": "Documentación",
+      "playground": "Playground",
+      "playgroundBadge": "POST-GA",
+      "about": "Sobre nosotros",
+      "contact": "Contacto",
+      "privacy": "Privacidad",
+      "terms": "Términos"
+    }
+  },
+  "home": {
+    "meta": {
+      "title": "letsylabs — Infraestructura de voz en tiempo real para IA, con cumplimiento europeo",
+      "description": "Infraestructura de voz en tiempo real para IA: audio, telefonía, STT, TTS y un registro de cumplimiento auditable — en tu infraestructura o en nuestro cloud."
+    },
+    "hero": {
+      "eyebrow": "INFRAESTRUCTURA DE VOZ EN TIEMPO REAL PARA IA",
+      "h1": "Dale voz a tu IA — en el teléfono y en la web.",
+      "sub": "Audio en streaming, transcripción en tiempo real, voz de baja latencia y llamadas telefónicas — conectado a tu propio agente o LLM. En tu infraestructura o en nuestro cloud. Cumplimiento europeo de serie.",
+      "ctaDocs": "Lee la documentación",
+      "codeAriaLabel": "Ejemplo de petición y respuesta de la API",
+      "copyIdle": "copiar",
+      "copyDone": "copiado ✓"
+    },
+    "ticker": {
+      "ariaLabel": "Eventos del sistema en directo"
+    },
+    "pipeline": {
+      "h2": "Trae tu propia inteligencia.",
+      "text": "Nosotros nos encargamos de los medios en tiempo real — transporte, transcripción, turnos de conversación, interrupciones, voz y el registro de auditoría. Tú decides qué piensa. Conecta tu agente por HTTP + SSE, o cualquier endpoint compatible con OpenAI.",
+      "hint": "HAZ CLIC EN UN ORIGEN Y UN DESTINO PARA REDIRIGIR",
+      "ariaLabel": "Diagrama de pipeline interactivo: las fuentes de audio se conectan a través del runtime de letsylabs con tu agente o cualquier LLM",
+      "nodes": {
+        "phone": "Teléfono",
+        "browser": "Navegador",
+        "yourApp": "Tu app",
+        "yourAgent": "Tu agente",
+        "openai": "OpenAI",
+        "ollama": "Ollama",
+        "anyLlm": "Cualquier LLM"
+      }
+    },
+    "voice": {
+      "eyebrow": "VOZ",
+      "h2": "Infraestructura de voz sin atarte a un agente.",
+      "cards": {
+        "stt": {
+          "event": "stt.partial",
+          "title": "STT en tiempo real",
+          "text": "Transcripciones parciales en menos de 300 ms. Español primero, multilingüe por diseño."
+        },
+        "tts": {
+          "event": "tts.first_audio",
+          "title": "TTS en streaming",
+          "text": "Primer audio por frase, no por respuesta. La voz empieza mientras el modelo todavía piensa."
+        },
+        "turns": {
+          "event": "turn.barge_in",
+          "title": "Turnos y barge-in",
+          "text": "Interrumpe al agente con tu voz. El runtime gestiona los turnos para que tu código no tenga que hacerlo."
+        },
+        "latency": {
+          "event": "latency.turn",
+          "title": "Trazado de latencia",
+          "text": "Cada tramo medido, cada conversación trazada. Consulta la línea de tiempo por llamada."
+        }
+      },
+      "transcriptLabel": "stt.final · es · 142ms"
+    },
+    "telephony": {
+      "eyebrow": "TELEFONÍA",
+      "h2": "Convierte cualquier llamada en un stream programable.",
+      "text": "Trae tu troncal SIP o tu centralita — Asterisk, 3CX, tu operador — y cada llamada se convierte en una sesión que controla tu software. Entrantes, salientes, transferencias, DTMF.",
+      "yourTrunk": "Tu troncal",
+      "yourTrunkSub": "Asterisk · 3CX · operador SIP",
+      "availableAtGa": "DISPONIBLE EN GA",
+      "managedNumbers": "Números gestionados",
+      "managedNumbersSub": "números · colas · softphone",
+      "claim": "Usa tu operador. O el nuestro, más adelante. Nunca atado."
+    },
+    "compliance": {
+      "eyebrow": "CUMPLIMIENTO EUROPEO POR DISEÑO",
+      "h2": "La ley ya lo exige. Nosotros lo traemos de serie.",
+      "text": "La Ley 10/2025 de España y el AI Act de la UE exigen que las IA que llaman se identifiquen, ofrezcan transferencia a una persona y mantengan registros. letsylabs lo incluye como infraestructura: aviso automático de IA al inicio de la llamada, transferencia garantizada a una persona, marcado de audio sintético y un registro de auditoría exportable y certificado por llamada.",
+      "cards": {
+        "disclosure": {
+          "title": "Aviso de IA",
+          "text": "Se informa a quien llama de que habla con una IA desde el inicio. Automático, registrado, verificable."
+        },
+        "handoff": {
+          "title": "Transferencia a humano",
+          "text": "Una vía garantizada de transferencia a una persona, a petición o por regla."
+        },
+        "audit": {
+          "title": "Registro de auditoría",
+          "text": "Un registro de eventos certificado y exportable por llamada. Cada aviso, cada transferencia."
+        },
+        "retention": {
+          "title": "Controles de retención",
+          "text": "Retención de grabaciones, borrado y rectificación — configurados, no programados."
+        }
+      },
+      "linkText": "Descubre cómo funciona el cumplimiento →"
+    },
+    "selfHost": {
+      "eyebrow": "AUTOALOJAMIENTO Y SOBERANÍA",
+      "h2": "Tu infraestructura. Tus datos. Un solo comando.",
+      "text": "Ejecuta toda la plataforma en tus servidores con docker compose — incluidos los modelos de STT y TTS de pesos abiertos, así el audio nunca sale de tu infraestructura. La misma pila que ejecutamos en nuestro cloud.",
+      "cardSelfHosted": "Autoalojado",
+      "cardSelfHostedTag": "(CON LICENCIA)",
+      "cardSub": "Misma API, misma pila.",
+      "cardManagedCloud": "Cloud gestionado",
+      "terminalAriaLabel": "Ejemplo de registro de arranque en autoalojamiento"
+    },
+    "openSource": {
+      "eyebrow": "CÓDIGO ABIERTO",
+      "h2": "Abierto donde importa.",
+      "text": "Los contratos principales, VAD y los adaptadores de modelos de pesos abiertos son Apache 2.0. Construye con los mismos tipos que usamos nosotros — hoy en Rust, pronto en Python.",
+      "cards": {
+        "types": {
+          "name": "letsy-types",
+          "text": "Contratos de sesión, eventos y fotogramas de audio. Los tipos que todo el sistema habla."
+        },
+        "vad": {
+          "name": "letsy-vad",
+          "text": "Detección de actividad de voz afinada para la conversación, no para el dictado."
+        },
+        "adapters": {
+          "name": "letsy-adapters",
+          "text": "Adaptadores de modelos de pesos abiertos — Voxtral y compañía."
+        }
+      },
+      "pythonBindings": "BINDINGS DE PYTHON: 2027"
+    },
+    "developers": {
+      "eyebrow": "DESARROLLADORES",
+      "h2": "Del primer stream a producción.",
+      "tabsLabel": "Ejemplos de código",
+      "tabCurl": "curl",
+      "tabRust": "Rust",
+      "tabPy": "Python",
+      "tabPyBadge": "2027",
+      "illustrativeLabel": "ILUSTRATIVO · SNIPPETS FINALES EN GA",
+      "counters": {
+        "voiceToVoice": "voz a voz",
+        "audioFrames": "fotogramas de audio",
+        "eventsTraced": "eventos trazados"
+      },
+      "targetBadge": "OBJETIVO"
+    },
+    "vision": {
+      "h2": "La voz es el primer sentido.",
+      "text": "letsylabs está construido como la capa de interacción entre el software inteligente y el mundo real. La estamos lanzando un sentido cada vez.",
+      "steps": {
+        "voice": "Voz",
+        "realtimeMedia": "Medios en tiempo real",
+        "vision": "Visión",
+        "avatars": "Avatares",
+        "devices": "Dispositivos"
+      },
+      "comingBadge": "PRÓXIMAMENTE"
+    },
+    "finalCta": {
+      "h2": "Construye IA de voz que aguante en producción — y en una auditoría.",
+      "ctaTalkToUs": "Habla con nosotros",
+      "note": "GA llega en marzo de 2027 · los pilotos de acceso anticipado obtienen condiciones fundacionales"
     }
   }
 }

@@ -1,0 +1,73 @@
+---
+/**
+ * Final CTA (brief W-3, W3-3a / "letsylabs Homepage.dc.html" lines 428-445). Decision
+ * (docs/plans/web/03_homepage.md): the real early-access `<form>` lands in W-7 (`EarlyAccessForm`,
+ * a POST to an env-configured endpoint) -- a `<form>` that appears to submit with nowhere to send
+ * data would violate CLAUDE.md §4.1 ("producto final, no demo"). Until then this CTA row is two
+ * `mailto:` links (primary + ghost "Talk to us") plus the GA note, with a marker comment at the spot
+ * W-7 mounts the real form.
+ */
+import Button from '../Button.astro';
+import { t, type Locale } from '../../i18n';
+import { ctaLabelKey } from '../../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+const ctaLabel = t(locale, ctaLabelKey(gaLaunched));
+---
+
+<section id="cta" class="final-cta radial-signal" style="--radial-x:50%;--radial-y:100%">
+  <div class="final-cta-inner container">
+    <h2 class="final-cta-h2" data-reveal>{t(locale, 'home.finalCta.h2')}</h2>
+    <!-- W-7: EarlyAccessForm mounts here -->
+    <div class="final-cta-actions" data-reveal data-delay="100">
+      <Button href="mailto:hello@letsylabs.com?subject=Early%20access">{ctaLabel}</Button>
+      <Button href="mailto:hello@letsylabs.com" variant="ghost">
+        {t(locale, 'home.finalCta.ctaTalkToUs')}
+      </Button>
+    </div>
+    <div class="final-cta-note">{t(locale, 'home.finalCta.note')}</div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    position: relative;
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .final-cta-inner {
+    max-width: 760px;
+    padding: 104px 32px;
+    text-align: center;
+    position: relative;
+  }
+
+  .final-cta-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 3.6vw, 42px);
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin: 0 0 36px;
+  }
+
+  .final-cta-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .final-cta-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+</style>

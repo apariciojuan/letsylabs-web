@@ -1,0 +1,270 @@
+---
+/**
+ * Developers section (brief W-3, W3-3a / "letsylabs Homepage.dc.html" lines 355-407): an accessible
+ * code-tabs card (curl/Rust/Python, wired by `src/scripts/code-tabs.ts`) marked illustrative
+ * (decision: real snippets land at GA), plus 3 latency/coverage counters (`data-counter`, wired by
+ * the already-existing `site-fx.ts` -- see `HomePage.astro`'s single `initFX(document)` call).
+ *
+ * Without JavaScript all three snippets render stacked (decision, docs/plans/web/03_homepage.md) --
+ * only `initCodeTabs` collapses that down to one visible panel. The three snippets themselves are
+ * literal (not i18n): illustrative, not final, technical code -- same category as the hero/ticker
+ * literal content.
+ */
+import Badge from '../Badge.astro';
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+// The counters' "TARGET"/"OBJETIVO" tag reuses Badge's `coming-soon` variant purely for its muted
+// visual style (border + muted color) -- CLAIMS_MATRIX rule 6 (figures are targets until R-11), not
+// because these numbers are literally "coming soon".
+const TARGET_BADGE_VARIANT = 'coming-soon' as const;
+
+const CURL_SNIPPET = `<span class="tok-comment"># 1. create a session bound to your connector</span>
+curl <span class="tok-keyword">-X</span> POST https://api.letsylabs.com/v1/sessions \\
+  <span class="tok-keyword">-H</span> <span class="tok-string">"Authorization: Bearer $LETSY_KEY"</span> <span class="tok-keyword">-d</span> <span class="tok-string">'{ "connector": "my-agent" }'</span>
+
+<span class="tok-comment"># 2. stream audio over the returned ws_url</span>
+websocat <span class="tok-string">"wss://api.letsylabs.com/v1/audio?session=01JD…"</span>`;
+
+const RUST_SNIPPET = `<span class="tok-keyword">let</span> session = letsy::Session::create(<span class="tok-string">"my-agent"</span>).await?;
+<span class="tok-keyword">let mut</span> events = session.connect().await?;
+<span class="tok-keyword">while let</span> Some(ev) = events.next().await {
+    <span class="tok-keyword">if let</span> Event::TranscriptFinal(t) = ev {
+        agent.reply(&amp;t.text).await?;
+    }
+}`;
+
+const PYTHON_SNIPPET = `<span class="tok-comment"># letsy-py lands in 2027 — same contracts, same events</span>
+session = letsy.Session.create(connector=<span class="tok-string">"my-agent"</span>)
+<span class="tok-keyword">async for</span> ev <span class="tok-keyword">in</span> session.events():
+    <span class="tok-keyword">if</span> ev.type == <span class="tok-string">"transcript.final"</span>:
+        <span class="tok-keyword">await</span> agent.reply(ev.text)`;
+---
+
+<section id="developers" class="developers-section container">
+  <div class="developers-header" data-reveal>
+    <Eyebrow>{t(locale, 'home.developers.eyebrow')}</Eyebrow>
+    <SectionHeading class="developers-h2">{t(locale, 'home.developers.h2')}</SectionHeading>
+  </div>
+
+  <div class="developers-tabs-card" data-reveal data-tabs>
+    <div class="developers-tabs-bar-row">
+      <div
+        class="developers-tabs-bar"
+        role="tablist"
+        aria-label={t(locale, 'home.developers.tabsLabel')}
+      >
+        <button
+          type="button"
+          role="tab"
+          id="dev-tab-curl"
+          aria-controls="dev-panel-curl"
+          aria-selected="true"
+          class="developers-tab is-active"
+          data-tab-id="curl">{t(locale, 'home.developers.tabCurl')}</button
+        >
+        <button
+          type="button"
+          role="tab"
+          id="dev-tab-rust"
+          aria-controls="dev-panel-rust"
+          aria-selected="false"
+          class="developers-tab"
+          data-tab-id="rust">{t(locale, 'home.developers.tabRust')}</button
+        >
+        <button
+          type="button"
+          role="tab"
+          id="dev-tab-py"
+          aria-controls="dev-panel-py"
+          aria-selected="false"
+          class="developers-tab developers-tab-py"
+          data-tab-id="py"
+        >
+          {t(locale, 'home.developers.tabPy')}
+          <span class="developers-tab-badge">{t(locale, 'home.developers.tabPyBadge')}</span>
+        </button>
+      </div>
+      <span class="developers-illustrative">{t(locale, 'home.developers.illustrativeLabel')}</span>
+    </div>
+    <div class="developers-tabs-body">
+      <pre
+        id="dev-panel-curl"
+        role="tabpanel"
+        aria-labelledby="dev-tab-curl"
+        data-tab-panel="curl"
+        class="developers-pre"
+        set:html={CURL_SNIPPET}
+      />
+      <pre
+        id="dev-panel-rust"
+        role="tabpanel"
+        aria-labelledby="dev-tab-rust"
+        data-tab-panel="rust"
+        class="developers-pre"
+        set:html={RUST_SNIPPET}
+      />
+      <pre
+        id="dev-panel-py"
+        role="tabpanel"
+        aria-labelledby="dev-tab-py"
+        data-tab-panel="py"
+        class="developers-pre"
+        set:html={PYTHON_SNIPPET}
+      />
+    </div>
+  </div>
+
+  <div class="developers-counters" data-reveal>
+    <div class="developers-counter-item">
+      <div class="developers-counter" data-counter data-target="1" data-prefix="<" data-suffix="s">
+        &lt;1s
+      </div>
+      <div class="developers-counter-label">
+        {t(locale, 'home.developers.counters.voiceToVoice')}
+        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+      </div>
+    </div>
+    <div class="developers-counter-item">
+      <div class="developers-counter" data-counter data-target="20" data-suffix="ms">20ms</div>
+      <div class="developers-counter-label">
+        {t(locale, 'home.developers.counters.audioFrames')}
+        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+      </div>
+    </div>
+    <div class="developers-counter-item">
+      <div class="developers-counter" data-counter data-target="100" data-suffix="%">100%</div>
+      <div class="developers-counter-label">
+        {t(locale, 'home.developers.counters.eventsTraced')}
+        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initCodeTabs } from '../../scripts/code-tabs';
+  initCodeTabs(document);
+</script>
+
+<style>
+  .developers-section {
+    padding: 80px 32px;
+  }
+
+  .developers-header {
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  :global(.developers-h2) {
+    margin: 0;
+  }
+
+  .developers-tabs-card {
+    max-width: 860px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .developers-tabs-bar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .developers-tabs-bar {
+    display: flex;
+  }
+
+  .developers-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 14px 22px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+  }
+
+  .developers-tab.is-active {
+    color: var(--ink);
+    border-bottom-color: var(--signal);
+  }
+
+  .developers-tab-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-badge);
+    padding: 1px 5px;
+  }
+
+  .developers-illustrative {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    padding: 0 22px;
+    white-space: nowrap;
+  }
+
+  .developers-tabs-body {
+    padding: 24px;
+    min-height: 190px;
+  }
+
+  .developers-pre {
+    margin: 0 0 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--ink);
+  }
+
+  .developers-pre:last-child {
+    margin-bottom: 0;
+  }
+
+  .developers-counters {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .developers-counter {
+    font-family: var(--font-mono);
+    font-size: 34px;
+    font-weight: 500;
+    color: var(--signal);
+  }
+
+  .developers-counter-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

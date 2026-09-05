@@ -21,4 +21,14 @@ describe('Card', () => {
     const body = await renderToBody(Card, { props: { hoverable: false }, slots: { default: 'x' } });
     expect(body.querySelector('.card')?.className).not.toContain('card-hoverable');
   });
+
+  it('forwards data-reveal/data-delay onto the wrapper div (regression: W-3 homepage sections)', async () => {
+    const body = await renderToBody(Card, {
+      props: { 'data-reveal': true, 'data-delay': '120' },
+      slots: { default: 'x' },
+    });
+    const card = body.querySelector('.card');
+    expect(card?.hasAttribute('data-reveal')).toBe(true);
+    expect(card?.getAttribute('data-delay')).toBe('120');
+  });
 });

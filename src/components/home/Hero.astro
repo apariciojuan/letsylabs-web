@@ -1,0 +1,164 @@
+---
+/**
+ * Homepage hero (brief W-3, W3-1a / "letsylabs Homepage.dc.html" lines 83-125): eyebrow + H1 + sub
+ * + CTAs on the left, a waveform canvas behind a typing code block on the right.
+ *
+ * Motion: `src/scripts/hero-wave.ts` draws the canvas every frame (a single static frame under
+ * reduced motion); `src/scripts/hero-typing.ts` types the plain-text snippet in once on first view,
+ * then restores the SSR-rendered, syntax-highlighted `<pre>` -- which is what's visible by default
+ * (no JS, or reduced motion) since it's the only one NOT `hidden` in the initial markup.
+ */
+import Button from '../Button.astro';
+import CodeBlock from '../CodeBlock.astro';
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+import { ctaLabelKey } from '../../lib/nav-links';
+import { HERO_CODE } from '../../scripts/hero-code';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+const ctaLabel = t(locale, ctaLabelKey(gaLaunched));
+
+// Static, syntax-highlighted SSR markup for the hero snippet, char-for-char the same text as
+// HERO_CODE (src/scripts/hero-code.ts) with `.tok-*` spans added. `set:html` (not inline JSX
+// children) so Prettier's astro/html formatter never reflows the deliberate whitespace inside this
+// <pre> -- same convention as src/pages/dev/components.astro's CodeBlock usage. Content is a fully
+// static, developer-authored literal (no user input), so this is safe.
+const HERO_CODE_HIGHLIGHTED = `curl <span class="tok-keyword">-X</span> POST https://api.letsylabs.com/v1/sessions \\
+  <span class="tok-keyword">-H</span> <span class="tok-string">"Authorization: Bearer $LETSY_KEY"</span> \\
+  <span class="tok-keyword">-d</span> <span class="tok-string">'{ "connector": "my-agent", "language": "es" }'</span>
+
+{ <span class="tok-keyword">"session_id"</span>: <span class="tok-string">"01JD…"</span>, <span class="tok-keyword">"ws_url"</span>: <span class="tok-string">"wss://…/audio"</span> }`;
+---
+
+<section class="hero radial-signal" style="--radial-x:72%;--radial-y:10%">
+  <div class="hero-inner container">
+    <div class="hero-copy">
+      <Eyebrow class="hero-eyebrow">{t(locale, 'home.hero.eyebrow')}</Eyebrow>
+      <SectionHeading level="hero" class="hero-h1">{t(locale, 'home.hero.h1')}</SectionHeading>
+      <p class="hero-sub">{t(locale, 'home.hero.sub')}</p>
+      <div class="hero-ctas">
+        <Button href="#cta">{ctaLabel}</Button>
+        <Button href="#developers" variant="ghost">{t(locale, 'home.hero.ctaDocs')}</Button>
+      </div>
+    </div>
+    <div class="hero-code-wrap">
+      <canvas class="hero-wave-canvas" data-hero-wave aria-hidden="true"></canvas>
+      <CodeBlock
+        language="bash"
+        shadow="hero"
+        copyText={HERO_CODE}
+        copyIdleLabel={t(locale, 'home.hero.copyIdle')}
+        copyDoneLabel={t(locale, 'home.hero.copyDone')}
+        ariaLabel={t(locale, 'home.hero.codeAriaLabel')}
+        class="hero-code-block"
+      >
+        <pre class="hero-code-pre" data-hero-code-highlighted set:html={HERO_CODE_HIGHLIGHTED} />
+        <pre
+          class="hero-code-pre"
+          data-hero-code-typing
+          hidden><span data-hero-code-typed /><span class="blink-cursor" aria-hidden="true">▋</span></pre>
+      </CodeBlock>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initHeroWave } from '../../scripts/hero-wave';
+  import { startHeroTyping } from '../../scripts/hero-typing';
+  import { HERO_CODE } from '../../scripts/hero-code';
+
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-wave]');
+  if (canvas) initHeroWave(canvas);
+
+  const highlighted = document.querySelector<HTMLElement>('[data-hero-code-highlighted]');
+  const typing = document.querySelector<HTMLElement>('[data-hero-code-typing]');
+  const typedTarget = document.querySelector<HTMLElement>('[data-hero-code-typed]');
+  if (highlighted && typing && typedTarget) {
+    startHeroTyping(HERO_CODE, { highlighted, typing, typedTarget });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    padding: 96px 32px 72px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-copy {
+    flex: 1 1 480px;
+    min-width: 320px;
+  }
+
+  :global(.hero-eyebrow) {
+    margin-bottom: 20px;
+  }
+
+  :global(.hero-h1) {
+    margin: 0 0 24px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 32px;
+    max-width: 540px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .hero-code-wrap {
+    flex: 1 1 420px;
+    min-width: 320px;
+    position: relative;
+  }
+
+  .hero-wave-canvas {
+    position: absolute;
+    left: -20px;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% + 40px);
+    height: 180px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  :global(.hero-code-block) {
+    position: relative;
+  }
+
+  :global(.hero-code-block .code-block-body) {
+    min-height: 168px;
+  }
+
+  .hero-code-pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--ink);
+  }
+</style>

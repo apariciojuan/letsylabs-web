@@ -18,13 +18,22 @@
  * pure progressive enhancement (a button whose only job is copying text) and the block's content is
  * fully visible without JavaScript either way, per the repo's "islas React solo donde hay estado"
  * rule -- this state (idle/copied) is trivial and DOM-local, not shared/reactive UI state.
+ *
+ * `shadow` (brief W-3, W3-1a — bug found reusing this component for the Hero snippet): the hero
+ * code block's shadow is `rgba(0,0,0,0.5)`, darker than every other CodeBlock instance
+ * ("letsylabs Homepage.dc.html" line 103 vs. Self-host's terminal at line 310, `0.45`) -- W-2's
+ * version hard-coded the 0.45 terminal value for every instance. Regression test:
+ * CodeBlock.test.ts "shadow prop".
  */
+export type CodeBlockShadow = 'terminal' | 'hero';
+
 interface Props {
   language: string;
   copyText?: string;
   copyIdleLabel?: string;
   copyDoneLabel?: string;
   ariaLabel?: string;
+  shadow?: CodeBlockShadow;
   class?: string;
 }
 
@@ -34,11 +43,16 @@ const {
   copyIdleLabel = 'copy',
   copyDoneLabel = 'copied ✓',
   ariaLabel,
+  shadow = 'terminal',
   class: className,
 } = Astro.props;
 ---
 
-<div class:list={['code-block', className]} role="group" aria-label={ariaLabel}>
+<div
+  class:list={['code-block', `code-block-shadow-${shadow}`, className]}
+  role="group"
+  aria-label={ariaLabel}
+>
   <div class="code-block-header">
     <span class="code-block-dot code-block-dot-red"></span>
     <span class="code-block-dot code-block-dot-amber"></span>
@@ -75,7 +89,14 @@ const {
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     overflow: hidden;
+  }
+
+  .code-block-shadow-terminal {
     box-shadow: var(--shadow-terminal);
+  }
+
+  .code-block-shadow-hero {
+    box-shadow: var(--shadow-hero);
   }
 
   .code-block-header {

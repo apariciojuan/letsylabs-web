@@ -32,6 +32,22 @@ describe('CodeBlock', () => {
     expect(body.querySelector('[data-copy-button]')).toBeNull();
   });
 
+  it('defaults to the terminal shadow class, and switches to the hero one (regression: W-3 reuse for the Hero snippet)', async () => {
+    const defaultBody = await renderToBody(CodeBlock, {
+      props: { language: 'bash' },
+      slots: { default: '<pre>x</pre>' },
+    });
+    expect(defaultBody.querySelector('.code-block')?.className).toContain(
+      'code-block-shadow-terminal',
+    );
+
+    const heroBody = await renderToBody(CodeBlock, {
+      props: { language: 'bash', shadow: 'hero' },
+      slots: { default: '<pre>x</pre>' },
+    });
+    expect(heroBody.querySelector('.code-block')?.className).toContain('code-block-shadow-hero');
+  });
+
   it('supports custom idle/done labels (for i18n callers)', async () => {
     const body = await renderToBody(CodeBlock, {
       props: {

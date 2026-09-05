@@ -11,8 +11,15 @@
  * throwaway reproduction: identical render succeeds in the plain `node` environment and fails only
  * once the file environment is switched to `jsdom`. Creating our own single `JSDOM` instance here
  * (after the Astro render has already produced a plain string) avoids the conflict entirely.
+ *
+ * Registers the React server renderer (brief W-3: PipelineSection.astro renders
+ * PipelineDiagramInteractive, a `client:load` React island, as part of its own server markup) --
+ * without this, `container.renderToString()` throws `NoMatchingRenderer` for any page that includes
+ * a React component, per Astro's container docs
+ * (https://docs.astro.build/en/guides/testing/#container-api).
  */
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import reactRenderer from '@astrojs/react/server.js';
 import { JSDOM } from 'jsdom';
 
 // `experimental_AstroContainer` has a private constructor (only `AstroContainer.create()` may
@@ -31,7 +38,10 @@ let containerPromise: Promise<Container> | null = null;
 
 function getContainer(): Promise<Container> {
   if (!containerPromise) {
-    containerPromise = AstroContainer.create();
+    containerPromise = AstroContainer.create().then((container) => {
+      container.addServerRenderer({ renderer: reactRenderer });
+      return container;
+    });
   }
   return containerPromise;
 }

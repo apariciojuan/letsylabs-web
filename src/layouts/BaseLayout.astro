@@ -1,16 +1,25 @@
 ---
+/**
+ * Shared page shell (brief W-3 entregable W3-0): mounts the real SiteNav/SiteFooter (W-2) around
+ * the page's content instead of the bootstrap's provisional `LangSwitch`-only bar — the language
+ * switch now lives inside SiteNav and SiteFooter themselves. `<main id="top">` gets
+ * `padding-top: var(--header-height)` to clear the fixed 64px header (README §Espaciado y forma);
+ * `#top` is also the hero's anchor target (`<a href="#top">` on the logo).
+ */
 import '../styles/tokens.css';
 import { locales } from '../i18n';
 import { localizePath } from '../i18n/routing';
-import LangSwitch from '../components/LangSwitch.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import type { Locale } from '../i18n';
 
 interface Props {
   locale: Locale;
   title: string;
+  description?: string;
 }
 
-const { locale, title } = Astro.props;
+const { locale, title, description } = Astro.props;
 const pathname = Astro.url.pathname;
 ---
 
@@ -19,6 +28,7 @@ const pathname = Astro.url.pathname;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
+    {description && <meta name="description" content={description} />}
     {
       locales.map((loc) => (
         <link rel="alternate" hreflang={loc} href={localizePath(pathname, loc)} />
@@ -27,13 +37,16 @@ const pathname = Astro.url.pathname;
     <link rel="alternate" hreflang="x-default" href={localizePath(pathname, 'en')} />
   </head>
   <body>
-    <div class="lang-switch-bar"><LangSwitch locale={locale} pathname={pathname} /></div>
-    <slot />
+    <SiteNav locale={locale} />
+    <main id="top" class="base-layout-main">
+      <slot />
+    </main>
+    <SiteFooter locale={locale} />
   </body>
 </html>
 
 <style>
-  .lang-switch-bar {
-    padding: 16px 32px;
+  .base-layout-main {
+    padding-top: var(--header-height);
   }
 </style>

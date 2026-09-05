@@ -19,11 +19,11 @@ describe('SiteFooter', () => {
     expect(labels).toEqual(['PRODUCT', 'DEVELOPERS', 'COMPANY', 'LEGAL']);
   });
 
-  it('links PRODUCT column entries to the sitemap routes (locale-aware)', async () => {
+  it('links PRODUCT column entries to the sitemap routes (locale-aware, real translations from W-3)', async () => {
     const body = await renderFooter('es', '/es/');
-    const product = getByRole(body, 'navigation', { name: 'TODO-ES: PRODUCT' });
-    expect(getByText(product, 'TODO-ES: Voice').getAttribute('href')).toBe('/es/voice');
-    expect(getByText(product, 'TODO-ES: Self-host').getAttribute('href')).toBe('/es/self-host');
+    const product = getByRole(body, 'navigation', { name: 'PRODUCTO' });
+    expect(getByText(product, 'Voz').getAttribute('href')).toBe('/es/voice');
+    expect(getByText(product, 'Autoalojado').getAttribute('href')).toBe('/es/self-host');
   });
 
   it('renders the bottom bar with the copyright and email (language-invariant, no TODO-ES)', async () => {

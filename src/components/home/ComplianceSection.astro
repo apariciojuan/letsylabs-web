@@ -1,0 +1,194 @@
+---
+/**
+ * Compliance section (brief W-3, W3-2b / "letsylabs Homepage.dc.html" lines 253-291) -- the
+ * homepage's differentiator block: `surface` background, a `signal`-at-50% top border, 4
+ * `bg`-colored (not `surface`) mini-cards with hand-copied line icons from the prototype, and a
+ * link to `/compliance`. No certification seals (honesty rule -- CLAUDE.md rule 1): seriousness
+ * comes from the real audit trail, not badges.
+ */
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+import { localizePath } from '../../i18n/routing';
+import { ROUTES } from '../../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const CARDS = [
+  { key: 'disclosure', delay: 0 },
+  { key: 'handoff', delay: 60 },
+  { key: 'audit', delay: 120 },
+  { key: 'retention', delay: 180 },
+] as const;
+---
+
+<section id="compliance" class="compliance-section">
+  <div class="compliance-inner container">
+    <div class="compliance-header" data-reveal>
+      <Eyebrow>{t(locale, 'home.compliance.eyebrow')}</Eyebrow>
+      <SectionHeading class="compliance-h2">{t(locale, 'home.compliance.h2')}</SectionHeading>
+      <p class="compliance-text">{t(locale, 'home.compliance.text')}</p>
+    </div>
+    <div class="compliance-grid">
+      {
+        CARDS.map(({ key, delay }) => (
+          <div class="compliance-card" data-reveal data-delay={delay}>
+            {key === 'disclosure' && (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="compliance-icon"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="3" style="fill:none;stroke:#4AF2A1;stroke-width:1.5" />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="8"
+                  style="fill:none;stroke:#4AF2A1;stroke-width:1.5;opacity:0.45"
+                />
+              </svg>
+            )}
+            {key === 'handoff' && (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="compliance-icon"
+                aria-hidden="true"
+              >
+                <circle cx="6" cy="12" r="3.5" style="fill:none;stroke:#4AF2A1;stroke-width:1.5" />
+                <circle cx="18" cy="12" r="3.5" style="fill:none;stroke:#4AF2A1;stroke-width:1.5" />
+                <line x1="10" y1="12" x2="14" y2="12" style="stroke:#4AF2A1;stroke-width:1.5" />
+              </svg>
+            )}
+            {key === 'audit' && (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="compliance-icon"
+                aria-hidden="true"
+              >
+                <line x1="5" y1="6" x2="19" y2="6" style="stroke:#58C4F6;stroke-width:1.5" />
+                <line x1="5" y1="12" x2="19" y2="12" style="stroke:#58C4F6;stroke-width:1.5" />
+                <line x1="5" y1="18" x2="19" y2="18" style="stroke:#58C4F6;stroke-width:1.5" />
+                <circle cx="5" cy="6" r="1.8" style="fill:#58C4F6" />
+                <circle cx="11" cy="12" r="1.8" style="fill:#58C4F6" />
+                <circle cx="8" cy="18" r="1.8" style="fill:#58C4F6" />
+              </svg>
+            )}
+            {key === 'retention' && (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="compliance-icon"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="8" style="fill:none;stroke:#4AF2A1;stroke-width:1.5" />
+                <line x1="12" y1="12" x2="12" y2="7.5" style="stroke:#4AF2A1;stroke-width:1.5" />
+                <line x1="12" y1="12" x2="15.5" y2="14" style="stroke:#4AF2A1;stroke-width:1.5" />
+              </svg>
+            )}
+            <div class="compliance-card-title">
+              {t(locale, `home.compliance.cards.${key}.title`)}
+            </div>
+            <p class="compliance-card-text">{t(locale, `home.compliance.cards.${key}.text`)}</p>
+          </div>
+        ))
+      }
+    </div>
+    <div class="compliance-link-row" data-reveal>
+      <a href={localizePath(ROUTES.compliance, locale)} class="compliance-link">
+        {t(locale, 'home.compliance.linkText')}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .compliance-section {
+    background: var(--surface);
+    border-top: 1px solid rgba(74, 242, 161, 0.5);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .compliance-inner {
+    padding: 96px 32px;
+  }
+
+  .compliance-header {
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+
+  :global(.compliance-h2) {
+    margin: 0 0 16px;
+  }
+
+  .compliance-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .compliance-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    transition: border-color var(--transition-hover);
+  }
+
+  .compliance-card:hover {
+    border-color: rgba(74, 242, 161, 0.4);
+  }
+
+  .compliance-icon {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .compliance-card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .compliance-card-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .compliance-link-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .compliance-link {
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

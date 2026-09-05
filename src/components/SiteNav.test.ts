@@ -31,11 +31,11 @@ describe('SiteNav', () => {
     expect(nav.getByRole('link', { name: 'Company' }).getAttribute('href')).toBe('/company');
   });
 
-  it('prefixes every link with /es for the Spanish locale (labels are TODO-ES until translated)', async () => {
+  it('prefixes every link with /es for the Spanish locale, with the real translated labels (W-3)', async () => {
     const body = await renderNav('es');
     const nav = desktopNav(body);
-    expect(nav.querySelector('a[href="/es/open-source"]')?.textContent).toBe('TODO-ES: Developers');
-    expect(nav.querySelector('a[href="/es/pricing"]')?.textContent).toBe('TODO-ES: Pricing');
+    expect(nav.querySelector('a[href="/es/open-source"]')?.textContent).toBe('Desarrolladores');
+    expect(nav.querySelector('a[href="/es/pricing"]')?.textContent).toBe('Precios');
   });
 
   it('marks the current top-level section active via aria-current="page"', async () => {

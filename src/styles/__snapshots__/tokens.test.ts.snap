@@ -29,6 +29,7 @@ exports[`design tokens (:root custom properties in src/styles/tokens.css) > matc
   "--section-padding-block": "64px",
   "--section-padding-block-lg": "104px",
   "--shadow-dropdown": "0 20px 60px rgba(0, 0, 0, 0.5)",
+  "--shadow-hero": "0 24px 80px rgba(0, 0, 0, 0.5)",
   "--shadow-terminal": "0 24px 80px rgba(0, 0, 0, 0.45)",
   "--signal": "#4af2a1",
   "--signal-hover": "#6ff5b5",

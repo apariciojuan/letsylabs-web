@@ -11,6 +11,27 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 /**
+ * Ratchet (brief W-3, W3-0): a translated catalog must never ship a `TODO-ES:`/`PROPUESTA-ES:`
+ * placeholder — those markers exist only to flag untranslated strings mid-task; leaving one in is
+ * the same bug as shipping the English string unlocalized. Recurses through nested objects/arrays
+ * and returns every offending dot-path.
+ */
+export function findTodoMarkers(catalog, prefix = '') {
+  if (Array.isArray(catalog)) {
+    return catalog.flatMap((item, index) => findTodoMarkers(item, `${prefix}[${index}]`));
+  }
+  if (catalog !== null && typeof catalog === 'object') {
+    return Object.entries(catalog).flatMap(([key, value]) =>
+      findTodoMarkers(value, prefix ? `${prefix}.${key}` : key),
+    );
+  }
+  if (typeof catalog === 'string' && /^(TODO-ES|PROPUESTA-ES):/.test(catalog)) {
+    return [`${prefix}: "${catalog}"`];
+  }
+  return [];
+}
+
+/**
  * Collects every path into `value` as a dot-notation string. Objects contribute one entry per key
  * (plus their children); arrays contribute a `<prefix>[]:<length>` entry (so a length mismatch is a
  * diff) plus one recursive entry per element (so nested object/array shape mismatches are caught
@@ -66,6 +87,13 @@ function main() {
   const es = JSON.parse(readFileSync(esPath, 'utf8'));
 
   const problems = checkParity(en, es);
+  const todoMarkers = [...findTodoMarkers(en), ...findTodoMarkers(es)];
+  if (todoMarkers.length > 0) {
+    console.error('i18n:check FAILED — untranslated TODO-ES:/PROPUESTA-ES: markers remain:');
+    for (const marker of todoMarkers) console.error(`  - ${marker}`);
+    process.exitCode = 1;
+    return;
+  }
   if (problems.length > 0) {
     console.error('i18n:check FAILED — src/i18n/en.json and src/i18n/es.json are not in parity:');
     for (const problem of problems) console.error(`  - ${problem}`);
@@ -73,7 +101,7 @@ function main() {
     return;
   }
   console.log(
-    `i18n:check OK — en.json and es.json are in parity (${collectPaths(en).length} key paths).`,
+    `i18n:check OK — en.json and es.json are in parity (${collectPaths(en).length} key paths), no TODO markers.`,
   );
 }
 

@@ -1,0 +1,91 @@
+---
+/**
+ * Event ticker (brief W-3, W3-1b / "letsylabs Homepage.dc.html" lines 126-149): a full-width band
+ * under the hero, a mono line of real system events marquee-scrolling in a 32s loop (duplicated
+ * content, `.marquee` from tokens.css, W-2). `prefers-reduced-motion` freezes it via the global
+ * rule in tokens.css.
+ *
+ * The 8 items (event name/latency/dot color) are literal, not i18n -- same decision as the code
+ * snippets (docs/plans/web/03_homepage.md: "Nombres de eventos, código y ticker no se traducen").
+ * Only the container's `aria-label` is translated.
+ */
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+type Accent = 'signal' | 'tel' | 'event';
+
+const ITEMS: { text: string; accent: Accent }[] = [
+  { text: 'stt.partial · 118ms', accent: 'event' },
+  { text: 'stt.final · 142ms', accent: 'event' },
+  { text: 'agent.first_token · 210ms', accent: 'signal' },
+  { text: 'tts.first_audio · 96ms', accent: 'signal' },
+  { text: 'call.transfer.human · ok', accent: 'tel' },
+  { text: 'trace.exported · 1.2s', accent: 'event' },
+  { text: 'dtmf.received · "3"', accent: 'tel' },
+  { text: 'turn.barge_in · 61ms', accent: 'signal' },
+];
+---
+
+<div class="ticker" role="group" aria-label={t(locale, 'home.ticker.ariaLabel')}>
+  <div class="ticker-track marquee">
+    <div class="ticker-group">
+      {
+        ITEMS.map((item) => (
+          <span class="ticker-item">
+            <span class:list={['ticker-dot', `ticker-dot-${item.accent}`]} aria-hidden="true">
+              ●
+            </span>{' '}
+            {item.text}
+          </span>
+        ))
+      }
+    </div>
+    <div class="ticker-group" aria-hidden="true">
+      {
+        ITEMS.map((item) => (
+          <span class="ticker-item">
+            <span class:list={['ticker-dot', `ticker-dot-${item.accent}`]} aria-hidden="true">
+              ●
+            </span>{' '}
+            {item.text}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .ticker {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .ticker-group {
+    display: inline-flex;
+    gap: 56px;
+    padding: 10px 28px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .ticker-dot-event {
+    color: var(--event);
+  }
+
+  .ticker-dot-signal {
+    color: var(--signal);
+  }
+
+  .ticker-dot-tel {
+    color: var(--tel);
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+/**
+ * Pipeline section (brief W-3, W3-1b / "letsylabs Homepage.dc.html" lines 152-181): the interactive
+ * source→runtime→destination diagram, the homepage's identity piece. Wraps
+ * `PipelineDiagramInteractive` (W-2 React island) with translated H2/text/hint/node labels; the
+ * re-routing geometry and click/keyboard behavior already live in that component and
+ * `pipeline-geometry.ts`.
+ */
+import PipelineDiagramInteractive from '../PipelineDiagramInteractive';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const sources = [
+  { id: 'phone', label: t(locale, 'home.pipeline.nodes.phone') },
+  { id: 'browser', label: t(locale, 'home.pipeline.nodes.browser') },
+  { id: 'app', label: t(locale, 'home.pipeline.nodes.yourApp') },
+];
+const destinations = [
+  { id: 'agent', label: t(locale, 'home.pipeline.nodes.yourAgent') },
+  { id: 'openai', label: t(locale, 'home.pipeline.nodes.openai') },
+  { id: 'ollama', label: t(locale, 'home.pipeline.nodes.ollama') },
+  { id: 'anyllm', label: t(locale, 'home.pipeline.nodes.anyLlm') },
+];
+---
+
+<section id="pipeline" class="pipeline-section container">
+  <div class="pipeline-header" data-reveal>
+    <SectionHeading centered class="pipeline-h2">{t(locale, 'home.pipeline.h2')}</SectionHeading>
+    <p class="pipeline-text">{t(locale, 'home.pipeline.text')}</p>
+  </div>
+  <div class="pipeline-hint" data-reveal data-delay="120">{t(locale, 'home.pipeline.hint')}</div>
+  <div class="pipeline-diagram-wrap" data-reveal data-delay="180">
+    <PipelineDiagramInteractive
+      client:load
+      sources={sources}
+      destinations={destinations}
+      centerLabel="letsylabs runtime"
+      centerSubLabel="VAD · STT · turns · TTS · trace"
+      hint={t(locale, 'home.pipeline.hint')}
+      ariaLabel={t(locale, 'home.pipeline.ariaLabel')}
+    />
+  </div>
+</section>
+
+<style>
+  .pipeline-section {
+    padding: 104px 32px 80px;
+  }
+
+  .pipeline-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 16px;
+  }
+
+  :global(.pipeline-h2) {
+    margin: 0 0 16px;
+  }
+
+  .pipeline-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .pipeline-hint {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .pipeline-diagram-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+</style>

@@ -4,6 +4,12 @@
  * 12px, padding 24-28px. Hover (150ms): border → accent at 40%, background → `surface-2`. The
  * accent is `signal` (green) by default; `tone="amber"` is the Telephony-page variant (`tel`).
  * `hoverable=false` renders a static card (no hover transition) for non-interactive contexts.
+ *
+ * Forwards any other attribute (`...rest`) onto the wrapper div -- bug found in W-3: every homepage
+ * section stacks its cards via `[data-reveal]`/`data-delay` (site-fx.ts), and a Card is the grid/flex
+ * item those attributes need to sit on directly (a wrapping div would work too, but would make every
+ * caller repeat that boilerplate). Without this, `<Card data-reveal>` silently dropped the attribute
+ * -- caught before it shipped; regression test in Card.test.ts.
  */
 export type CardTone = 'default' | 'amber';
 
@@ -11,12 +17,13 @@ interface Props {
   tone?: CardTone;
   hoverable?: boolean;
   class?: string;
+  [key: `data-${string}`]: unknown;
 }
 
-const { tone = 'default', hoverable = true, class: className } = Astro.props;
+const { tone = 'default', hoverable = true, class: className, ...rest } = Astro.props;
 ---
 
-<div class:list={['card', `card-${tone}`, { 'card-hoverable': hoverable }, className]}>
+<div class:list={['card', `card-${tone}`, { 'card-hoverable': hoverable }, className]} {...rest}>
   <slot />
 </div>
 

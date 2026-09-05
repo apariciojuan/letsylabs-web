@@ -6,9 +6,6 @@
       "groupLabel": "Language"
     }
   },
-  "home": {
-    "h1": "Bootstrap placeholder — content pending."
-  },
   "nav": {
     "product": "Product",
     "developers": "Developers",
@@ -63,6 +60,164 @@
       "contact": "Contact",
       "privacy": "Privacy",
       "terms": "Terms"
+    }
+  },
+  "home": {
+    "meta": {
+      "title": "letsylabs — Realtime voice infrastructure for AI, EU-compliant",
+      "description": "Realtime voice infrastructure for AI: audio, telephony, STT, TTS and an auditable compliance trail — self-hosted or in our cloud."
+    },
+    "hero": {
+      "eyebrow": "REALTIME VOICE INFRASTRUCTURE FOR AI",
+      "h1": "Give your AI a voice — on the phone and on the web.",
+      "sub": "Stream audio, transcribe in realtime, speak with low latency and route phone calls — connected to your own agent or LLM. Self-hosted or in our cloud. EU-compliant by design.",
+      "ctaDocs": "Read the docs",
+      "codeAriaLabel": "Example API request and response",
+      "copyIdle": "copy",
+      "copyDone": "copied ✓"
+    },
+    "ticker": {
+      "ariaLabel": "Live system events"
+    },
+    "pipeline": {
+      "h2": "Bring your own intelligence.",
+      "text": "We handle realtime media — transport, transcription, turn-taking, interruptions, speech and the audit trail. You decide what thinks. Connect your agent over HTTP + SSE, or any OpenAI-compatible endpoint.",
+      "hint": "CLICK A SOURCE AND A DESTINATION TO REROUTE",
+      "ariaLabel": "Interactive pipeline diagram: audio sources connect through the letsylabs runtime to your agent or any LLM",
+      "nodes": {
+        "phone": "Phone",
+        "browser": "Browser",
+        "yourApp": "Your app",
+        "yourAgent": "Your agent",
+        "openai": "OpenAI",
+        "ollama": "Ollama",
+        "anyLlm": "Any LLM"
+      }
+    },
+    "voice": {
+      "eyebrow": "VOICE",
+      "h2": "Speech infrastructure without the agent lock-in.",
+      "cards": {
+        "stt": {
+          "event": "stt.partial",
+          "title": "Realtime STT",
+          "text": "Partial transcripts in under 300 ms. Spanish first, multilingual by design."
+        },
+        "tts": {
+          "event": "tts.first_audio",
+          "title": "Streaming TTS",
+          "text": "First audio per sentence, not per response. Speech starts while the model is still thinking."
+        },
+        "turns": {
+          "event": "turn.barge_in",
+          "title": "Turn-taking & barge-in",
+          "text": "Interrupt the agent with your voice. The runtime handles turns so your code doesn't."
+        },
+        "latency": {
+          "event": "latency.turn",
+          "title": "Latency tracing",
+          "text": "Every segment measured, every conversation traced. Query the timeline per call."
+        }
+      },
+      "transcriptLabel": "stt.final · es · 142ms"
+    },
+    "telephony": {
+      "eyebrow": "TELEPHONY",
+      "h2": "Turn any phone call into a programmable stream.",
+      "text": "Bring your SIP trunk or PBX — Asterisk, 3CX, your carrier — and every call becomes a session your software controls. Inbound, outbound, transfers, DTMF.",
+      "yourTrunk": "Your trunk",
+      "yourTrunkSub": "Asterisk · 3CX · SIP carrier",
+      "availableAtGa": "AVAILABLE AT GA",
+      "managedNumbers": "Managed numbers",
+      "managedNumbersSub": "numbers · queues · webphone",
+      "claim": "Use your carrier. Or ours, later. Never locked in."
+    },
+    "compliance": {
+      "eyebrow": "EU-COMPLIANT BY DESIGN",
+      "h2": "The law now requires it. We built it in.",
+      "text": "Spain's Ley 10/2025 and the EU AI Act require AI callers to identify themselves, offer a human handoff and keep records. letsylabs ships these as infrastructure: automatic AI disclosure at call start, guaranteed transfer to a human, synthetic-audio marking and a certified, exportable audit log per call.",
+      "cards": {
+        "disclosure": {
+          "title": "AI disclosure",
+          "text": "The caller is told it's an AI at call start. Automatic, logged, verifiable."
+        },
+        "handoff": {
+          "title": "Human handoff",
+          "text": "A guaranteed transfer path to a person, on request or on rule."
+        },
+        "audit": {
+          "title": "Audit trail",
+          "text": "A certified, exportable event log per call. Every disclosure, every transfer."
+        },
+        "retention": {
+          "title": "Retention controls",
+          "text": "Recording retention, deletion and rectification — configured, not coded."
+        }
+      },
+      "linkText": "See how compliance works →"
+    },
+    "selfHost": {
+      "eyebrow": "SELF-HOST & SOVEREIGNTY",
+      "h2": "Your infrastructure. Your data. One command.",
+      "text": "Run the entire platform on your servers with docker compose — including open-weight STT and TTS models, so audio never leaves your infrastructure. The same stack we run in our cloud.",
+      "cardSelfHosted": "Self-hosted",
+      "cardSelfHostedTag": "(LICENSED)",
+      "cardSub": "Same API, same stack.",
+      "cardManagedCloud": "Managed cloud",
+      "terminalAriaLabel": "Example self-hosted startup log"
+    },
+    "openSource": {
+      "eyebrow": "OPEN SOURCE",
+      "h2": "Open where it matters.",
+      "text": "The core contracts, VAD and open-weight model adapters are Apache 2.0. Build with the same types we build on — in Rust today, Python soon.",
+      "cards": {
+        "types": {
+          "name": "letsy-types",
+          "text": "Session, event and audio-frame contracts. The types everything speaks."
+        },
+        "vad": {
+          "name": "letsy-vad",
+          "text": "Voice activity detection tuned for conversation, not dictation."
+        },
+        "adapters": {
+          "name": "letsy-adapters",
+          "text": "Open-weight model adapters — Voxtral and friends."
+        }
+      },
+      "pythonBindings": "PYTHON BINDINGS: 2027"
+    },
+    "developers": {
+      "eyebrow": "DEVELOPERS",
+      "h2": "From first stream to production.",
+      "tabsLabel": "Code examples",
+      "tabCurl": "curl",
+      "tabRust": "Rust",
+      "tabPy": "Python",
+      "tabPyBadge": "2027",
+      "illustrativeLabel": "ILLUSTRATIVE · FINAL SNIPPETS AT GA",
+      "counters": {
+        "voiceToVoice": "voice-to-voice",
+        "audioFrames": "audio frames",
+        "eventsTraced": "events traced"
+      },
+      "targetBadge": "TARGET"
+    },
+    "vision": {
+      "h2": "Voice is the first sense.",
+      "text": "letsylabs is built as the interaction layer between intelligent software and the real world. We're shipping it one sense at a time.",
+      "steps": {
+        "voice": "Voice",
+        "realtimeMedia": "Realtime media",
+        "vision": "Vision",
+        "avatars": "Avatars",
+        "devices": "Devices"
+      },
+      "comingBadge": "COMING"
+    },
+    "finalCta": {
+      "h2": "Build voice AI that holds up in production — and in an audit.",
+      "ctaTalkToUs": "Talk to us",
+      "note": "GA lands March 2027 · early-access pilots get founding terms"
     }
   }
 }

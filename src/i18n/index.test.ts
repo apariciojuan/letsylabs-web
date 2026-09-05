@@ -5,11 +5,11 @@ import { defaultLocale, locales, t, type TranslationKeyOf } from './index';
 
 describe('t()', () => {
   it('returns the English string for a known key', () => {
-    expect(t('en', 'home.h1')).toBe(en.home.h1);
+    expect(t('en', 'home.hero.h1')).toBe(en.home.hero.h1);
   });
 
   it('returns the Spanish string for a known key', () => {
-    expect(t('es', 'home.h1')).toBe(es.home.h1);
+    expect(t('es', 'home.hero.h1')).toBe(es.home.hero.h1);
   });
 
   it('resolves nested keys (common.languageSwitch.en)', () => {

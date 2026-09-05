@@ -1,0 +1,114 @@
+---
+/**
+ * Vision section (brief W-3, W3-3a / "letsylabs Homepage.dc.html" lines 409-426): small and honest,
+ * a single connector line `Voice → Realtime media → Vision → Avatars → Devices` (only "Voice" is
+ * live -- signal-colored with a dot and the animated `flowline` gradient connector right after it;
+ * everything else is muted with a plain connector) plus a `COMING` badge and one line of copy.
+ */
+import Badge from '../Badge.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const STEPS = [
+  { key: 'voice', live: true },
+  { key: 'realtimeMedia', live: false },
+  { key: 'vision', live: false },
+  { key: 'avatars', live: false },
+  { key: 'devices', live: false },
+] as const;
+---
+
+<section class="vision-section container">
+  <div class="vision-inner" data-reveal>
+    <SectionHeading level="minor" centered class="vision-h2">
+      {t(locale, 'home.vision.h2')}
+    </SectionHeading>
+    <div class="vision-steps">
+      {
+        STEPS.map((step, i) => (
+          <>
+            {i > 0 && <span class="vision-connector" />}
+            <span class:list={['vision-step', { 'vision-step-live': step.live }]}>
+              {step.live && <span class="vision-dot" aria-hidden="true" />}
+              {t(locale, `home.vision.steps.${step.key}`)}
+            </span>
+          </>
+        ))
+      }
+      <Badge variant="coming-soon" class="vision-coming-badge">
+        {t(locale, 'home.vision.comingBadge')}
+      </Badge>
+    </div>
+    <p class="vision-text">{t(locale, 'home.vision.text')}</p>
+  </div>
+</section>
+
+<style>
+  .vision-section {
+    padding: 64px 32px 80px;
+  }
+
+  .vision-inner {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  :global(.vision-h2) {
+    margin: 0 0 28px;
+  }
+
+  .vision-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .vision-step {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .vision-step-live {
+    color: var(--signal);
+  }
+
+  .vision-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .vision-connector {
+    width: 36px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .vision-step-live + .vision-connector {
+    background: linear-gradient(90deg, rgba(74, 242, 161, 0.6), rgba(255, 255, 255, 0.15));
+    background-size: 220px 1px;
+    animation: flowline 3s linear infinite;
+  }
+
+  .vision-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

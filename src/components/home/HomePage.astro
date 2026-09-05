@@ -1,0 +1,42 @@
+---
+/**
+ * Homepage (brief W-3): composes the 11 shipped blocks from "letsylabs Homepage.dc.html" in order
+ * (block 12, the cookie banner, is deliberately not implemented -- decision: no analytics, no
+ * cookie). `<BaseLayout>` already mounts SiteNav/SiteFooter and `<main id="top">` around this.
+ */
+import Hero from './Hero.astro';
+import EventTicker from './EventTicker.astro';
+import PipelineSection from './PipelineSection.astro';
+import VoiceSection from './VoiceSection.astro';
+import TelephonySection from './TelephonySection.astro';
+import ComplianceSection from './ComplianceSection.astro';
+import SelfHostSection from './SelfHostSection.astro';
+import OpenSourceSection from './OpenSourceSection.astro';
+import DevelopersSection from './DevelopersSection.astro';
+import VisionSection from './VisionSection.astro';
+import FinalCta from './FinalCta.astro';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<Hero locale={locale} />
+<EventTicker locale={locale} />
+<PipelineSection locale={locale} />
+<VoiceSection locale={locale} />
+<TelephonySection locale={locale} />
+<ComplianceSection locale={locale} />
+<SelfHostSection locale={locale} />
+<OpenSourceSection locale={locale} />
+<DevelopersSection locale={locale} />
+<VisionSection locale={locale} />
+<FinalCta locale={locale} />
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
