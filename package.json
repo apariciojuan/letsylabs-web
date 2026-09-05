@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 4321",
     "build": "astro build",
+    "build:production": "PUBLIC_SITE_ENV=production astro build && PUBLIC_SITE_ENV=production node scripts/check_claims.mjs dist CLAIMS_MATRIX.md && node scripts/check_providers.mjs dist",
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro check",
@@ -24,6 +25,8 @@
     "a11y:check": "node scripts/check_a11y.mjs dist",
     "og:check": "node scripts/check_og.mjs dist",
     "og:render": "node scripts/og/render.mjs",
+    "claims:check": "node scripts/check_claims.mjs dist CLAIMS_MATRIX.md",
+    "providers:check": "node scripts/check_providers.mjs dist",
     "format": "prettier --write ."
   },
   "dependencies": {

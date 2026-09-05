@@ -72,7 +72,7 @@ const EQ_DELAYS_MS = [0, 120, 240];
         <text x="226" y="55" class="voice-how-label-text"
           >{t(locale, 'voice.howItWorks.nodes.vad')}</text
         >
-        <text x="226" y="98" class="voice-how-sub-text"
+        <text x="226" y="98" class="voice-how-sub-text" data-claim-state="target"
           >{t(locale, 'voice.howItWorks.nodes.vadSub')}</text
         >
       </g>
@@ -87,8 +87,11 @@ const EQ_DELAYS_MS = [0, 120, 240];
         <text x="362" y="55" class="voice-how-label-text"
           >{t(locale, 'voice.howItWorks.nodes.stt')}</text
         >
-        <text x="362" y="98" class="voice-how-sub-text voice-how-sub-event"
-          >{t(locale, 'voice.howItWorks.nodes.sttSub')}</text
+        <text
+          x="362"
+          y="98"
+          class="voice-how-sub-text voice-how-sub-event"
+          data-claim-state="target">{t(locale, 'voice.howItWorks.nodes.sttSub')}</text
         >
       </g>
       <g>
@@ -117,8 +120,11 @@ const EQ_DELAYS_MS = [0, 120, 240];
         <text x="664" y="55" class="voice-how-label-text"
           >{t(locale, 'voice.howItWorks.nodes.tts')}</text
         >
-        <text x="664" y="98" class="voice-how-sub-text voice-how-sub-signal"
-          >{t(locale, 'voice.howItWorks.nodes.ttsSub')}</text
+        <text
+          x="664"
+          y="98"
+          class="voice-how-sub-text voice-how-sub-signal"
+          data-claim-state="target">{t(locale, 'voice.howItWorks.nodes.ttsSub')}</text
         >
       </g>
       <g>
@@ -129,6 +135,7 @@ const EQ_DELAYS_MS = [0, 120, 240];
       </g>
       <circle data-pulse-dot="voice" cx="80" cy="55" r="4" class="voice-how-pulse-dot"></circle>
     </svg>
+    <p class="voice-how-target-note">{t(locale, 'common.targetFiguresNote')}</p>
   </div>
 </section>
 
@@ -163,7 +170,9 @@ const EQ_DELAYS_MS = [0, 120, 240];
           }
         </span>
         <span class="voice-barge-in">{t(locale, 'voice.capabilities.turns.demoBargeIn')}</span>
-        <span class="voice-barge-cancel">{t(locale, 'voice.capabilities.turns.demoCancel')}</span>
+        <span class="voice-barge-cancel" data-claim-state="target"
+          >{t(locale, 'voice.capabilities.turns.demoCancel')}</span
+        >
       </div>
     </Card>
     <Card hoverable data-reveal data-delay="180">
@@ -177,29 +186,32 @@ const EQ_DELAYS_MS = [0, 120, 240];
           <span class="voice-mini-dot voice-mini-dot-event">●</span> 00:03.1 · {
             t(locale, 'voice.capabilities.latency.rows.sttFinal')
           }
-          <span class="voice-mini-latency">142ms</span>
+          <span class="voice-mini-latency" data-claim-state="target">142ms</span>
         </div>
         <div>
           <span class="voice-mini-dot voice-mini-dot-signal">●</span> 00:03.3 · {
             t(locale, 'voice.capabilities.latency.rows.agentFirstToken')
           }
-          <span class="voice-mini-latency">210ms</span>
+          <span class="voice-mini-latency" data-claim-state="target">210ms</span>
         </div>
         <div>
           <span class="voice-mini-dot voice-mini-dot-signal">●</span> 00:03.4 · {
             t(locale, 'voice.capabilities.latency.rows.ttsFirstAudio')
           }
-          <span class="voice-mini-latency">96ms</span>
+          <span class="voice-mini-latency" data-claim-state="target">96ms</span>
         </div>
         <div>
           <span class="voice-mini-dot voice-mini-dot-event">●</span> 00:03.4 · {
             t(locale, 'voice.capabilities.latency.rows.latencyTurn')
           }
-          <span class="voice-mini-latency voice-mini-latency-ink">448ms</span>
+          <span class="voice-mini-latency voice-mini-latency-ink" data-claim-state="target"
+            >448ms</span
+          >
         </div>
       </div>
     </Card>
   </div>
+  <p class="voice-cap-target-note">{t(locale, 'common.targetFiguresNote')}</p>
 </section>
 
 <section class="voice-use-cases container">
@@ -350,6 +362,19 @@ const EQ_DELAYS_MS = [0, 120, 240];
     }
   }
 
+  /* CLAIMS_MATRIX rule 6 / brief W-9: the diagram's per-hop latencies (20ms/<300ms/96ms) are
+     unmeasured targets (R-11 pending) -- a badge per number would break the diagram (decision
+     already noted in CLAIMS_MATRIX.md), so a single muted section-level note covers all of them
+     instead, same visual register as .voice-how-label above the diagram. */
+  .voice-how-target-note {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin: 14px 0 0;
+  }
+
   .voice-capabilities {
     padding: 0 32px 72px;
   }
@@ -358,6 +383,16 @@ const EQ_DELAYS_MS = [0, 120, 240];
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 16px;
+  }
+
+  /* Same rationale as .voice-how-target-note above: covers the turns card's tts.cancel · 61ms
+     demo and the latency card's mini-timeline (142/210/96/448ms), one note for the whole section. */
+  .voice-cap-target-note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin: 20px 0 0;
   }
 
   :global(.voice-cap-grid .card) {

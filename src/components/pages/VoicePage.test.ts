@@ -57,4 +57,28 @@ describe('VoicePage', () => {
     const body = await renderToBody(VoicePage, { props: { locale: 'en' } });
     expect(body.querySelectorAll('.card[data-reveal]').length).toBe(4);
   });
+
+  // Bug found in W-9 audit: the diagram/mini-demo latencies (20ms/<300ms/96ms/61ms/142ms/210ms/448ms)
+  // had no target marking at all (CLAIMS_MATRIX.md, "Latencias del diagrama..." row) -- unlike Home's
+  // Developers counters, which already had a TARGET badge. Homogenized per the controller's
+  // 2026-09-05 decision: data-claim-state="target" on every unmeasured figure + one visible note per
+  // section (no per-figure badge, which would break the diagram).
+  it('stamps data-claim-state="target" on every unmeasured latency figure (CU-W9-2)', async () => {
+    const body = await renderToBody(VoicePage, { props: { locale: 'en' } });
+    const targetEls = body.querySelectorAll('[data-claim-state="target"]');
+    // 3 diagram sub-labels (20ms/<300ms/96ms) + 1 barge-in demo (61ms) + 4 mini-timeline rows
+    // (142ms/210ms/96ms/448ms) = 8.
+    expect(targetEls).toHaveLength(8);
+  });
+
+  it('shows a visible "target figures" note in both the diagram and the capabilities sections', async () => {
+    const body = await renderToBody(VoicePage, { props: { locale: 'en' } });
+    expect(body.querySelectorAll('.voice-how-target-note, .voice-cap-target-note')).toHaveLength(2);
+    expect(body.textContent).toContain(en.common.targetFiguresNote);
+  });
+
+  it('shows the Spanish target-figures note', async () => {
+    const body = await renderToBody(VoicePage, { props: { locale: 'es' } });
+    expect(body.textContent).toContain(es.common.targetFiguresNote);
+  });
 });

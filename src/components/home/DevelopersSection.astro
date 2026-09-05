@@ -129,21 +129,27 @@ session = letsy.Session.create(connector=<span class="tok-string">"my-agent"</sp
       </div>
       <div class="developers-counter-label">
         {t(locale, 'home.developers.counters.voiceToVoice')}
-        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+        <Badge variant={TARGET_BADGE_VARIANT} claimState="target"
+          >{t(locale, 'home.developers.targetBadge')}</Badge
+        >
       </div>
     </div>
     <div class="developers-counter-item">
       <div class="developers-counter" data-counter data-target="20" data-suffix="ms">20ms</div>
       <div class="developers-counter-label">
         {t(locale, 'home.developers.counters.audioFrames')}
-        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+        <Badge variant={TARGET_BADGE_VARIANT} claimState="target"
+          >{t(locale, 'home.developers.targetBadge')}</Badge
+        >
       </div>
     </div>
     <div class="developers-counter-item">
       <div class="developers-counter" data-counter data-target="100" data-suffix="%">100%</div>
       <div class="developers-counter-label">
         {t(locale, 'home.developers.counters.eventsTraced')}
-        <Badge variant={TARGET_BADGE_VARIANT}>{t(locale, 'home.developers.targetBadge')}</Badge>
+        <Badge variant={TARGET_BADGE_VARIANT} claimState="target"
+          >{t(locale, 'home.developers.targetBadge')}</Badge
+        >
       </div>
     </div>
   </div>

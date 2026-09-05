@@ -19,15 +19,23 @@ const { locale } = Astro.props;
 
 type Accent = 'signal' | 'tel' | 'event';
 
-const ITEMS: { text: string; accent: Accent }[] = [
-  { text: 'stt.partial · 118ms', accent: 'event' },
-  { text: 'stt.final · 142ms', accent: 'event' },
-  { text: 'agent.first_token · 210ms', accent: 'signal' },
-  { text: 'tts.first_audio · 96ms', accent: 'signal' },
-  { text: 'call.transfer.human · ok', accent: 'tel' },
-  { text: 'trace.exported · 1.2s', accent: 'event' },
-  { text: 'dtmf.received · "3"', accent: 'tel' },
-  { text: 'turn.barge_in · 61ms', accent: 'signal' },
+/**
+ * `hasTargetFigure` (brief W-9, CLAIMS_MATRIX rule 6): 6 of these 8 items carry an unmeasured
+ * latency (R-11 pending) with no marking at all until now -- a real gap found during the W-9 audit
+ * (the Developers section's counters and the /voice diagram already had target treatment, this
+ * ticker had none). The other 2 items ("ok", the DTMF digit) are not timing figures. Stamped as
+ * `data-claim-state="target"` on the item itself (DOM-only, see CLAIMS_MATRIX.md) rather than
+ * adding new visible copy to this already-shipped, handoff-fidelity-sensitive marquee band.
+ */
+const ITEMS: { text: string; accent: Accent; hasTargetFigure: boolean }[] = [
+  { text: 'stt.partial · 118ms', accent: 'event', hasTargetFigure: true },
+  { text: 'stt.final · 142ms', accent: 'event', hasTargetFigure: true },
+  { text: 'agent.first_token · 210ms', accent: 'signal', hasTargetFigure: true },
+  { text: 'tts.first_audio · 96ms', accent: 'signal', hasTargetFigure: true },
+  { text: 'call.transfer.human · ok', accent: 'tel', hasTargetFigure: false },
+  { text: 'trace.exported · 1.2s', accent: 'event', hasTargetFigure: true },
+  { text: 'dtmf.received · "3"', accent: 'tel', hasTargetFigure: false },
+  { text: 'turn.barge_in · 61ms', accent: 'signal', hasTargetFigure: true },
 ];
 ---
 
@@ -36,7 +44,7 @@ const ITEMS: { text: string; accent: Accent }[] = [
     <div class="ticker-group">
       {
         ITEMS.map((item) => (
-          <span class="ticker-item">
+          <span class="ticker-item" data-claim-state={item.hasTargetFigure ? 'target' : undefined}>
             <span class:list={['ticker-dot', `ticker-dot-${item.accent}`]} aria-hidden="true">
               ●
             </span>{' '}
@@ -48,7 +56,7 @@ const ITEMS: { text: string; accent: Accent }[] = [
     <div class="ticker-group" aria-hidden="true">
       {
         ITEMS.map((item) => (
-          <span class="ticker-item">
+          <span class="ticker-item" data-claim-state={item.hasTargetFigure ? 'target' : undefined}>
             <span class:list={['ticker-dot', `ticker-dot-${item.accent}`]} aria-hidden="true">
               ●
             </span>{' '}

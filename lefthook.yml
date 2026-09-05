@@ -30,3 +30,13 @@ pre-commit:
       # Same convention as third-party-ratchet/placeholders-ratchet above: no glob gate, fast
       # no-op without a stale dist/ build directory (brief W-7).
       run: corepack pnpm headers:check
+    claims-ratchet:
+      # Same convention as third-party-ratchet/placeholders-ratchet/headers-ratchet above: no glob
+      # gate -- deliberately runs on every commit (not just ones touching CLAIMS_MATRIX.md), since
+      # its whole point is to catch a watched term shipped in NEW copy that nobody added a row for
+      # (brief W-9); fast no-op without a stale dist/ build directory.
+      run: corepack pnpm claims:check
+    providers-ratchet:
+      # Same convention as third-party-ratchet/placeholders-ratchet/headers-ratchet above: no glob
+      # gate, fast no-op without a stale dist/ build directory (brief W-9).
+      run: corepack pnpm providers:check

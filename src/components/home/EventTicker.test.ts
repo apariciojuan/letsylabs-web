@@ -30,6 +30,23 @@ describe('EventTicker', () => {
     );
   });
 
+  // Bug found in W-9 audit: this ticker's 6 latency items (118ms/142ms/210ms/96ms/1.2s/61ms) had NO
+  // illustrative/target marking at all, unlike the Developers section's badged counters.
+  it('stamps data-claim-state="target" on the 6 items with an unmeasured latency, not on "ok"/DTMF (CU-W9-2)', async () => {
+    const body = await renderToBody(EventTicker, { props: { locale: 'en' } });
+    const visibleGroup = body.querySelectorAll('.ticker-group')[0];
+    const targetItems = visibleGroup.querySelectorAll('.ticker-item[data-claim-state="target"]');
+    expect(targetItems).toHaveLength(6);
+    const nonTargetItems = visibleGroup.querySelectorAll('.ticker-item:not([data-claim-state])');
+    expect(nonTargetItems).toHaveLength(2);
+    expect(
+      Array.from(nonTargetItems).some((el) => el.textContent?.includes('call.transfer.human')),
+    ).toBe(true);
+    expect(Array.from(nonTargetItems).some((el) => el.textContent?.includes('dtmf.received'))).toBe(
+      true,
+    );
+  });
+
   it('the container aria-label is translated', async () => {
     const enBody = await renderToBody(EventTicker, { props: { locale: 'en' } });
     const esBody = await renderToBody(EventTicker, { props: { locale: 'es' } });

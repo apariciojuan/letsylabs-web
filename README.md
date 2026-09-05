@@ -29,23 +29,26 @@ Edita cualquier fichero bajo `src/` con el servicio `web` levantado y el navegad
 
 Todos se ejecutan con `docker compose -f compose.dev.yml run --rm dev corepack pnpm <script>`:
 
-| Script               | Qué hace                                                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `dev`                | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`)                                             |
-| `build`              | Build de producción a `dist/` (`astro build`)                                                                       |
-| `preview`            | Sirve `dist/` para revisar el build                                                                                 |
-| `typecheck`          | `astro check` (TypeScript + diagnósticos de Astro)                                                                  |
-| `lint`               | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)                                                  |
-| `format:check`       | Prettier en modo comprobación (`prettier-plugin-astro` incluido)                                                    |
-| `test`               | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)                                                 |
-| `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                                                                |
-| `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                                                       |
-| `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder`                                     |
-| `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` sin su hash sha256 en `script-src` (brief W-7, W-7b) |
-| `seo:check`          | Título único/descripción/canonical/hreflang absolutos/`og:image`/JSON-LD (solo home) en `dist/` (brief W-8)         |
-| `a11y:check`         | Un solo `<h1>` sin saltos de nivel, `<html lang>` correcto y los 4 landmarks en `dist/` (brief W-8)                 |
-| `og:check`           | Cada imagen OG existe en `dist/og/` a 1200×630 y todo `og:image` referenciado resuelve (brief W-8)                  |
-| `og:render`          | Genera los PNG de `public/og/` (SVG → PNG con el Chromium del perfil `e2e`) — solo cuando cambia un título/página   |
+| Script               | Qué hace                                                                                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `dev`                | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`)                                                                          |
+| `build`              | Build de producción a `dist/` (`astro build`)                                                                                                    |
+| `preview`            | Sirve `dist/` para revisar el build                                                                                                              |
+| `typecheck`          | `astro check` (TypeScript + diagnósticos de Astro)                                                                                               |
+| `lint`               | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)                                                                               |
+| `format:check`       | Prettier en modo comprobación (`prettier-plugin-astro` incluido)                                                                                 |
+| `test`               | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)                                                                              |
+| `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                                                                                             |
+| `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                                                                                    |
+| `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder`                                                                  |
+| `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` sin su hash sha256 en `script-src` (brief W-7, W-7b)                              |
+| `seo:check`          | Título único/descripción/canonical/hreflang absolutos/`og:image`/JSON-LD (solo home) en `dist/` (brief W-8)                                      |
+| `a11y:check`         | Un solo `<h1>` sin saltos de nivel, `<html lang>` correcto y los 4 landmarks en `dist/` (brief W-8)                                              |
+| `og:check`           | Cada imagen OG existe en `dist/og/` a 1200×630 y todo `og:image` referenciado resuelve (brief W-8)                                               |
+| `og:render`          | Genera los PNG de `public/og/` (SVG → PNG con el Chromium del perfil `e2e`) — solo cuando cambia un título/página                                |
+| `claims:check`       | `CLAIMS_MATRIX.md` cubre todo término vigilado en `dist/` y toda fila `target` tiene su marca DOM (brief W-9)                                    |
+| `providers:check`    | Nombres de proveedor por ruta: Deepgram/ElevenLabs/LiveKit prohibidos siempre; Asterisk/3CX/SIP/Voxtral solo en sus rutas permitidas (brief W-9) |
+| `build:production`   | `astro build` + `claims:check` + `providers:check` con `PUBLIC_SITE_ENV=production` — ver «Publicar el sitio» abajo                              |
 
 Ratchets adicionales (no son scripts de `package.json`, se invocan directos):
 
@@ -102,6 +105,37 @@ add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interes
 
 `<origen del endpoint, si lo hay>` = el origen (esquema+host) de `PUBLIC_WAITLIST_ENDPOINT` en ese
 build; omítelo por completo si la variable está vacía (fail-closed, D-W7-1).
+
+### Publicar el sitio
+
+`CLAIMS_MATRIX.md` es vinculante (CLAUDE.md raíz §10.2, §4.1): **el sitio no se publica en producción
+con filas `bloqueante`**. `pnpm build` (sin `PUBLIC_SITE_ENV`) es el build de desarrollo/pase visual —
+nunca bloquea, para que la batería siga en verde mientras el producto está sin sellar. Antes de
+publicar de verdad:
+
+```sh
+docker compose -f compose.dev.yml run --rm dev corepack pnpm run build:production
+```
+
+Esto encadena `PUBLIC_SITE_ENV=production astro build` → `claims:check` → `providers:check`
+(`package.json`, script `build:production`). Si falla por filas `bloqueante`, el mensaje lista cada
+una con su página y su afirmación — **eso es correcto hoy** (CLAUDE.md raíz §1.1: "en desarrollo,
+pre-código, sin producción"; casi todo el producto está sin sellar). Antes de un lanzamiento real:
+
+1. Corre `build:production` y revisa cada fila `bloqueante` de la lista: reescríbela a futuro con
+   badge, retírala, o espera a que el bloque correspondiente selle en el maestro y actualiza su Estado
+   en `CLAIMS_MATRIX.md` a `sellado`/`disponible`.
+2. Repite hasta que `build:production` termine en verde (cero filas `bloqueante`).
+3. **Recaptura las pantallas afectadas con fecha** (CLAUDE.md raíz §10.2) en cuanto cambie el copy o
+   las capacidades reales del producto — no solo al publicar: en cada ronda que toque una pantalla ya
+   capturada.
+4. Fija `PUBLIC_SITE_URL` al dominio real (hoy `https://letsylabs.com` provisional, workspace 🔴) y
+   `PUBLIC_WAITLIST_ENDPOINT` al endpoint real de Formspree antes de este mismo build — ambos afectan
+   URLs absolutas (canonical/hreflang/sitemap) y el formulario de acceso anticipado.
+
+`providers:check` (nombres de proveedor por ruta) y las filas `target` (cifras sin medición sellada,
+regla 6 de la matriz) NO dependen de `PUBLIC_SITE_ENV`: se exigen siempre, en desarrollo y en
+producción por igual — solo el bloqueo por filas `bloqueante` distingue entre ambos modos.
 
 ### Métricas y límites
 

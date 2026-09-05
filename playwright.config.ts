@@ -6,6 +6,10 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:4321';
 
 export default defineConfig({
   testDir: './e2e',
+  // Debt W8-D1 / brief W-9: warms every route (both locales) sequentially before any test worker
+  // starts, so a cold `astro dev` (right after `up -d web`) never races a test's own timeout budget
+  // to compile a page for the first time. See e2e/global-setup.ts's doc comment.
+  globalSetup: './e2e/global-setup.ts',
   fullyParallel: true,
   // The `e2e` compose service has a 2GB mem_limit. W-2 added a dev QA page
   // (src/pages/dev/components.astro) that runs several animations at once (multiple

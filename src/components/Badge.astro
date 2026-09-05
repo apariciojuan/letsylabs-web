@@ -4,18 +4,26 @@
  * letter-spacing 1px, radius 4px, 1px border. Five variants, matching the CLAIMS_MATRIX honesty
  * rules -- AVAILABLE is the only "present tense" variant; every other one signals a future state.
  * Presentational: label text is the default slot (caller-supplied, already translated).
+ *
+ * `claimState` (brief W-9, CLAIMS_MATRIX rule 6 / CU-W9-2): stamps `data-claim-state="target"` on
+ * the pill so `scripts/check_claims.mjs` can verify, purely from the built HTML, that every page
+ * with a `target`-state row in CLAIMS_MATRIX.md actually carries a visible target marker. Optional
+ * because most badges (COMING SOON, PREVIEW, BETA, POST-GA) are not target-figure markers.
  */
 export type BadgeVariant = 'available' | 'coming-soon' | 'preview' | 'beta' | 'post-ga';
 
 interface Props {
   variant?: BadgeVariant;
+  claimState?: 'target';
   class?: string;
 }
 
-const { variant = 'coming-soon', class: className } = Astro.props;
+const { variant = 'coming-soon', claimState, class: className } = Astro.props;
 ---
 
-<span class:list={['badge', `badge-${variant}`, className]}><slot /></span>
+<span class:list={['badge', `badge-${variant}`, className]} data-claim-state={claimState}
+  ><slot /></span
+>
 
 <style>
   .badge {

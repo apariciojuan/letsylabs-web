@@ -49,6 +49,14 @@ describe('DevelopersSection', () => {
     expect(body.textContent).toMatch(/TARGET/);
   });
 
+  // Bug found in W-9 audit: the TARGET badge had no machine-readable marker, so
+  // scripts/check_claims.mjs could not verify a target-state row is actually marked in the page.
+  it('each of the 3 TARGET badges carries data-claim-state="target" (CU-W9-2)', async () => {
+    const body = await renderToBody(DevelopersSection, { props: { locale: 'en' } });
+    const targetBadges = body.querySelectorAll('[data-claim-state="target"]');
+    expect(targetBadges).toHaveLength(3);
+  });
+
   it('the illustrative label text differs in Spanish (translated) but the code snippets stay in English', async () => {
     const esBody = await renderToBody(DevelopersSection, { props: { locale: 'es' } });
     expect(esBody.textContent).toContain('curl -X POST https://api.letsylabs.com/v1/sessions');
