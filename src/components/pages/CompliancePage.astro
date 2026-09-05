@@ -1,0 +1,530 @@
+---
+/**
+ * /compliance (brief W-5, W5-1a/W5-1b/W5-2a / "Compliance.dc.html") -- the "star" page, the one
+ * that sells compliance itself, so nothing on it can overclaim (CLAUDE.md §7.5, §4.1). The
+ * prototype's copy is Spanish-original (unlike every other interior page); the English text below
+ * is a careful translation into `compliance.*`'s EN catalog, done by the agent per the brief's
+ * explicit decision -- both catalogs render off the SAME component and layout.
+ *
+ * Deliberate deviation from the prototype (brief decision, not a bug): the hero's footer line
+ * "Página disponible en español · English version at GA" is NOT rendered -- the English route
+ * exists from day one, so that note would be a stale/false claim the moment this page ships.
+ *
+ * Sections, top to bottom: hero (PageHero) -> "the law requires / letsylabs solves" 4 cards (each
+ * `{ARTÍCULO}` hole rendered by the shared `Placeholder`, brief W-6) -> the compliant-call timeline
+ * (shared `EventTimeline`, brief W-2) -> the auditable export sample (custom card, see below) -> a
+ * short legal FAQ -> a closing CTA with the mandatory disclaimer.
+ *
+ * The export card is NOT `CodeBlock.astro`: that component's header always renders the 3
+ * red/amber/green dots, which the prototype's export card does not have (its header is just the
+ * mono endpoint string + a badge) -- same "if it doesn't fit, custom markup" call already made by
+ * W-4/W-6 for other one-off blocks. It still reuses the SAME global syntax-highlight classes
+ * (`.tok-string`/`.tok-keyword`/`.tok-number` in tokens.css) that `CodeBlock`'s callers use, so the
+ * JSON sample's coloring matches the rest of the site. The JSON itself is a literal (not i18n, same
+ * treatment as the Hero/Developers code snippets) and its header carries a `Badge` reusing the
+ * existing muted `coming-soon` variant with the slot text "ILLUSTRATIVE"/"ILUSTRATIVO" (brief
+ * decision: the export format is not sealed until C-6/R-13 -- no new Badge variant needed, the
+ * variant only controls color/style, the label text is caller-supplied).
+ */
+import Badge from '../Badge.astro';
+import Button from '../Button.astro';
+import Card from '../Card.astro';
+import EventTimeline from '../EventTimeline.astro';
+import PageHero from '../PageHero.astro';
+import Placeholder from '../Placeholder.astro';
+import { t, type Locale, type TranslationKeyOf } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+/**
+ * The 4 "law requires -> letsylabs solves" cards. Cards 1-2 embed the literal event name mid-sentence
+ * (a different position in each language: end in ES, middle in EN) via `solutionPrefix`/
+ * `solutionSuffix` i18n keys wrapping a shared literal `event` string -- this repo has no precedent
+ * for embedding markup inside an i18n value, so the split-string approach keeps the event name a
+ * plain literal (never translated) while still letting each language's sentence read naturally.
+ * Cards 3-4 have no embedded event name in the prototype, so they use a single `solution` key.
+ */
+const LAW_CARDS = [
+  { key: 'disclosure', event: 'disclosure.played', delay: 0 },
+  { key: 'handoff', event: 'call.transfer.human', delay: 60 },
+  { key: 'audioMarking', event: null, delay: 120 },
+  { key: 'retention', event: null, delay: 180 },
+] as const;
+
+/**
+ * Timestamps and event-type names are literal (never translated, identical in both locales -- same
+ * rule as the Homepage ticker and the Hero code snippet); only each row's `detail` text is
+ * translated, via `detailKey`.
+ */
+type TimelineAccent = 'signal' | 'tel' | 'event';
+
+const TIMELINE_EVENTS: {
+  ts: string;
+  type: string;
+  detailKey: TranslationKeyOf;
+  accent: TimelineAccent;
+}[] = [
+  {
+    ts: '00:00.0',
+    type: 'call.answered',
+    detailKey: 'compliance.timeline.events.answered',
+    accent: 'event',
+  },
+  {
+    ts: '00:00.4',
+    type: 'disclosure.played',
+    detailKey: 'compliance.timeline.events.disclosure',
+    accent: 'signal',
+  },
+  {
+    ts: '00:08.2',
+    type: 'stt.final',
+    detailKey: 'compliance.timeline.events.sttFinal',
+    accent: 'event',
+  },
+  {
+    ts: '00:08.9',
+    type: 'call.transfer.human',
+    detailKey: 'compliance.timeline.events.transfer',
+    accent: 'tel',
+  },
+  {
+    ts: '03:12.6',
+    type: 'call.ended',
+    detailKey: 'compliance.timeline.events.ended',
+    accent: 'event',
+  },
+  {
+    ts: '03:12.7',
+    type: 'trace.sealed',
+    detailKey: 'compliance.timeline.events.sealed',
+    accent: 'signal',
+  },
+];
+
+const timelineEvents = TIMELINE_EVENTS.map(({ ts, type, detailKey, accent }) => ({
+  ts,
+  type,
+  detail: t(locale, detailKey),
+  accent,
+}));
+
+const EXPORT_CHECK_KEYS = ['deletion', 'retention', 'aiAct'] as const;
+const FAQ_KEYS = ['autoCompliance', 'outsideEs', 'ownDisclosure'] as const;
+
+// Illustrative export sample (brief decision: the real format is set by C-6/R-13; this JSON is a
+// literal, not i18n, marked with the `ILLUSTRATIVE` badge in its header -- same treatment as the
+// Hero/Developers code snippets, which are also not translated).
+const EXPORT_ENDPOINT = 'GET /v1/sessions/01JD…/trace?format=audit';
+const EXPORT_JSON = `{
+  <span class="tok-keyword">"session"</span>: <span class="tok-string">"01JD…"</span>,
+  <span class="tok-keyword">"disclosure"</span>: { <span class="tok-keyword">"played_at"</span>: <span class="tok-string">"00:00.4"</span>, <span class="tok-keyword">"verified"</span>: true },
+  <span class="tok-keyword">"human_handoff"</span>: { <span class="tok-keyword">"offered"</span>: true, <span class="tok-keyword">"completed"</span>: true },
+  <span class="tok-keyword">"synthetic_audio_marked"</span>: true,
+  <span class="tok-keyword">"events"</span>: <span class="tok-number">47</span>,
+  <span class="tok-keyword">"signature"</span>: <span class="tok-string">"ed25519:9f2c…"</span>
+}`;
+---
+
+<PageHero
+  eyebrow={t(locale, 'compliance.hero.eyebrow')}
+  heading={t(locale, 'compliance.hero.h1')}
+  headingMaxWidth={860}
+  sub={t(locale, 'compliance.hero.sub')}
+  subMaxWidth={680}
+  accent="signal"
+  ctas={[{ href: 'mailto:hello@letsylabs.com', label: t(locale, 'compliance.hero.cta') }]}
+/>
+
+<section class="cmp-law container">
+  <div class="cmp-law-header" data-reveal>
+    <h2 class="cmp-law-h2">{t(locale, 'compliance.law.h2')}</h2>
+    <p class="cmp-law-text">{t(locale, 'compliance.law.text')}</p>
+  </div>
+  <div class="cmp-law-grid">
+    {
+      LAW_CARDS.map(({ key, event, delay }) => (
+        <Card hoverable data-reveal data-delay={delay}>
+          <div class="cmp-law-requires">
+            {t(locale, 'compliance.law.requiresLabel')}{' '}
+            <span class="cmp-law-article">
+              <span aria-hidden="true">· </span>
+              <Placeholder token="ARTÍCULO" label={t(locale, 'common.placeholder.pendingValue')} />
+            </span>
+          </div>
+          <div class="cmp-law-obligation">
+            {t(locale, `compliance.law.cards.${key}.obligation`)}
+          </div>
+          <div class="cmp-law-divider">
+            <div class="cmp-law-solves">{t(locale, 'compliance.law.solvesLabel')}</div>
+            <p class="cmp-law-solution">
+              {event ? (
+                <>
+                  {t(locale, `compliance.law.cards.${key}.solutionPrefix`)}
+                  <span class="cmp-mono-event">{event}</span>
+                  {t(locale, `compliance.law.cards.${key}.solutionSuffix`)}
+                </>
+              ) : (
+                t(locale, `compliance.law.cards.${key}.solution`)
+              )}
+            </p>
+          </div>
+        </Card>
+      ))
+    }
+  </div>
+  <div class="cmp-law-footnote" data-reveal>
+    <Placeholder token="ARTÍCULO" label={t(locale, 'common.placeholder.pendingValue')} />{' '}
+    {t(locale, 'compliance.law.footnoteSuffix')}
+  </div>
+</section>
+
+<section class="cmp-timeline container">
+  <div class="cmp-timeline-header" data-reveal>
+    <h2 class="cmp-timeline-h2">{t(locale, 'compliance.timeline.h2')}</h2>
+    <p class="cmp-timeline-text">{t(locale, 'compliance.timeline.text')}</p>
+  </div>
+  <div class="cmp-timeline-card" data-reveal data-delay="80">
+    <EventTimeline events={timelineEvents} ariaLabel={t(locale, 'compliance.timeline.ariaLabel')} />
+  </div>
+</section>
+
+<section class="cmp-export container">
+  <div class="cmp-export-copy" data-reveal>
+    <h2 class="cmp-export-h2">{t(locale, 'compliance.export.h2')}</h2>
+    <p class="cmp-export-text">{t(locale, 'compliance.export.text')}</p>
+    <div class="cmp-export-checks">
+      {
+        EXPORT_CHECK_KEYS.map((key) => (
+          <div class="cmp-export-check">
+            <span class="cmp-export-checkmark" aria-hidden="true">
+              ✔
+            </span>
+            {t(locale, `compliance.export.checks.${key}`)}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="cmp-export-sample" data-reveal data-delay="100">
+    <div class="cmp-export-card">
+      <div class="cmp-export-card-header">
+        <span class="cmp-export-endpoint">{EXPORT_ENDPOINT}</span>
+        <Badge variant="coming-soon">{t(locale, 'compliance.export.badge')}</Badge>
+      </div>
+      <pre class="cmp-export-pre" set:html={EXPORT_JSON} />
+    </div>
+  </div>
+</section>
+
+<section class="cmp-faq container">
+  <div class="cmp-faq-header" data-reveal>
+    <h2 class="cmp-faq-h2">{t(locale, 'compliance.faq.h2')}</h2>
+  </div>
+  <div class="cmp-faq-grid">
+    {
+      FAQ_KEYS.map((key, index) => (
+        <Card hoverable={false} data-reveal data-delay={index * 60}>
+          <div class="cmp-faq-q">{t(locale, `compliance.faq.items.${key}.q`)}</div>
+          <p class="cmp-faq-a">{t(locale, `compliance.faq.items.${key}.a`)}</p>
+        </Card>
+      ))
+    }
+  </div>
+</section>
+
+<section class="cmp-cta">
+  <div class="cmp-cta-inner">
+    <h2 class="cmp-cta-h2" data-reveal>
+      {t(locale, 'compliance.cta.h2')}
+    </h2>
+    <div data-reveal data-delay="80">
+      <Button href="mailto:hello@letsylabs.com">{t(locale, 'compliance.cta.button')}</Button>
+    </div>
+    <p class="cmp-cta-disclaimer" data-reveal data-delay="140">
+      {t(locale, 'compliance.cta.disclaimer')}
+    </p>
+  </div>
+</section>
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
+
+<style>
+  .cmp-law {
+    padding: 80px 32px 40px;
+  }
+
+  .cmp-law-header {
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .cmp-law-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.625rem, 3vw, 2.125rem);
+    letter-spacing: -0.6px;
+    margin: 0 0 12px;
+  }
+
+  .cmp-law-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cmp-law-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 16px;
+  }
+
+  :global(.cmp-law-grid .card) {
+    padding: 26px;
+  }
+
+  .cmp-law-requires {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .cmp-law-article {
+    color: var(--event);
+  }
+
+  .cmp-law-obligation {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .cmp-law-divider {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+
+  .cmp-law-solves {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--signal);
+    margin-bottom: 8px;
+  }
+
+  .cmp-law-solution {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cmp-mono-event {
+    font-family: var(--font-mono);
+    color: var(--event);
+  }
+
+  .cmp-law-footnote {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+
+  .cmp-timeline {
+    padding: 64px 32px;
+  }
+
+  .cmp-timeline-header {
+    max-width: 640px;
+    margin-bottom: 36px;
+  }
+
+  .cmp-timeline-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.625rem, 3vw, 2.125rem);
+    letter-spacing: -0.6px;
+    margin: 0 0 12px;
+  }
+
+  .cmp-timeline-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cmp-timeline-card {
+    max-width: 760px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 28px 32px;
+  }
+
+  .cmp-export {
+    padding: 16px 32px 64px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .cmp-export-copy {
+    flex: 1 1 380px;
+    min-width: 300px;
+  }
+
+  .cmp-export-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+    letter-spacing: -0.6px;
+    margin: 0 0 14px;
+  }
+
+  .cmp-export-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+
+  .cmp-export-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .cmp-export-check {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .cmp-export-checkmark {
+    font-family: var(--font-mono);
+    color: var(--signal);
+  }
+
+  .cmp-export-sample {
+    flex: 1 1 400px;
+    min-width: 300px;
+  }
+
+  .cmp-export-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .cmp-export-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cmp-export-endpoint {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .cmp-export-pre {
+    margin: 0;
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+
+  .cmp-faq {
+    padding: 0 32px 72px;
+  }
+
+  .cmp-faq-header {
+    max-width: 640px;
+    margin-bottom: 28px;
+  }
+
+  .cmp-faq-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+    letter-spacing: -0.6px;
+    margin: 0;
+  }
+
+  .cmp-faq-grid {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.cmp-faq-grid .card) {
+    padding: 20px 24px;
+  }
+
+  .cmp-faq-q {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .cmp-faq-a {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cmp-cta {
+    border-top: 1px solid var(--line);
+  }
+
+  .cmp-cta-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 32px;
+    text-align: center;
+  }
+
+  .cmp-cta-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.625rem, 3vw, 2.125rem);
+    letter-spacing: -0.6px;
+    margin: 0 0 28px;
+    text-wrap: pretty;
+  }
+
+  .cmp-cta-disclaimer {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 32px auto 0;
+    max-width: 520px;
+  }
+</style>

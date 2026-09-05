@@ -372,6 +372,90 @@
       "complianceLink": "Llamadas conformes con la Ley 10/2025"
     }
   },
+  "compliance": {
+    "meta": {
+      "title": "Cumplimiento — letsylabs",
+      "description": "Aviso de IA, transferencia garantizada a humano, marcado de audio sintético y registro auditable por llamada — como parte de la infraestructura, no como proyecto aparte."
+    },
+    "hero": {
+      "eyebrow": "CUMPLIMIENTO EUROPEO DE SERIE",
+      "h1": "Cumple la Ley 10/2025 sin construir nada.",
+      "sub": "Aviso de IA, transferencia garantizada a humano, marcado de audio sintético y registro auditable por llamada — como parte de la infraestructura, no como proyecto aparte.",
+      "cta": "Habla con nosotros"
+    },
+    "law": {
+      "h2": "Qué exige la ley — y cómo lo resolvemos.",
+      "text": "Cuatro obligaciones llanas. Cada una llega resuelta como infraestructura.",
+      "requiresLabel": "LA LEY EXIGE",
+      "solvesLabel": "LETSYLABS",
+      "cards": {
+        "disclosure": {
+          "obligation": "Identificarse como IA al inicio de la llamada.",
+          "solutionPrefix": "Aviso automático de IA al descolgar, registrado como evento ",
+          "solutionSuffix": "."
+        },
+        "handoff": {
+          "obligation": "Ofrecer transferencia a una persona.",
+          "solutionPrefix": "Handoff garantizado a humano por petición o por regla — ",
+          "solutionSuffix": "."
+        },
+        "audioMarking": {
+          "obligation": "Marcar el audio generado como sintético.",
+          "solution": "Marcado de audio sintético en el propio stream de TTS, sin configurar nada."
+        },
+        "retention": {
+          "obligation": "Conservar constancia de lo ocurrido.",
+          "solution": "Registro auditable certificado y exportable por llamada, con retención configurable."
+        }
+      },
+      "footnoteSuffix": "— la referencia legal exacta la redacta el equipo jurídico."
+    },
+    "timeline": {
+      "h2": "Una llamada conforme, evento a evento.",
+      "text": "Esto es lo que queda registrado en cada llamada. La seriedad no la ponen los sellos: la pone la traza.",
+      "ariaLabel": "Cronología de eventos de una llamada conforme",
+      "events": {
+        "answered": "entrante · +34 …",
+        "disclosure": "\"Le atiende un sistema de IA…\"",
+        "sttFinal": "\"quiero hablar con una persona\"",
+        "transfer": "cola: soporte · ok",
+        "ended": "duración 3m 12s",
+        "sealed": "registro certificado · exportable"
+      }
+    },
+    "export": {
+      "h2": "El registro, listo para el auditor.",
+      "text": "Cada llamada se exporta como un documento firmado: eventos, avisos, transferencias y retención aplicada. Un comando, un fichero.",
+      "checks": {
+        "deletion": "Borrado y rectificación por llamada",
+        "retention": "Retención configurable por política",
+        "aiAct": "AI Act art. 50 para el resto de la UE"
+      },
+      "badge": "ILUSTRATIVO"
+    },
+    "faq": {
+      "h2": "FAQ legal breve.",
+      "items": {
+        "autoCompliance": {
+          "q": "¿Esto me hace cumplir automáticamente?",
+          "a": "No. Te da las herramientas técnicas resueltas; el cumplimiento final depende de tu implementación y tus procesos."
+        },
+        "outsideEs": {
+          "q": "¿Aplica fuera de España?",
+          "a": "El AI Act (art. 50) exige transparencia similar en toda la UE. Los mismos mecanismos sirven para ambos marcos."
+        },
+        "ownDisclosure": {
+          "q": "¿Y si ya tengo mi propio sistema de avisos?",
+          "a": "Puedes desactivar los nuestros por sesión. El registro auditable sigue funcionando igual."
+        }
+      }
+    },
+    "cta": {
+      "h2": "¿Llamadas con IA en España o la UE? Hablemos.",
+      "button": "Habla con nosotros",
+      "disclaimer": "letsylabs proporciona herramientas técnicas; el cumplimiento final depende de tu implementación. No es asesoramiento jurídico."
+    }
+  },
   "selfHost": {
     "meta": {
       "title": "Self-host — letsylabs",

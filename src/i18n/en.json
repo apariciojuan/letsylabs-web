@@ -372,6 +372,90 @@
       "complianceLink": "Calls that comply with Ley 10/2025"
     }
   },
+  "compliance": {
+    "meta": {
+      "title": "Compliance — letsylabs",
+      "description": "AI disclosure, guaranteed human handoff, synthetic-audio marking and an auditable log per call — built into the infrastructure, not a separate project."
+    },
+    "hero": {
+      "eyebrow": "EU-COMPLIANT BY DESIGN",
+      "h1": "Comply with Ley 10/2025 without building anything.",
+      "sub": "AI disclosure, guaranteed human handoff, synthetic-audio marking and an auditable log per call — built into the infrastructure, not a separate project.",
+      "cta": "Talk to us"
+    },
+    "law": {
+      "h2": "What the law requires — and how we solve it.",
+      "text": "Four plain obligations. Each one arrives solved as infrastructure.",
+      "requiresLabel": "THE LAW REQUIRES",
+      "solvesLabel": "LETSYLABS",
+      "cards": {
+        "disclosure": {
+          "obligation": "Identify as an AI at the start of the call.",
+          "solutionPrefix": "Automatic AI disclosure when the call is answered, logged as a ",
+          "solutionSuffix": " event."
+        },
+        "handoff": {
+          "obligation": "Offer a transfer to a human.",
+          "solutionPrefix": "Guaranteed handoff to a human, on request or by rule — ",
+          "solutionSuffix": "."
+        },
+        "audioMarking": {
+          "obligation": "Mark generated audio as synthetic.",
+          "solution": "Synthetic-audio marking built into the TTS stream itself — nothing to configure."
+        },
+        "retention": {
+          "obligation": "Keep a record of what happened.",
+          "solution": "A certified, exportable audit log per call, with configurable retention."
+        }
+      },
+      "footnoteSuffix": "— the exact legal reference is drafted by the legal team."
+    },
+    "timeline": {
+      "h2": "A compliant call, event by event.",
+      "text": "This is what gets recorded on every call. Seriousness doesn't come from seals — it comes from the trace.",
+      "ariaLabel": "Timeline of events for a compliant call",
+      "events": {
+        "answered": "inbound · +34 …",
+        "disclosure": "\"You are speaking with an AI system…\"",
+        "sttFinal": "\"I want to talk to a person\"",
+        "transfer": "queue: support · ok",
+        "ended": "duration 3m 12s",
+        "sealed": "certified record · exportable"
+      }
+    },
+    "export": {
+      "h2": "The record, ready for the auditor.",
+      "text": "Every call exports as a signed document: events, disclosures, transfers and retention applied. One command, one file.",
+      "checks": {
+        "deletion": "Deletion and rectification per call",
+        "retention": "Configurable retention by policy",
+        "aiAct": "AI Act art. 50 for the rest of the EU"
+      },
+      "badge": "ILLUSTRATIVE"
+    },
+    "faq": {
+      "h2": "Quick legal FAQ.",
+      "items": {
+        "autoCompliance": {
+          "q": "Does this make me automatically compliant?",
+          "a": "No. It gives you the technical tools, solved; final compliance depends on your implementation and your processes."
+        },
+        "outsideEs": {
+          "q": "Does this apply outside Spain?",
+          "a": "The AI Act (art. 50) requires similar transparency across the EU. The same mechanisms serve both frameworks."
+        },
+        "ownDisclosure": {
+          "q": "What if I already have my own disclosure system?",
+          "a": "You can turn ours off per session. The audit log keeps working just the same."
+        }
+      }
+    },
+    "cta": {
+      "h2": "AI calls in Spain or the EU? Let's talk.",
+      "button": "Talk to us",
+      "disclaimer": "letsylabs provides technical tools; final compliance depends on your implementation. This is not legal advice."
+    }
+  },
   "selfHost": {
     "meta": {
       "title": "Self-host — letsylabs",

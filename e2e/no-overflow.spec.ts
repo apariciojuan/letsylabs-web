@@ -11,6 +11,8 @@ const breakpoints = [380, 768, 1200];
 // /pricing (W-6) is the one page whose layout changes with PUBLIC_GA_LAUNCHED: only the default
 // (pre-GA) build is covered here, same as every other suite (CU-W6-1, no second build in the
 // battery -- see PricingPage.test.ts for both states).
+// /compliance (W-5) has the widest single card row of any interior page (the flex-wrap Export
+// section, 380px/400px basis columns) -- must still stay inside its own container at 380px.
 const pages = [
   '/',
   '/es/',
@@ -19,6 +21,8 @@ const pages = [
   '/es/voice',
   '/telephony',
   '/es/telephony',
+  '/compliance',
+  '/es/compliance',
   '/self-host',
   '/es/self-host',
   '/open-source',

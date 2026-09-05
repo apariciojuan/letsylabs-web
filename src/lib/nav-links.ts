@@ -4,12 +4,11 @@
  * (unprefixed) paths -- `localizePath()` (src/i18n/routing.ts) maps them to `/es/...` for the
  * Spanish nav/footer.
  *
- * None of these pages exist yet (W-3/W-4/W-5/W-6 build them); Astro does not validate link targets
- * at build time, so linking to them now is safe. Pending per the W-2 brief and
- * docs/plans/web/00_plan_web.md W-5.1: `/compliance` is expected to become an ES-first exception
- * (ES canonical at the bare path, EN at `/en/compliance`) once that routing convention is
- * confirmed -- until then this module (and therefore SiteNav/SiteFooter) treats it like every other
- * page (EN canonical, `/es/compliance` for Spanish). Flagged in task-W-2-report.md.
+ * `/compliance` (brief W-5): the user's routing decision (2026-09-05) confirmed EN canonical at the
+ * bare path, `/es/compliance` for Spanish -- the SAME convention as every other page, no ES-first
+ * exception. This module already treated it that way while the decision was still pending (see the
+ * W-2 report); this comment just drops the "pending" framing now that W-5 has built the actual
+ * pages on that footing.
  */
 
 export const ROUTES = {
