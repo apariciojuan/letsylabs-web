@@ -1,0 +1,213 @@
+---
+/**
+ * /pricing (brief W-6, W6-1a / "Pricing.dc.html"): the one page whose layout genuinely differs by
+ * build-time state, not just its copy -- `gaLaunched` is received as a PROP (not read from
+ * `import.meta.env` inside this component, unlike VoicePage/TelephonyPage/OpenSourcePage) so
+ * `PricingPage.test.ts` can render both states directly without faking Vite's env at test time. The
+ * route files (`src/pages/pricing.astro`, `src/pages/es/pricing.astro`) are the ones that read
+ * `PUBLIC_GA_LAUNCHED` and pass it down.
+ *
+ * Pre-GA: hero + a Waitlist section (a `mailto:` hueco, same decision as the Homepage's
+ * `FinalCta.astro` in W-3 -- the real form lands in W-7). Post-GA: hero + a 3-column Plans section
+ * (Primitives / Voice Agent — highlighted, no hover, floating "MOST COMMON" tag / Self-hosted — a
+ * plain "Talk to us" mailto link, not a price). Both states share the same FAQ section below.
+ * `{PRICE}` renders through `Placeholder` (brief W-6 decision) rather than a real number.
+ */
+import Button from '../Button.astro';
+import Card from '../Card.astro';
+import PageHero from '../PageHero.astro';
+import Placeholder from '../Placeholder.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  gaLaunched: boolean;
+}
+
+const { locale, gaLaunched } = Astro.props;
+
+const FAQ_KEYS = ['telephony', 'earlyAccess', 'llm'] as const;
+---
+
+<PageHero
+  eyebrow={t(locale, 'pricing.hero.eyebrow')}
+  heading={t(locale, gaLaunched ? 'pricing.hero.postGa.h1' : 'pricing.hero.preGa.h1')}
+  headingMaxWidth={820}
+  sub={t(locale, gaLaunched ? 'pricing.hero.postGa.sub' : 'pricing.hero.preGa.sub')}
+  subMaxWidth={600}
+  subMarginBottom={8}
+  paddingBottom={56}
+  accent="signal"
+/>
+
+{
+  !gaLaunched && (
+    <section class="pr-waitlist container">
+      <div class="pr-waitlist-inner" data-reveal>
+        {/* W-7: EarlyAccessForm mounts here */}
+        <Button href="mailto:hello@letsylabs.com?subject=Early%20access">
+          {t(locale, 'pricing.waitlist.cta')}
+        </Button>
+      </div>
+    </section>
+  )
+}
+
+{
+  gaLaunched && (
+    <section class="pr-plans container">
+      <div class="pr-plans-grid">
+        <Card hoverable data-reveal>
+          <div class="pr-plan-name">{t(locale, 'pricing.plans.primitives.name')}</div>
+          <div class="pr-plan-desc">{t(locale, 'pricing.plans.primitives.description')}</div>
+          <div class="pr-plan-price">
+            <Placeholder token="PRICE" label={t(locale, 'common.placeholder.pendingValue')} />
+            <span class="pr-plan-price-suffix">{t(locale, 'pricing.plans.priceSuffix')}</span>
+          </div>
+        </Card>
+        <Card hoverable={false} class="pr-plan-voice" data-reveal data-delay={60}>
+          <span class="pr-plan-tag">{t(locale, 'pricing.plans.mostCommon')}</span>
+          <div class="pr-plan-name">{t(locale, 'pricing.plans.voiceAgent.name')}</div>
+          <div class="pr-plan-desc">{t(locale, 'pricing.plans.voiceAgent.description')}</div>
+          <div class="pr-plan-price">
+            <Placeholder token="PRICE" label={t(locale, 'common.placeholder.pendingValue')} />
+            <span class="pr-plan-price-suffix">{t(locale, 'pricing.plans.priceSuffix')}</span>
+          </div>
+        </Card>
+        <Card hoverable data-reveal data-delay={120}>
+          <div class="pr-plan-name">{t(locale, 'pricing.plans.selfHosted.name')}</div>
+          <div class="pr-plan-desc">{t(locale, 'pricing.plans.selfHosted.description')}</div>
+          <div class="pr-plan-price pr-plan-link">
+            <a href="mailto:hello@letsylabs.com">{t(locale, 'pricing.plans.selfHosted.cta')} →</a>
+          </div>
+        </Card>
+      </div>
+    </section>
+  )
+}
+
+<section class="pr-faq container">
+  <div class="pr-faq-grid">
+    {
+      FAQ_KEYS.map((key, index) => (
+        <Card hoverable={false} data-reveal data-delay={index * 60}>
+          <div class="pr-faq-q">{t(locale, `pricing.faq.${key}.q`)}</div>
+          <p class="pr-faq-a">{t(locale, `pricing.faq.${key}.a`)}</p>
+        </Card>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
+
+<style>
+  .pr-waitlist {
+    padding: 16px 32px 88px;
+  }
+
+  .pr-waitlist-inner {
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .pr-plans {
+    padding: 16px 32px 56px;
+  }
+
+  .pr-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  :global(.pr-plans-grid .card) {
+    padding: 30px;
+  }
+
+  :global(.pr-plans-grid .card.pr-plan-voice) {
+    position: relative;
+    border-color: rgba(74, 242, 161, 0.5);
+  }
+
+  .pr-plan-tag {
+    position: absolute;
+    top: -9px;
+    left: 24px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--signal);
+  }
+
+  .pr-plan-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 6px;
+  }
+
+  .pr-plan-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .pr-plan-price {
+    font-family: var(--font-mono);
+    font-size: 30px;
+    color: var(--signal);
+  }
+
+  .pr-plan-price-suffix {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .pr-plan-link {
+    font-size: 18px;
+    color: var(--ink);
+    padding-top: 8px;
+  }
+
+  .pr-plan-link a {
+    color: var(--ink);
+  }
+
+  .pr-faq {
+    padding: 0 32px 88px;
+  }
+
+  .pr-faq-grid {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.pr-faq-grid .card) {
+    padding: 20px 24px;
+  }
+
+  .pr-faq-q {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .pr-faq-a {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

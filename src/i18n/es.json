@@ -4,6 +4,9 @@
       "en": "EN",
       "es": "ES",
       "groupLabel": "Idioma"
+    },
+    "placeholder": {
+      "pendingValue": "valor pendiente"
     }
   },
   "nav": {
@@ -461,6 +464,88 @@
       "line1": "Contratos abiertos, para que nunca quedes atado.",
       "line2": "Runtime cerrado, para que podamos construir un negocio.",
       "line3": "Se abre más a medida que crece la comunidad."
+    }
+  },
+  "pricing": {
+    "meta": {
+      "title": "Precios — letsylabs",
+      "description": "Trae tu propio operador — los minutos de telefonía son tuyos. Descubre qué incluye el GA y únete hoy a la lista de acceso anticipado."
+    },
+    "hero": {
+      "eyebrow": "PRECIOS",
+      "preGa": {
+        "h1": "Los precios llegan con el GA.",
+        "sub": "Marzo de 2027. Los pilotos de acceso anticipado obtienen condiciones fundacionales."
+      },
+      "postGa": {
+        "h1": "Paga por minutos, no por promesas.",
+        "sub": "Trae tu propio operador — los minutos de telefonía son tuyos."
+      }
+    },
+    "waitlist": {
+      "cta": "Acceso anticipado"
+    },
+    "plans": {
+      "mostCommon": "MÁS COMÚN",
+      "priceSuffix": " €/min",
+      "primitives": {
+        "name": "Primitivas",
+        "description": "STT + TTS + orquestación, a la carta."
+      },
+      "voiceAgent": {
+        "name": "Agente de voz",
+        "description": "El bucle de voz completo, por minuto de conversación."
+      },
+      "selfHosted": {
+        "name": "Autoalojado",
+        "description": "Por despliegue, al mes. Tu infraestructura.",
+        "cta": "Habla con nosotros"
+      }
+    },
+    "faq": {
+      "telephony": {
+        "q": "¿Los minutos de telefonía cuestan aparte?",
+        "a": "Traes tu propio operador — esos minutos son entre tú y él. Facturamos el runtime, no la línea."
+      },
+      "earlyAccess": {
+        "q": "¿Qué obtienen los pilotos de acceso anticipado?",
+        "a": "Condiciones fundacionales fijadas en el GA, acceso directo al equipo e influencia en la hoja de ruta."
+      },
+      "llm": {
+        "q": "¿El LLM está incluido?",
+        "a": "No — trae tu propia inteligencia. Conectas tu agente o LLM; nunca encarecemos los tokens del modelo."
+      }
+    }
+  },
+  "company": {
+    "meta": {
+      "title": "Empresa — letsylabs",
+      "description": "Construimos la capa de interacción entre el software inteligente y el mundo real — empezando por la voz, desde España, para Europa."
+    },
+    "hero": {
+      "eyebrow": "EMPRESA",
+      "statement": "Construimos la capa de interacción entre el software inteligente y el mundo real — empezando por la voz, desde España, para Europa."
+    },
+    "principles": {
+      "byoIntelligence": {
+        "title": "Trae tu propia inteligencia",
+        "text": "Nunca competimos con tu agente. El razonamiento es tuyo; la infraestructura es nuestra."
+      },
+      "complianceInfra": {
+        "title": "El cumplimiento es infraestructura",
+        "text": "La ley no es una petición de función. El aviso, la transferencia y la auditoría vienen incluidos en el runtime."
+      },
+      "sovereignty": {
+        "title": "La soberanía es real",
+        "text": "Autoaloja todo, modelos de pesos abiertos incluidos. Confía porque puedes verificarlo."
+      },
+      "noSmoke": {
+        "title": "Sin humo",
+        "text": "Sin logos falsos, sin testimonios inventados, sin certificaciones que no tengamos. Las insignias dicen «próximamente» cuando algo está por llegar."
+      }
+    },
+    "contact": {
+      "text": "El equipo, cuando esté listo. Hasta entonces: "
     }
   }
 }

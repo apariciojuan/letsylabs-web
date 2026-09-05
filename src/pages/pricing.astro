@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PricingPage from '../components/pages/PricingPage.astro';
+import { t } from '../i18n';
+
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'pricing.meta.title')}
+  description={t('en', 'pricing.meta.description')}
+>
+  <PricingPage locale="en" gaLaunched={gaLaunched} />
+</BaseLayout>

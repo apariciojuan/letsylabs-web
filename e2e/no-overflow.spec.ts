@@ -8,6 +8,9 @@ const breakpoints = [380, 768, 1200];
 // The 8 product pages (W-4) each carry a wide table (/voice use-cases, /self-host comparison) and a
 // wrapping node row (/self-host "audio never leaves") that must stay inside their own
 // overflow-x:auto container at 380px, never force the document itself to scroll horizontally.
+// /pricing (W-6) is the one page whose layout changes with PUBLIC_GA_LAUNCHED: only the default
+// (pre-GA) build is covered here, same as every other suite (CU-W6-1, no second build in the
+// battery -- see PricingPage.test.ts for both states).
 const pages = [
   '/',
   '/es/',
@@ -20,6 +23,10 @@ const pages = [
   '/es/self-host',
   '/open-source',
   '/es/open-source',
+  '/pricing',
+  '/es/pricing',
+  '/company',
+  '/es/company',
 ];
 
 for (const width of breakpoints) {

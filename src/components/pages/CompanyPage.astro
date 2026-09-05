@@ -1,0 +1,143 @@
+---
+/**
+ * /company (brief W-6, W6-1b / "Company.dc.html"): the shortest page on the site -- a single
+ * centered statement, 4 numbered principle cards, a contact line. No photos (decision already
+ * registered: "Sin fotos.").
+ *
+ * The hero does NOT reuse `PageHero` (unlike every other interior page): it has no sub and no CTA
+ * row (PageHero's `sub` prop is required), a narrower container (900px, not the shared
+ * `--container-max-width` of 1180px) and different padding (112/72, not 96/64) -- brief W-6's own
+ * fallback ("si no admite sin sub/CTAs, markup propio con los mismos tokens"). Reuses `Eyebrow` and
+ * `SectionHeading` (same H1 tag + the shared `.radial-signal` glow class PageHero itself uses) so
+ * the visual language still matches every other hero exactly, just assembled locally instead of
+ * stretching the shared component with one-off props nothing else needs.
+ */
+import Card from '../Card.astro';
+import Eyebrow from '../Eyebrow.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const PRINCIPLE_KEYS = ['byoIntelligence', 'complianceInfra', 'sovereignty', 'noSmoke'] as const;
+---
+
+<section
+  class="company-hero radial-signal"
+  style="--radial-x:50%;--radial-y:0%;--radial-signal-opacity:0.05"
+>
+  <div class="company-hero-inner">
+    <Eyebrow tone="signal" class="company-hero-eyebrow">{t(locale, 'company.hero.eyebrow')}</Eyebrow
+    >
+    <SectionHeading level="hero" centered class="company-hero-h1">
+      {t(locale, 'company.hero.statement')}
+    </SectionHeading>
+  </div>
+</section>
+
+<section class="company-principles container">
+  <div class="company-principles-grid">
+    {
+      PRINCIPLE_KEYS.map((key, index) => (
+        <Card hoverable={false} data-reveal data-delay={index * 60}>
+          <div class="company-principle-number">{String(index + 1).padStart(2, '0')}</div>
+          <div class="company-principle-title">{t(locale, `company.principles.${key}.title`)}</div>
+          <p class="company-principle-text">{t(locale, `company.principles.${key}.text`)}</p>
+        </Card>
+      ))
+    }
+  </div>
+</section>
+
+<section class="company-contact container">
+  <div class="company-contact-line" data-reveal>
+    {t(locale, 'company.contact.text')}<a href="mailto:hello@letsylabs.com">hello@letsylabs.com</a>
+  </div>
+</section>
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
+
+<style>
+  .company-hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .company-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 112px 32px 72px;
+    position: relative;
+    text-align: center;
+  }
+
+  :global(.company-hero-eyebrow) {
+    margin-bottom: 24px;
+  }
+
+  :global(h1.company-hero-h1) {
+    font-size: clamp(1.875rem, 3.8vw, 3.125rem);
+    line-height: 1.18;
+    letter-spacing: -1px;
+    text-wrap: pretty;
+  }
+
+  .company-principles {
+    padding: 24px 32px 72px;
+  }
+
+  .company-principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  :global(.company-principles-grid .card) {
+    padding: 26px;
+  }
+
+  .company-principle-number {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--signal);
+    margin-bottom: 12px;
+  }
+
+  .company-principle-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .company-principle-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .company-contact {
+    padding: 0 32px 96px;
+    text-align: center;
+  }
+
+  .company-contact-line {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .company-contact-line a {
+    color: var(--signal);
+  }
+</style>

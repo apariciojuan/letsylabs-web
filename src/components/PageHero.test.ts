@@ -62,6 +62,30 @@ describe('PageHero', () => {
     expect(links[0].className).toContain('btn-primary');
   });
 
+  it('defaults the hero bottom padding and sub margin-bottom to the values every existing caller relies on', async () => {
+    const body = await renderToBody(PageHero, {
+      props: { eyebrow: 'VOICE', heading: 'x', sub: 'y' },
+    });
+    const section = body.querySelector('.page-hero');
+    expect(section?.getAttribute('style')).toContain('--page-hero-padding-bottom:64px');
+    expect(section?.getAttribute('style')).toContain('--page-hero-sub-margin-bottom:32px');
+  });
+
+  it('overrides the hero bottom padding and sub margin-bottom per instance (Pricing: 56px/8px)', async () => {
+    const body = await renderToBody(PageHero, {
+      props: {
+        eyebrow: 'PRICING',
+        heading: 'x',
+        sub: 'y',
+        paddingBottom: 56,
+        subMarginBottom: 8,
+      },
+    });
+    const section = body.querySelector('.page-hero');
+    expect(section?.getAttribute('style')).toContain('--page-hero-padding-bottom:56px');
+    expect(section?.getAttribute('style')).toContain('--page-hero-sub-margin-bottom:8px');
+  });
+
   it('renders two CTAs in order (Voice: primary + ghost)', async () => {
     const body = await renderToBody(PageHero, {
       props: {

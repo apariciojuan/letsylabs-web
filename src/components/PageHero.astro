@@ -18,6 +18,13 @@
  * it is overridden per-instance via the `--radial-signal-opacity` custom property inline -- the
  * amber variant's default (0.05) already matches every `tel`-accented interior hero, no override
  * needed.
+ *
+ * `paddingBottom`/`subMarginBottom` (brief W-6, Pricing): Pricing's hero has no CTA row, so its
+ * bottom padding (56px, not the usual 64px) and its sub's margin-bottom (8px, not 32px) are both
+ * smaller than every other interior hero -- the Waitlist/Plans section right below it supplies its
+ * own top padding instead. Same per-instance-override mechanism as the radial opacity above (a CSS
+ * custom property set inline on the `<section>`, read by the scoped stylesheet with a fallback that
+ * reproduces today's values), so Voice/Telephony/SelfHost/OpenSource are byte-for-byte unaffected.
  */
 import Button from './Button.astro';
 import Eyebrow from './Eyebrow.astro';
@@ -38,6 +45,8 @@ interface Props {
   headingMaxWidth?: number;
   sub: string;
   subMaxWidth?: number;
+  subMarginBottom?: number;
+  paddingBottom?: number;
   accent?: PageHeroAccent;
   ctas?: PageHeroCta[];
   class?: string;
@@ -50,6 +59,8 @@ const {
   headingMaxWidth = 820,
   sub,
   subMaxWidth = 600,
+  subMarginBottom = 32,
+  paddingBottom = 64,
   accent = 'signal',
   ctas = [],
   class: className,
@@ -57,9 +68,10 @@ const {
 
 const radialClass = accent === 'tel' ? 'radial-tel' : 'radial-signal';
 const radialStyle =
-  accent === 'tel'
+  (accent === 'tel'
     ? '--radial-x:50%;--radial-y:0%;'
-    : '--radial-x:50%;--radial-y:0%;--radial-signal-opacity:0.05;';
+    : '--radial-x:50%;--radial-y:0%;--radial-signal-opacity:0.05;') +
+  `--page-hero-padding-bottom:${paddingBottom}px;--page-hero-sub-margin-bottom:${subMarginBottom}px;`;
 ---
 
 <section class:list={['page-hero', radialClass, className]} style={radialStyle}>
@@ -97,7 +109,7 @@ const radialStyle =
   .page-hero-inner {
     max-width: var(--container-max-width);
     margin-inline: auto;
-    padding: 96px 32px 64px;
+    padding: 96px 32px var(--page-hero-padding-bottom, 64px);
     position: relative;
     text-align: center;
   }
@@ -118,7 +130,7 @@ const radialStyle =
     font-size: 17px;
     line-height: 1.6;
     color: var(--muted);
-    margin: 0 auto 32px;
+    margin: 0 auto var(--page-hero-sub-margin-bottom, 32px);
     text-wrap: pretty;
   }
 

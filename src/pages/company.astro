@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CompanyPage from '../components/pages/CompanyPage.astro';
+import { t } from '../i18n';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'company.meta.title')}
+  description={t('en', 'company.meta.description')}
+>
+  <CompanyPage locale="en" />
+</BaseLayout>

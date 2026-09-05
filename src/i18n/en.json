@@ -4,6 +4,9 @@
       "en": "EN",
       "es": "ES",
       "groupLabel": "Language"
+    },
+    "placeholder": {
+      "pendingValue": "pending value"
     }
   },
   "nav": {
@@ -453,6 +456,88 @@
       "line1": "Open contracts, so you're never locked in.",
       "line2": "Closed runtime, so we can build a business.",
       "line3": "More opens up as the community grows."
+    }
+  },
+  "pricing": {
+    "meta": {
+      "title": "Pricing — letsylabs",
+      "description": "Bring your own carrier — telephony minutes are yours. See what's included at GA and join the early-access waitlist today."
+    },
+    "hero": {
+      "eyebrow": "PRICING",
+      "preGa": {
+        "h1": "Pricing lands with GA.",
+        "sub": "March 2027. Early-access pilots get founding terms."
+      },
+      "postGa": {
+        "h1": "Pay for minutes, not promises.",
+        "sub": "Bring your own carrier — telephony minutes are yours."
+      }
+    },
+    "waitlist": {
+      "cta": "Get early access"
+    },
+    "plans": {
+      "mostCommon": "MOST COMMON",
+      "priceSuffix": " €/min",
+      "primitives": {
+        "name": "Primitives",
+        "description": "STT + TTS + orchestration, à la carte."
+      },
+      "voiceAgent": {
+        "name": "Voice Agent",
+        "description": "The full voice loop, per conversation minute."
+      },
+      "selfHosted": {
+        "name": "Self-hosted",
+        "description": "Per deployment, per month. Your infra.",
+        "cta": "Talk to us"
+      }
+    },
+    "faq": {
+      "telephony": {
+        "q": "Do telephony minutes cost extra?",
+        "a": "You bring your own carrier — those minutes are between you and them. We bill the runtime, not the pipe."
+      },
+      "earlyAccess": {
+        "q": "What do early-access pilots get?",
+        "a": "Founding terms locked at GA, direct access to the team, and influence on the roadmap."
+      },
+      "llm": {
+        "q": "Is the LLM included?",
+        "a": "No — bring your own intelligence. You connect your agent or LLM; we never mark up model tokens."
+      }
+    }
+  },
+  "company": {
+    "meta": {
+      "title": "Company — letsylabs",
+      "description": "We build the interaction layer between intelligent software and the real world — starting with voice, from Spain, for Europe."
+    },
+    "hero": {
+      "eyebrow": "COMPANY",
+      "statement": "We build the interaction layer between intelligent software and the real world — starting with voice, from Spain, for Europe."
+    },
+    "principles": {
+      "byoIntelligence": {
+        "title": "Bring your own intelligence",
+        "text": "We never compete with your agent. The thinking is yours; the plumbing is ours."
+      },
+      "complianceInfra": {
+        "title": "Compliance is infrastructure",
+        "text": "The law isn't a feature request. Disclosure, handoff and audit ship in the runtime."
+      },
+      "sovereignty": {
+        "title": "Sovereignty is real",
+        "text": "Self-host everything, open-weight models included. Trust it because you can verify it."
+      },
+      "noSmoke": {
+        "title": "No smoke",
+        "text": "No fake logos, no invented testimonials, no certifications we don't hold. Badges say \"coming\" when things are coming."
+      }
+    },
+    "contact": {
+      "text": "The team, when they're ready. Until then: "
     }
   }
 }

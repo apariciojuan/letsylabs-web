@@ -22,3 +22,7 @@ pre-commit:
       # dist/ is git-ignored (never staged), so this has no glob gate; it is a fast no-op when
       # dist/ doesn't exist and only bites once a stale build directory is present locally.
       run: scripts/check_third_party.sh dist
+    placeholders-ratchet:
+      # Same convention as third-party-ratchet above: no glob gate, fast no-op without a stale
+      # dist/ build directory.
+      run: corepack pnpm placeholders:check

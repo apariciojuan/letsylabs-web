@@ -1,0 +1,36 @@
+---
+/**
+ * Honest hole for a value not decided yet (brief W-6, decision "{PRICE} es un hueco marcado";
+ * reused by W-5 for "{ARTÍCULO}"): renders the literal token text (e.g. "{PRICE}") inside a small
+ * dashed-border pill instead of inventing a number or leaving bare, un-styled `{TOKEN}` text in the
+ * page. `data-placeholder="<token>"` marks the element for `scripts/check_placeholders.mjs` (the
+ * ratchet that fails the build if a `{TOKEN}` string ever ships outside an element carrying this
+ * attribute). `aria-label`/`title` come from the caller's already-translated i18n string
+ * (`common.placeholder.pendingValue`: "pending value" / "valor pendiente").
+ */
+interface Props {
+  token: string;
+  label: string;
+  class?: string;
+}
+
+const { token, label, class: className } = Astro.props;
+---
+
+<span
+  class:list={['placeholder', className]}
+  data-placeholder={token}
+  aria-label={label}
+  title={label}>{`{${token}}`}</span
+>
+
+<style>
+  .placeholder {
+    display: inline-block;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    padding: 0 6px;
+  }
+</style>

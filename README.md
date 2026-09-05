@@ -29,17 +29,18 @@ Edita cualquier fichero bajo `src/` con el servicio `web` levantado y el navegad
 
 Todos se ejecutan con `docker compose -f compose.dev.yml run --rm dev corepack pnpm <script>`:
 
-| Script         | Qué hace                                                                |
-| -------------- | ----------------------------------------------------------------------- |
-| `dev`          | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`) |
-| `build`        | Build de producción a `dist/` (`astro build`)                           |
-| `preview`      | Sirve `dist/` para revisar el build                                     |
-| `typecheck`    | `astro check` (TypeScript + diagnósticos de Astro)                      |
-| `lint`         | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)      |
-| `format:check` | Prettier en modo comprobación (`prettier-plugin-astro` incluido)        |
-| `test`         | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)     |
-| `e2e`          | Playwright — ver más abajo, necesita el perfil `e2e`                    |
-| `i18n:check`   | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`           |
+| Script               | Qué hace                                                                        |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `dev`                | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`)         |
+| `build`              | Build de producción a `dist/` (`astro build`)                                   |
+| `preview`            | Sirve `dist/` para revisar el build                                             |
+| `typecheck`          | `astro check` (TypeScript + diagnósticos de Astro)                              |
+| `lint`               | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)              |
+| `format:check`       | Prettier en modo comprobación (`prettier-plugin-astro` incluido)                |
+| `test`               | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)             |
+| `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                            |
+| `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                   |
+| `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder` |
 
 Ratchets adicionales (no son scripts de `package.json`, se invocan directos):
 
