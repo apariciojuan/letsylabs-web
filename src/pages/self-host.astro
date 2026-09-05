@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SelfHostPage from '../components/pages/SelfHostPage.astro';
+import { t } from '../i18n';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'selfHost.meta.title')}
+  description={t('en', 'selfHost.meta.description')}
+>
+  <SelfHostPage locale="en" />
+</BaseLayout>

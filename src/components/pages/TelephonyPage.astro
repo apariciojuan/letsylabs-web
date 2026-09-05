@@ -1,0 +1,293 @@
+---
+/**
+ * /telephony (brief W-4, W4-1b / "Telephony.dc.html"): amber-accented hero + the Human ⟷ Call ⟷ AI
+ * handoff diagram (two opposite-direction CSS pulses, `telpulse`/`telpulseback` from tokens.css,
+ * same primitives as the Homepage's `TelephonySection.astro`) + 4 capability cards (reusing
+ * `Card`'s `tone="amber"` hover variant) + a managed-telephony roadmap card.
+ */
+import Badge from '../Badge.astro';
+import Card from '../Card.astro';
+import PageHero from '../PageHero.astro';
+import { t, type Locale } from '../../i18n';
+import { localizePath } from '../../i18n/routing';
+import { ctaLabelKey, ROUTES } from '../../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+---
+
+<PageHero
+  eyebrow={t(locale, 'telephony.hero.eyebrow')}
+  eyebrowTone="tel"
+  heading={t(locale, 'telephony.hero.h1')}
+  headingMaxWidth={820}
+  sub={t(locale, 'telephony.hero.sub')}
+  subMaxWidth={620}
+  accent="tel"
+  ctas={[{ href: localizePath(ROUTES.pricing, locale), label: t(locale, ctaLabelKey(gaLaunched)) }]}
+/>
+
+<section class="tel-handoff container">
+  <div class="tel-handoff-label" data-reveal>{t(locale, 'telephony.handoff.label')}</div>
+  <div
+    class="tel-handoff-card"
+    data-reveal
+    data-delay="100"
+    role="img"
+    aria-label={t(locale, 'telephony.handoff.ariaLabel')}
+  >
+    <div class="tel-handoff-node">
+      {t(locale, 'telephony.handoff.human')}
+      <span class="tel-handoff-node-sub">{t(locale, 'telephony.handoff.humanSub')}</span>
+    </div>
+    <div class="tel-handoff-line tel-handoff-line-forward" aria-hidden="true">
+      <span class="tel-handoff-dot"></span>
+    </div>
+    <div class="tel-handoff-call">
+      {t(locale, 'telephony.handoff.call')}
+      <span class="tel-handoff-node-sub">{t(locale, 'telephony.handoff.callSub')}</span>
+    </div>
+    <div class="tel-handoff-line tel-handoff-line-back" aria-hidden="true">
+      <span class="tel-handoff-dot"></span>
+    </div>
+    <div class="tel-handoff-node">
+      {t(locale, 'telephony.handoff.ai')}
+      <span class="tel-handoff-node-sub">{t(locale, 'telephony.handoff.aiSub')}</span>
+    </div>
+  </div>
+</section>
+
+<section class="tel-capabilities container">
+  <div class="tel-cap-grid">
+    <Card tone="amber" hoverable data-reveal>
+      <div class="tel-cap-event">{t(locale, 'telephony.capabilities.inbound.event')}</div>
+      <div class="tel-cap-title">{t(locale, 'telephony.capabilities.inbound.title')}</div>
+      <p class="tel-cap-text">{t(locale, 'telephony.capabilities.inbound.text')}</p>
+    </Card>
+    <Card tone="amber" hoverable data-reveal data-delay="60">
+      <div class="tel-cap-event">{t(locale, 'telephony.capabilities.trunk.event')}</div>
+      <div class="tel-cap-title">{t(locale, 'telephony.capabilities.trunk.title')}</div>
+      <p class="tel-cap-text tel-cap-text-tight">
+        {t(locale, 'telephony.capabilities.trunk.text')}
+      </p>
+      <div class="tel-chips">
+        <span class="tel-chip">{t(locale, 'telephony.capabilities.trunk.chips.asterisk')}</span>
+        <span class="tel-chip">{t(locale, 'telephony.capabilities.trunk.chips.threeCx')}</span>
+        <span class="tel-chip">{t(locale, 'telephony.capabilities.trunk.chips.sip')}</span>
+      </div>
+    </Card>
+    <Card tone="amber" hoverable data-reveal data-delay="120">
+      <div class="tel-cap-event">{t(locale, 'telephony.capabilities.transfers.event')}</div>
+      <div class="tel-cap-title">{t(locale, 'telephony.capabilities.transfers.title')}</div>
+      <p class="tel-cap-text">{t(locale, 'telephony.capabilities.transfers.text')}</p>
+    </Card>
+    <Card tone="amber" hoverable data-reveal data-delay="180">
+      <div class="tel-cap-event">{t(locale, 'telephony.capabilities.recordings.event')}</div>
+      <div class="tel-cap-title">{t(locale, 'telephony.capabilities.recordings.title')}</div>
+      <p class="tel-cap-text">{t(locale, 'telephony.capabilities.recordings.text')}</p>
+    </Card>
+  </div>
+</section>
+
+<section class="tel-roadmap container">
+  <div class="tel-roadmap-card" data-reveal>
+    <div class="tel-roadmap-label">{t(locale, 'telephony.roadmap.label')}</div>
+    <div class="tel-roadmap-badges">
+      <Badge variant="coming-soon">{t(locale, 'telephony.roadmap.managedNumbers')}</Badge>
+      <Badge variant="coming-soon">{t(locale, 'telephony.roadmap.queues')}</Badge>
+      <Badge variant="coming-soon">{t(locale, 'telephony.roadmap.webphone')}</Badge>
+    </div>
+    <div class="tel-roadmap-claim">{t(locale, 'telephony.roadmap.claim')}</div>
+  </div>
+  <div class="tel-roadmap-link" data-reveal data-delay="100">
+    <a class="compliance-link" href={localizePath(ROUTES.compliance, locale)}>
+      {t(locale, 'telephony.roadmap.complianceLink')}
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
+
+<style>
+  .tel-handoff {
+    padding: 32px 32px 72px;
+  }
+
+  .tel-handoff-label {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .tel-handoff-card {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .tel-handoff-node {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    text-align: center;
+    min-width: 80px;
+  }
+
+  .tel-handoff-node-sub {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .tel-handoff-line {
+    flex: 1;
+    min-width: 100px;
+    position: relative;
+    height: 1px;
+    background: rgba(255, 180, 84, 0.3);
+  }
+
+  .tel-handoff-dot {
+    position: absolute;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tel);
+    box-shadow: 0 0 8px var(--tel);
+  }
+
+  .tel-handoff-line-forward .tel-handoff-dot {
+    animation: telpulse 2.8s linear infinite;
+  }
+
+  .tel-handoff-line-back .tel-handoff-dot {
+    animation: telpulseback 2.8s linear infinite;
+  }
+
+  .tel-handoff-call {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid rgba(255, 180, 84, 0.4);
+    border-radius: var(--radius-sm);
+    padding: 12px 20px;
+  }
+
+  .tel-capabilities {
+    padding: 0 32px 72px;
+  }
+
+  .tel-cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  :global(.tel-cap-grid .card) {
+    padding: 26px;
+  }
+
+  .tel-cap-event {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--tel);
+    margin-bottom: 10px;
+  }
+
+  .tel-cap-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .tel-cap-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .tel-cap-text-tight {
+    margin: 0 0 14px;
+  }
+
+  .tel-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .tel-chip {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-badge);
+    padding: 3px 9px;
+  }
+
+  .tel-roadmap {
+    padding: 0 32px 88px;
+  }
+
+  .tel-roadmap-card {
+    max-width: 760px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 26px 28px;
+  }
+
+  .tel-roadmap-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .tel-roadmap-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tel-roadmap-claim {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--tel);
+    margin-top: 18px;
+  }
+
+  .tel-roadmap-link {
+    margin-top: 32px;
+  }
+
+  .tel-roadmap-link a {
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

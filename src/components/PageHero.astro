@@ -1,0 +1,131 @@
+---
+/**
+ * Centered interior-page hero (brief W-4, entregable W4-0): shared shell for /voice, /telephony,
+ * /self-host and /open-source. Distinct from the Homepage's own two-column `Hero.astro` -- these
+ * hero sections are single-column, centered, and use their OWN type scale for the H1, not the
+ * global `h1` tag rule (tokens.css's `--text-h1-hero`/`--tracking-h1-hero` are tuned for the
+ * Homepage's headline: clamp(34-36px,4.2-4.6vw,58-66px), tracking -1.5px). Every one of
+ * Voice/Telephony/SelfHost/OpenSource.dc.html uses the same, smaller values instead:
+ * `font-size:clamp(34px,4.2vw,58px);line-height:1.12;letter-spacing:-1.2px`. `.page-hero-h1`
+ * overrides those two properties with higher specificity than the bare `h1` tag rule (a class
+ * selector always outranks a type selector, regardless of stylesheet order) -- see
+ * PageHero.test.ts for a regression test pinning the override.
+ *
+ * Radial background (README §Design Tokens: "el hero de Telephony usa rgba(255,180,84,0.05)"):
+ * reuses tokens.css's `.radial-signal`/`.radial-tel` utility classes (same pattern as the Homepage
+ * hero, `Hero.astro`) at position `50% 0%` (top-center, vs. the Homepage's `72% 10%`). The green
+ * variant needs a lower opacity here (0.05) than its 0.06 default (tuned for the Homepage hero), so
+ * it is overridden per-instance via the `--radial-signal-opacity` custom property inline -- the
+ * amber variant's default (0.05) already matches every `tel`-accented interior hero, no override
+ * needed.
+ */
+import Button from './Button.astro';
+import Eyebrow from './Eyebrow.astro';
+import SectionHeading from './SectionHeading.astro';
+
+export type PageHeroAccent = 'signal' | 'tel';
+
+export interface PageHeroCta {
+  href: string;
+  label: string;
+  variant?: 'primary' | 'ghost';
+}
+
+interface Props {
+  eyebrow: string;
+  eyebrowTone?: 'signal' | 'tel' | 'event' | 'muted';
+  heading: string;
+  headingMaxWidth?: number;
+  sub: string;
+  subMaxWidth?: number;
+  accent?: PageHeroAccent;
+  ctas?: PageHeroCta[];
+  class?: string;
+}
+
+const {
+  eyebrow,
+  eyebrowTone = 'signal',
+  heading,
+  headingMaxWidth = 820,
+  sub,
+  subMaxWidth = 600,
+  accent = 'signal',
+  ctas = [],
+  class: className,
+} = Astro.props;
+
+const radialClass = accent === 'tel' ? 'radial-tel' : 'radial-signal';
+const radialStyle =
+  accent === 'tel'
+    ? '--radial-x:50%;--radial-y:0%;'
+    : '--radial-x:50%;--radial-y:0%;--radial-signal-opacity:0.05;';
+---
+
+<section class:list={['page-hero', radialClass, className]} style={radialStyle}>
+  <div class="page-hero-inner">
+    <Eyebrow tone={eyebrowTone} class="page-hero-eyebrow">{eyebrow}</Eyebrow>
+    <SectionHeading
+      level="hero"
+      centered
+      class="page-hero-h1"
+      style={`max-width:${headingMaxWidth}px`}
+    >
+      {heading}
+    </SectionHeading>
+    <p class="page-hero-sub" style={`max-width:${subMaxWidth}px`}>{sub}</p>
+    {
+      ctas.length > 0 && (
+        <div class="page-hero-ctas">
+          {ctas.map((cta) => (
+            <Button href={cta.href} variant={cta.variant ?? 'primary'}>
+              {cta.label}
+            </Button>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero-inner {
+    max-width: var(--container-max-width);
+    margin-inline: auto;
+    padding: 96px 32px 64px;
+    position: relative;
+    text-align: center;
+  }
+
+  :global(.page-hero-eyebrow) {
+    margin-bottom: 20px;
+  }
+
+  :global(h1.page-hero-h1) {
+    font-size: clamp(2.125rem, 4.2vw, 3.625rem);
+    line-height: 1.12;
+    letter-spacing: -1.2px;
+    margin: 0 auto 20px;
+    text-wrap: pretty;
+  }
+
+  .page-hero-sub {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 auto 32px;
+    text-wrap: pretty;
+  }
+
+  .page-hero-ctas {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

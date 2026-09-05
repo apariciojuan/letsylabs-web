@@ -39,4 +39,12 @@ describe('SectionHeading', () => {
       'section-heading-centered',
     );
   });
+
+  it('forwards extra attributes (e.g. a per-instance style) onto the rendered tag', async () => {
+    const body = await renderToBody(SectionHeading, {
+      props: { level: 'hero', style: 'max-width:780px' },
+      slots: { default: 'x' },
+    });
+    expect(getByRole(body, 'heading', { level: 1 }).getAttribute('style')).toBe('max-width:780px');
+  });
 });

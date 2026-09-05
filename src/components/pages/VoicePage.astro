@@ -1,0 +1,563 @@
+---
+/**
+ * /voice (brief W-4, W4-1a / "Voice.dc.html"): hero + a straight-line per-hop latency diagram +
+ * 4 capability cards + a use-case table + an endpoints block. The diagram is bespoke markup (not
+ * the shared `PipelineDiagram.astro`): that component's node/edge geometry and CSS `offset-path`
+ * pulse don't match this screen's fixed 6-box single-line layout with latency sub-labels, and the
+ * brief calls for driving the pulse through `site-fx.ts`'s `initSvgPulses` (`data-pulse-path`/
+ * `data-pulse-dot`/`data-pulse-ms`), the same API the Homepage's dev QA page and the reduced-motion
+ * ratchet already exercise.
+ */
+import Badge from '../Badge.astro';
+import Card from '../Card.astro';
+import PageHero from '../PageHero.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { t, type Locale } from '../../i18n';
+import { localizePath } from '../../i18n/routing';
+import { ctaLabelKey, ROUTES } from '../../lib/nav-links';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const gaLaunched = import.meta.env.PUBLIC_GA_LAUNCHED === 'true';
+
+const USE_CASE_ROWS = [
+  'aiAgents',
+  'callAutomation',
+  'liveTranscription',
+  'assistants',
+  'accessibility',
+] as const;
+const EQ_DELAYS_MS = [0, 120, 240];
+---
+
+<PageHero
+  eyebrow={t(locale, 'voice.hero.eyebrow')}
+  heading={t(locale, 'voice.hero.h1')}
+  headingMaxWidth={820}
+  sub={t(locale, 'voice.hero.sub')}
+  subMaxWidth={600}
+  accent="signal"
+  ctas={[
+    { href: localizePath(ROUTES.pricing, locale), label: t(locale, ctaLabelKey(gaLaunched)) },
+    {
+      href: localizePath(ROUTES.openSource, locale),
+      label: t(locale, 'voice.hero.ctaDocs'),
+      variant: 'ghost',
+    },
+  ]}
+/>
+
+<section class="voice-how container">
+  <div class="voice-how-label" data-reveal>{t(locale, 'voice.howItWorks.label')}</div>
+  <div class="voice-how-diagram" data-reveal data-delay="100">
+    <svg
+      viewBox="0 0 860 130"
+      class="voice-how-svg"
+      role="img"
+      aria-label={t(locale, 'voice.howItWorks.ariaLabel')}
+    >
+      <path data-pulse-path="voice" data-pulse-ms="3400" d="M 80 55 L 780 55" class="voice-how-line"
+      ></path>
+      <g>
+        <rect x="20" y="33" width="120" height="44" rx="8" class="voice-how-node"></rect>
+        <text x="80" y="55" class="voice-how-label-text"
+          >{t(locale, 'voice.howItWorks.nodes.audioIn')}</text
+        >
+      </g>
+      <g>
+        <rect x="176" y="33" width="100" height="44" rx="8" class="voice-how-node"></rect>
+        <text x="226" y="55" class="voice-how-label-text"
+          >{t(locale, 'voice.howItWorks.nodes.vad')}</text
+        >
+        <text x="226" y="98" class="voice-how-sub-text"
+          >{t(locale, 'voice.howItWorks.nodes.vadSub')}</text
+        >
+      </g>
+      <g>
+        <rect
+          x="312"
+          y="33"
+          width="100"
+          height="44"
+          rx="8"
+          class="voice-how-node voice-how-node-event"></rect>
+        <text x="362" y="55" class="voice-how-label-text"
+          >{t(locale, 'voice.howItWorks.nodes.stt')}</text
+        >
+        <text x="362" y="98" class="voice-how-sub-text voice-how-sub-event"
+          >{t(locale, 'voice.howItWorks.nodes.sttSub')}</text
+        >
+      </g>
+      <g>
+        <rect
+          x="448"
+          y="33"
+          width="130"
+          height="44"
+          rx="8"
+          class="voice-how-node voice-how-node-signal"></rect>
+        <text x="513" y="55" class="voice-how-label-text"
+          >{t(locale, 'voice.howItWorks.nodes.yourAgent')}</text
+        >
+        <text x="513" y="98" class="voice-how-sub-text voice-how-sub-signal"
+          >{t(locale, 'voice.howItWorks.nodes.yourAgentSub')}</text
+        >
+      </g>
+      <g>
+        <rect
+          x="614"
+          y="33"
+          width="100"
+          height="44"
+          rx="8"
+          class="voice-how-node voice-how-node-signal"></rect>
+        <text x="664" y="55" class="voice-how-label-text"
+          >{t(locale, 'voice.howItWorks.nodes.tts')}</text
+        >
+        <text x="664" y="98" class="voice-how-sub-text voice-how-sub-signal"
+          >{t(locale, 'voice.howItWorks.nodes.ttsSub')}</text
+        >
+      </g>
+      <g>
+        <rect x="750" y="33" width="90" height="44" rx="8" class="voice-how-node"></rect>
+        <text x="795" y="55" class="voice-how-label-text voice-how-label-text-sm"
+          >{t(locale, 'voice.howItWorks.nodes.audioOut')}</text
+        >
+      </g>
+      <circle data-pulse-dot="voice" cx="80" cy="55" r="4" class="voice-how-pulse-dot"></circle>
+    </svg>
+  </div>
+</section>
+
+<section class="voice-capabilities container">
+  <div class="voice-cap-grid">
+    <Card hoverable data-reveal>
+      <div class="voice-cap-event voice-cap-event-cyan">
+        {t(locale, 'voice.capabilities.stt.event')}
+      </div>
+      <div class="voice-cap-title">{t(locale, 'voice.capabilities.stt.title')}</div>
+      <p class="voice-cap-text">{t(locale, 'voice.capabilities.stt.text')}</p>
+    </Card>
+    <Card hoverable data-reveal data-delay="60">
+      <div class="voice-cap-event">{t(locale, 'voice.capabilities.tts.event')}</div>
+      <div class="voice-cap-title">{t(locale, 'voice.capabilities.tts.title')}</div>
+      <p class="voice-cap-text voice-cap-text-tight">{t(locale, 'voice.capabilities.tts.text')}</p>
+      <Badge variant="coming-soon">{t(locale, 'voice.capabilities.tts.badge')}</Badge>
+    </Card>
+    <Card hoverable data-reveal data-delay="120">
+      <div class="voice-cap-event">{t(locale, 'voice.capabilities.turns.event')}</div>
+      <div class="voice-cap-title">{t(locale, 'voice.capabilities.turns.title')}</div>
+      <p class="voice-cap-text">{t(locale, 'voice.capabilities.turns.text')}</p>
+      <div class="voice-barge-demo">
+        <span class="voice-barge-speaking"
+          >{t(locale, 'voice.capabilities.turns.demoSpeaking')}</span
+        >
+        <span class="voice-barge-bars" aria-hidden="true">
+          {
+            EQ_DELAYS_MS.map((delay) => (
+              <span class="voice-barge-bar" style={`animation-delay:${delay}ms`} />
+            ))
+          }
+        </span>
+        <span class="voice-barge-in">{t(locale, 'voice.capabilities.turns.demoBargeIn')}</span>
+        <span class="voice-barge-cancel">{t(locale, 'voice.capabilities.turns.demoCancel')}</span>
+      </div>
+    </Card>
+    <Card hoverable data-reveal data-delay="180">
+      <div class="voice-cap-event voice-cap-event-cyan">
+        {t(locale, 'voice.capabilities.latency.event')}
+      </div>
+      <div class="voice-cap-title">{t(locale, 'voice.capabilities.latency.title')}</div>
+      <p class="voice-cap-text">{t(locale, 'voice.capabilities.latency.text')}</p>
+      <div class="voice-mini-timeline">
+        <div>
+          <span class="voice-mini-dot voice-mini-dot-event">●</span> 00:03.1 · {
+            t(locale, 'voice.capabilities.latency.rows.sttFinal')
+          }
+          <span class="voice-mini-latency">142ms</span>
+        </div>
+        <div>
+          <span class="voice-mini-dot voice-mini-dot-signal">●</span> 00:03.3 · {
+            t(locale, 'voice.capabilities.latency.rows.agentFirstToken')
+          }
+          <span class="voice-mini-latency">210ms</span>
+        </div>
+        <div>
+          <span class="voice-mini-dot voice-mini-dot-signal">●</span> 00:03.4 · {
+            t(locale, 'voice.capabilities.latency.rows.ttsFirstAudio')
+          }
+          <span class="voice-mini-latency">96ms</span>
+        </div>
+        <div>
+          <span class="voice-mini-dot voice-mini-dot-event">●</span> 00:03.4 · {
+            t(locale, 'voice.capabilities.latency.rows.latencyTurn')
+          }
+          <span class="voice-mini-latency voice-mini-latency-ink">448ms</span>
+        </div>
+      </div>
+    </Card>
+  </div>
+</section>
+
+<section class="voice-use-cases container">
+  <div class="voice-use-cases-header" data-reveal>
+    <SectionHeading class="voice-use-cases-h2">{t(locale, 'voice.useCases.h2')}</SectionHeading>
+  </div>
+  <div class="voice-table-scroll" data-reveal data-delay="80">
+    <div class="voice-table" role="table" aria-label={t(locale, 'voice.useCases.h2')}>
+      <div class="voice-table-row voice-table-header" role="row">
+        <div class="voice-table-cell voice-table-head" role="columnheader">
+          {t(locale, 'voice.useCases.tableHeaderCase')}
+        </div>
+        <div class="voice-table-cell voice-table-head" role="columnheader">
+          {t(locale, 'voice.useCases.tableHeaderWhat')}
+        </div>
+      </div>
+      {
+        USE_CASE_ROWS.map((key, index) => (
+          <div
+            class:list={[
+              'voice-table-row',
+              { 'voice-table-row-last': index === USE_CASE_ROWS.length - 1 },
+            ]}
+            role="row"
+          >
+            <div class="voice-table-cell voice-table-name" role="cell">
+              {t(locale, `voice.useCases.rows.${key}.name`)}
+            </div>
+            <div class="voice-table-cell voice-table-desc" role="cell">
+              {t(locale, `voice.useCases.rows.${key}.text`)}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="voice-endpoints container">
+  <div class="voice-endpoints-card" data-reveal>
+    <div>
+      <span class="voice-endpoint-method voice-endpoint-signal">POST</span> /v1/sessions <span
+        class="voice-endpoint-desc">{t(locale, 'voice.endpoints.createSession')}</span
+      >
+    </div>
+    <div>
+      <span class="voice-endpoint-method voice-endpoint-event">WS</span> &nbsp;&nbsp;wss://…/audio <span
+        class="voice-endpoint-desc">{t(locale, 'voice.endpoints.streamAudio')}</span
+      >
+    </div>
+    <div>
+      <span class="voice-endpoint-method voice-endpoint-signal">GET</span> &nbsp;/v1/sessions/:id/trace
+      <span class="voice-endpoint-desc">{t(locale, 'voice.endpoints.queryTimeline')}</span>
+    </div>
+  </div>
+  <div class="voice-endpoints-link" data-reveal data-delay="100">
+    <a href={localizePath(ROUTES.openSource, locale)}
+      >{t(locale, 'voice.endpoints.readTheDocs')} <span aria-hidden="true">→</span></a
+    >
+  </div>
+</section>
+
+<script>
+  import { initFX } from '../../scripts/site-fx';
+  initFX(document);
+</script>
+
+<style>
+  .voice-how {
+    padding: 48px 32px 72px;
+  }
+
+  .voice-how-label {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .voice-how-diagram {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .voice-how-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .voice-how-line {
+    fill: none;
+    stroke: rgba(74, 242, 161, 0.25);
+    stroke-width: 1.5;
+  }
+
+  .voice-how-node {
+    fill: var(--surface);
+    stroke: rgba(255, 255, 255, 0.14);
+    stroke-width: 1;
+  }
+
+  .voice-how-node-event {
+    stroke: rgba(88, 196, 246, 0.5);
+  }
+
+  .voice-how-node-signal {
+    stroke: rgba(74, 242, 161, 0.5);
+  }
+
+  .voice-how-label-text {
+    fill: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .voice-how-label-text-sm {
+    font-size: 12px;
+  }
+
+  .voice-how-sub-text {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-anchor: middle;
+  }
+
+  .voice-how-sub-event {
+    fill: var(--event);
+  }
+
+  .voice-how-sub-signal {
+    fill: var(--signal);
+  }
+
+  .voice-how-pulse-dot {
+    fill: var(--signal);
+    filter: drop-shadow(0 0 6px var(--signal));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .voice-how-pulse-dot {
+      display: none;
+    }
+  }
+
+  .voice-capabilities {
+    padding: 0 32px 72px;
+  }
+
+  .voice-cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  :global(.voice-cap-grid .card) {
+    padding: 28px;
+  }
+
+  .voice-cap-event {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--signal);
+    margin-bottom: 10px;
+  }
+
+  .voice-cap-event-cyan {
+    color: var(--event);
+  }
+
+  .voice-cap-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 10px;
+  }
+
+  .voice-cap-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .voice-cap-text-tight {
+    margin: 0 0 14px;
+  }
+
+  .voice-barge-demo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .voice-barge-speaking {
+    color: var(--signal);
+  }
+
+  .voice-barge-bars {
+    display: inline-flex;
+    gap: 2px;
+    height: 16px;
+    align-items: center;
+  }
+
+  .voice-barge-bar {
+    width: 2px;
+    height: 100%;
+    background: var(--tel);
+    animation: bar 0.9s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .voice-barge-in {
+    color: var(--tel);
+  }
+
+  .voice-barge-cancel {
+    color: var(--muted);
+  }
+
+  .voice-mini-timeline {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.9;
+    border-left: 1px solid rgba(88, 196, 246, 0.4);
+    padding-left: 14px;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  .voice-mini-dot-event {
+    color: var(--event);
+  }
+
+  .voice-mini-dot-signal {
+    color: var(--signal);
+  }
+
+  .voice-mini-latency {
+    float: right;
+  }
+
+  .voice-mini-latency-ink {
+    color: var(--ink);
+  }
+
+  .voice-use-cases {
+    padding: 0 32px 72px;
+  }
+
+  .voice-use-cases-header {
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  :global(h2.voice-use-cases-h2) {
+    margin: 0;
+    font-size: clamp(1.625rem, 3vw, 2.125rem);
+    letter-spacing: -0.6px;
+  }
+
+  .voice-table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+  }
+
+  .voice-table {
+    min-width: 560px;
+  }
+
+  .voice-table-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .voice-table-row-last {
+    border-bottom: none;
+  }
+
+  .voice-table-header {
+    background: var(--surface);
+  }
+
+  .voice-table-cell {
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+
+  .voice-table-head {
+    padding: 14px 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  .voice-table-name {
+    font-weight: 500;
+  }
+
+  .voice-table-desc {
+    color: var(--muted);
+  }
+
+  .voice-endpoints {
+    padding: 0 32px 88px;
+  }
+
+  .voice-endpoints-card {
+    max-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px 28px;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 2.2;
+  }
+
+  .voice-endpoint-method {
+    display: inline-block;
+    min-width: 42px;
+  }
+
+  .voice-endpoint-signal {
+    color: var(--signal);
+  }
+
+  .voice-endpoint-event {
+    color: var(--event);
+  }
+
+  .voice-endpoint-desc {
+    color: var(--muted);
+    float: right;
+  }
+
+  .voice-endpoints-link {
+    margin-top: 32px;
+  }
+
+  .voice-endpoints-link a {
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

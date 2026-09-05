@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VoicePage from '../../components/pages/VoicePage.astro';
+import { t } from '../../i18n';
+---
+
+<BaseLayout
+  locale="es"
+  title={t('es', 'voice.meta.title')}
+  description={t('es', 'voice.meta.description')}
+>
+  <VoicePage locale="es" />
+</BaseLayout>

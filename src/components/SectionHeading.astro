@@ -6,6 +6,11 @@
  * - "minor": smaller H2s like the Homepage "Vision" block (clamp 24-34px, tracking -0.6px) -- the
  *   `.h2-minor` modifier class in tokens.css.
  * Presentational only: text comes from the default slot (already resolved via i18n by the caller).
+ *
+ * Forwards any other attribute (`...rest`) onto the rendered tag -- same fix as Card.astro (W-3):
+ * `PageHero.astro` (W-4) needs a per-instance `style="max-width:…"` on the `<h1 level="hero">` it
+ * renders (each interior page's H1 clamps to a different max-width), which a component that only
+ * destructures `level`/`centered`/`class` from `Astro.props` silently drops.
  */
 export type SectionHeadingLevel = 'hero' | 'section' | 'minor';
 
@@ -13,14 +18,15 @@ interface Props {
   level?: SectionHeadingLevel;
   centered?: boolean;
   class?: string;
+  [key: string]: unknown;
 }
 
-const { level = 'section', centered = false, class: className } = Astro.props;
+const { level = 'section', centered = false, class: className, ...rest } = Astro.props;
 const Tag = level === 'hero' ? 'h1' : 'h2';
 const levelClass = level === 'minor' ? 'h2-minor' : undefined;
 ---
 
-<Tag class:list={[levelClass, { 'section-heading-centered': centered }, className]}>
+<Tag class:list={[levelClass, { 'section-heading-centered': centered }, className]} {...rest}>
   <slot />
 </Tag>
 

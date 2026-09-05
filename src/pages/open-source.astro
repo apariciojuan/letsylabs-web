@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OpenSourcePage from '../components/pages/OpenSourcePage.astro';
+import { t } from '../i18n';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'openSource.meta.title')}
+  description={t('en', 'openSource.meta.description')}
+>
+  <OpenSourcePage locale="en" />
+</BaseLayout>

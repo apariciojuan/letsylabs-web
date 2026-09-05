@@ -219,5 +219,248 @@
       "ctaTalkToUs": "Habla con nosotros",
       "note": "GA llega en marzo de 2027 · los pilotos de acceso anticipado obtienen condiciones fundacionales"
     }
+  },
+  "voice": {
+    "meta": {
+      "title": "Voz — letsylabs",
+      "description": "STT, TTS, gestión de turnos y trazado como un único runtime. Tu agente sigue siendo tuyo."
+    },
+    "hero": {
+      "eyebrow": "VOZ",
+      "h1": "Infraestructura de voz en tiempo real para tus aplicaciones.",
+      "sub": "STT, TTS, gestión de turnos y trazado como un único runtime. Tu agente sigue siendo tuyo.",
+      "ctaDocs": "Lee la documentación"
+    },
+    "howItWorks": {
+      "label": "CADA TRAMO MEDIDO — LATENCIAS POR SALTO",
+      "ariaLabel": "Pipeline de voz con latencias por salto: entrada de audio, VAD, STT, tu agente, TTS, salida de audio",
+      "nodes": {
+        "audioIn": "audio in",
+        "vad": "VAD",
+        "vadSub": "frames de 20ms",
+        "stt": "STT",
+        "sttSub": "parcial <300ms",
+        "yourAgent": "tu agente",
+        "yourAgentSub": "HTTP + SSE",
+        "tts": "TTS",
+        "ttsSub": "primer audio en 96ms",
+        "audioOut": "audio out"
+      }
+    },
+    "capabilities": {
+      "stt": {
+        "event": "stt.partial · stt.final",
+        "title": "STT en tiempo real",
+        "text": "Transcripciones parciales y finales mientras la persona habla. Español primero, multilingüe por diseño. Modelos de pesos abiertos disponibles para autoalojamiento."
+      },
+      "tts": {
+        "event": "tts.first_audio",
+        "title": "TTS en streaming",
+        "text": "La voz se emite por frase, no por respuesta. Las voces son recursos de la plataforma — cambia de proveedor o trae voces clonadas sin tocar código.",
+        "badge": "CLONACIÓN DE VOZ: PRÓXIMAMENTE"
+      },
+      "turns": {
+        "event": "turn.barge_in",
+        "title": "Turnos y barge-in",
+        "text": "La persona interrumpe, el agente se detiene. El runtime detecta el turno y cancela el TTS a mitad de frase — tu código nunca gestiona temporizadores.",
+        "demoSpeaking": "agente hablando",
+        "demoBargeIn": "la persona interrumpe",
+        "demoCancel": "→ tts.cancel · 61ms"
+      },
+      "latency": {
+        "event": "latency.turn",
+        "title": "Trazado de latencia",
+        "text": "Cada conversación deja una línea de tiempo que puedes consultar. Latencias por salto, totales por turno, exportables.",
+        "rows": {
+          "sttFinal": "stt.final",
+          "agentFirstToken": "agent.first_token",
+          "ttsFirstAudio": "tts.first_audio",
+          "latencyTurn": "latency.turn"
+        }
+      }
+    },
+    "useCases": {
+      "h2": "Para qué sirve.",
+      "tableHeaderCase": "CASO DE USO",
+      "tableHeaderWhat": "QUÉ HACE LETSYLABS",
+      "rows": {
+        "aiAgents": {
+          "name": "Agentes de IA",
+          "text": "Bucle de voz completo — tu agente piensa, el runtime escucha y habla."
+        },
+        "callAutomation": {
+          "name": "Automatización de llamadas",
+          "text": "Llamadas entrantes y salientes como sesiones programables con DTMF y transferencias."
+        },
+        "liveTranscription": {
+          "name": "Transcripción en vivo",
+          "text": "Parciales en menos de 300 ms, finales con puntuación, por interlocutor."
+        },
+        "assistants": {
+          "name": "Asistentes",
+          "text": "Voz web y en app con un barge-in que se siente humano."
+        },
+        "accessibility": {
+          "name": "Accesibilidad",
+          "text": "Voz de baja latencia de entrada y salida para interfaces que hablan."
+        }
+      }
+    },
+    "endpoints": {
+      "createSession": "crea una sesión",
+      "streamAudio": "transmite audio + eventos",
+      "queryTimeline": "consulta la línea de tiempo",
+      "readTheDocs": "Lee la documentación"
+    }
+  },
+  "telephony": {
+    "meta": {
+      "title": "Telefonía — letsylabs",
+      "description": "Trae tu troncal SIP o tu centralita — cada llamada se convierte en una sesión que controla tu software. Entrantes, salientes, transferencias, DTMF."
+    },
+    "hero": {
+      "eyebrow": "TELEFONÍA",
+      "h1": "Telefonía programable, hecha para humanos e IA.",
+      "sub": "Trae tu troncal SIP o tu centralita — cada llamada se convierte en una sesión que controla tu software. Entrantes, salientes, transferencias, DTMF."
+    },
+    "handoff": {
+      "label": "HUMANO ⟷ LLAMADA ⟷ IA — TRANSFERENCIA EN AMBAS DIRECCIONES, EN MEDIO DE LA LLAMADA",
+      "ariaLabel": "Transferencia entre humano, llamada e IA, en ambas direcciones, en medio de la llamada",
+      "human": "Humano",
+      "humanSub": "tu equipo",
+      "call": "Llamada",
+      "callSub": "una sesión",
+      "ai": "IA",
+      "aiSub": "tu agente"
+    },
+    "capabilities": {
+      "inbound": {
+        "event": "call.inbound · call.outbound",
+        "title": "Entrantes y salientes",
+        "text": "Responde llamadas o realízalas desde tu código. Cada llamada es una sesión con los mismos eventos que el audio web."
+      },
+      "trunk": {
+        "event": "sip.register",
+        "title": "Trae tu troncal",
+        "text": "Asterisk, 3CX o tu operador SIP. Apúntalo a letsylabs y conserva tus números, tarifas y contratos.",
+        "chips": {
+          "asterisk": "Asterisk",
+          "threeCx": "3CX",
+          "sip": "SIP"
+        }
+      },
+      "transfers": {
+        "event": "call.transfer · dtmf",
+        "title": "Transferencias y DTMF",
+        "text": "Transferencias asistidas o directas, entrada de teclado como eventos. La transferencia de cumplimiento a un humano usa la misma primitiva."
+      },
+      "recordings": {
+        "event": "recording.retention",
+        "title": "Grabaciones",
+        "text": "Grabación por llamada con políticas de retención que tú configuras — borrado y rectificación integrados."
+      }
+    },
+    "roadmap": {
+      "label": "TELEFONÍA GESTIONADA — HOJA DE RUTA",
+      "managedNumbers": "NÚMEROS GESTIONADOS · PRÓXIMAMENTE",
+      "queues": "COLAS · PRÓXIMAMENTE",
+      "webphone": "SOFTPHONE · PRÓXIMAMENTE",
+      "claim": "Usa tu operador. O el nuestro, más adelante. Nunca atado.",
+      "complianceLink": "Llamadas conformes con la Ley 10/2025"
+    }
+  },
+  "selfHost": {
+    "meta": {
+      "title": "Self-host — letsylabs",
+      "description": "Un host, docker compose, modelos de pesos abiertos. El audio nunca sale de tu infraestructura — y puedes verificarlo."
+    },
+    "hero": {
+      "eyebrow": "AUTOALOJAMIENTO Y SOBERANÍA",
+      "h1": "El argumento de la soberanía, demostrado.",
+      "sub": "Un host, docker compose, modelos de pesos abiertos. El audio nunca sale de tu infraestructura — y puedes verificarlo.",
+      "cta": "Habla con nosotros"
+    },
+    "audioNeverLeaves": {
+      "label": "LA RUTA 100% DE PESOS ABIERTOS — EL AUDIO NUNCA SALE",
+      "ariaLabel": "Ruta del audio dentro de tu infraestructura: entrada de audio, runtime de letsy, STT/TTS de pesos abiertos, tu agente — sin llamadas externas",
+      "badge": "TU INFRAESTRUCTURA",
+      "nodes": {
+        "audioIn": "audio in",
+        "runtime": "letsy runtime",
+        "sttTts": "STT/TTS de pesos abiertos",
+        "yourAgent": "tu agente"
+      },
+      "caption": "sin llamadas a APIs externas · sin salida de audio · tus claves, tus tenants"
+    },
+    "terminal": {
+      "ariaLabel": "Ejemplo de registro de arranque autoalojado con modelos de pesos abiertos",
+      "requirements": "Requisitos: un host · docker compose · una GPU si quieres STT/TTS de pesos abiertos a velocidad."
+    },
+    "comparison": {
+      "selfHosted": "AUTOALOJADO",
+      "cloud": "CLOUD",
+      "rows": {
+        "apiStack": { "label": "API y pila", "selfHosted": "Igual", "cloud": "Igual" },
+        "audioEgress": {
+          "label": "Salida de audio",
+          "selfHosted": "Ninguna",
+          "cloud": "Región UE"
+        },
+        "models": { "label": "Modelos", "selfHosted": "Pesos abiertos", "cloud": "Gestionados" },
+        "updates": {
+          "label": "Actualizaciones",
+          "selfHosted": "Tú las aplicas",
+          "cloud": "Automáticas"
+        },
+        "pricing": { "label": "Precio", "selfHosted": "Licencia", "cloud": "Por minuto" }
+      },
+      "chips": {
+        "encryption": "CIFRADO EN TRÁNSITO Y EN REPOSO",
+        "isolation": "AISLAMIENTO POR TENANT",
+        "keys": "TUS CLAVES"
+      }
+    },
+    "license": {
+      "text": "Licencia comercial, sin precio público todavía —",
+      "link": "habla con nosotros"
+    }
+  },
+  "openSource": {
+    "meta": {
+      "title": "Código abierto — letsylabs",
+      "description": "Los tipos, VAD y los adaptadores de pesos abiertos son Apache 2.0. Construye con los mismos contratos sobre los que construimos nosotros."
+    },
+    "hero": {
+      "eyebrow": "DESARROLLADORES · CÓDIGO ABIERTO",
+      "h1": "Construido en Rust. Abierto en los contratos.",
+      "sub": "Los tipos, VAD y los adaptadores de pesos abiertos son Apache 2.0. Construye con los mismos contratos sobre los que construimos nosotros.",
+      "ctaCrates": "Explora los crates"
+    },
+    "crates": {
+      "types": {
+        "name": "letsy-types",
+        "text": "Contratos de sesión, eventos y fotogramas de audio. Los tipos que todo el sistema habla."
+      },
+      "vad": {
+        "name": "letsy-vad",
+        "text": "Detección de actividad de voz afinada para la conversación, no para el dictado."
+      },
+      "adapters": {
+        "name": "letsy-adapters",
+        "text": "Adaptadores de modelos de pesos abiertos — Voxtral y compañía."
+      },
+      "license": "Apache-2.0",
+      "language": "Rust",
+      "stars": "☆ —",
+      "githubLabel": "GitHub → github.com/letsylabs",
+      "githubBadge": "PRÓXIMAMENTE",
+      "pythonBindings": "LETSY-PY: 2027"
+    },
+    "philosophy": {
+      "label": "FILOSOFÍA — DICHA CON HONESTIDAD",
+      "line1": "Contratos abiertos, para que nunca quedes atado.",
+      "line2": "Runtime cerrado, para que podamos construir un negocio.",
+      "line3": "Se abre más a medida que crece la comunidad."
+    }
   }
 }

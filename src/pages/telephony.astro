@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TelephonyPage from '../components/pages/TelephonyPage.astro';
+import { t } from '../i18n';
+---
+
+<BaseLayout
+  locale="en"
+  title={t('en', 'telephony.meta.title')}
+  description={t('en', 'telephony.meta.description')}
+>
+  <TelephonyPage locale="en" />
+</BaseLayout>

@@ -219,5 +219,240 @@
       "ctaTalkToUs": "Talk to us",
       "note": "GA lands March 2027 · early-access pilots get founding terms"
     }
+  },
+  "voice": {
+    "meta": {
+      "title": "Voice — letsylabs",
+      "description": "STT, TTS, turn-taking and tracing as one runtime. Your agent stays yours."
+    },
+    "hero": {
+      "eyebrow": "VOICE",
+      "h1": "Realtime speech infrastructure for your applications.",
+      "sub": "STT, TTS, turn-taking and tracing as one runtime. Your agent stays yours.",
+      "ctaDocs": "Read the docs"
+    },
+    "howItWorks": {
+      "label": "EVERY SEGMENT MEASURED — LATENCIES PER HOP",
+      "ariaLabel": "Voice pipeline with per-hop latencies: audio in, VAD, STT, your agent, TTS, audio out",
+      "nodes": {
+        "audioIn": "audio in",
+        "vad": "VAD",
+        "vadSub": "20ms frames",
+        "stt": "STT",
+        "sttSub": "<300ms partial",
+        "yourAgent": "your agent",
+        "yourAgentSub": "HTTP + SSE",
+        "tts": "TTS",
+        "ttsSub": "96ms first audio",
+        "audioOut": "audio out"
+      }
+    },
+    "capabilities": {
+      "stt": {
+        "event": "stt.partial · stt.final",
+        "title": "Realtime STT",
+        "text": "Partial and final transcripts as the caller speaks. Spanish first, multilingual by design. Open-weight models available for self-host."
+      },
+      "tts": {
+        "event": "tts.first_audio",
+        "title": "Streaming TTS",
+        "text": "Speech streams per sentence, not per response. Voices are platform resources — switch providers or bring cloned voices without changing code.",
+        "badge": "VOICE CLONING: COMING"
+      },
+      "turns": {
+        "event": "turn.barge_in",
+        "title": "Turn-taking & barge-in",
+        "text": "The caller interrupts, the agent stops. The runtime detects the turn and cancels TTS mid-sentence — your code never juggles timers.",
+        "demoSpeaking": "agent speaking",
+        "demoBargeIn": "caller barges in",
+        "demoCancel": "→ tts.cancel · 61ms"
+      },
+      "latency": {
+        "event": "latency.turn",
+        "title": "Latency tracing",
+        "text": "Every conversation leaves a timeline you can query. Per-hop latencies, per-turn totals, exportable.",
+        "rows": {
+          "sttFinal": "stt.final",
+          "agentFirstToken": "agent.first_token",
+          "ttsFirstAudio": "tts.first_audio",
+          "latencyTurn": "latency.turn"
+        }
+      }
+    },
+    "useCases": {
+      "h2": "What it's for.",
+      "tableHeaderCase": "USE CASE",
+      "tableHeaderWhat": "WHAT LETSYLABS DOES",
+      "rows": {
+        "aiAgents": {
+          "name": "AI agents",
+          "text": "Full voice loop — your agent thinks, the runtime listens and speaks."
+        },
+        "callAutomation": {
+          "name": "Call automation",
+          "text": "Inbound and outbound calls as programmable sessions with DTMF and transfers."
+        },
+        "liveTranscription": {
+          "name": "Live transcription",
+          "text": "Partials in under 300 ms, finals with punctuation, per-speaker."
+        },
+        "assistants": {
+          "name": "Assistants",
+          "text": "Web and in-app voice with barge-in that feels human."
+        },
+        "accessibility": {
+          "name": "Accessibility",
+          "text": "Low-latency speech in and out for interfaces that talk."
+        }
+      }
+    },
+    "endpoints": {
+      "createSession": "create a session",
+      "streamAudio": "stream audio + events",
+      "queryTimeline": "query the timeline",
+      "readTheDocs": "Read the docs"
+    }
+  },
+  "telephony": {
+    "meta": {
+      "title": "Telephony — letsylabs",
+      "description": "Bring your SIP trunk or PBX — every call becomes a session your software controls. Inbound, outbound, transfers, DTMF."
+    },
+    "hero": {
+      "eyebrow": "TELEPHONY",
+      "h1": "Programmable telephony built for humans and AI.",
+      "sub": "Bring your SIP trunk or PBX — every call becomes a session your software controls. Inbound, outbound, transfers, DTMF."
+    },
+    "handoff": {
+      "label": "HUMAN ⟷ CALL ⟷ AI — HANDOFF IN BOTH DIRECTIONS, MID-CALL",
+      "ariaLabel": "Human to call to AI handoff, in both directions, mid-call",
+      "human": "Human",
+      "humanSub": "your team",
+      "call": "Call",
+      "callSub": "one session",
+      "ai": "AI",
+      "aiSub": "your agent"
+    },
+    "capabilities": {
+      "inbound": {
+        "event": "call.inbound · call.outbound",
+        "title": "Inbound & outbound",
+        "text": "Answer calls or place them from your code. Every call is a session with the same events as web audio."
+      },
+      "trunk": {
+        "event": "sip.register",
+        "title": "Bring your trunk",
+        "text": "Asterisk, 3CX, or your SIP carrier. Point it at letsylabs and keep your numbers, rates and contracts.",
+        "chips": {
+          "asterisk": "Asterisk",
+          "threeCx": "3CX",
+          "sip": "SIP"
+        }
+      },
+      "transfers": {
+        "event": "call.transfer · dtmf",
+        "title": "Transfers & DTMF",
+        "text": "Warm or blind transfers, keypad input as events. The compliance handoff to a human uses the same primitive."
+      },
+      "recordings": {
+        "event": "recording.retention",
+        "title": "Recordings",
+        "text": "Per-call recording with retention policies you configure — deletion and rectification built in."
+      }
+    },
+    "roadmap": {
+      "label": "MANAGED TELEPHONY — ROADMAP",
+      "managedNumbers": "MANAGED NUMBERS · COMING SOON",
+      "queues": "QUEUES · COMING SOON",
+      "webphone": "WEBPHONE · COMING SOON",
+      "claim": "Use your carrier. Or ours, later. Never locked in.",
+      "complianceLink": "Calls that comply with Ley 10/2025"
+    }
+  },
+  "selfHost": {
+    "meta": {
+      "title": "Self-host — letsylabs",
+      "description": "One host, docker compose, open-weight models. Audio never leaves your infrastructure — and you can verify it."
+    },
+    "hero": {
+      "eyebrow": "SELF-HOST & SOVEREIGNTY",
+      "h1": "The sovereignty argument, proven.",
+      "sub": "One host, docker compose, open-weight models. Audio never leaves your infrastructure — and you can verify it.",
+      "cta": "Talk to us"
+    },
+    "audioNeverLeaves": {
+      "label": "THE 100% OPEN-WEIGHT ROUTE — AUDIO NEVER LEAVES",
+      "ariaLabel": "Audio path inside your infrastructure: audio in, letsy runtime, open-weight STT/TTS, your agent — no external calls",
+      "badge": "YOUR INFRASTRUCTURE",
+      "nodes": {
+        "audioIn": "audio in",
+        "runtime": "letsy runtime",
+        "sttTts": "open-weight STT/TTS",
+        "yourAgent": "your agent"
+      },
+      "caption": "no external API calls · no audio egress · your keys, your tenants"
+    },
+    "terminal": {
+      "ariaLabel": "Example self-hosted startup log with open-weight models",
+      "requirements": "Requirements: one host · docker compose · a GPU if you want open-weight STT/TTS at speed."
+    },
+    "comparison": {
+      "selfHosted": "SELF-HOSTED",
+      "cloud": "CLOUD",
+      "rows": {
+        "apiStack": { "label": "API & stack", "selfHosted": "Same", "cloud": "Same" },
+        "audioEgress": { "label": "Audio egress", "selfHosted": "None", "cloud": "EU region" },
+        "models": { "label": "Models", "selfHosted": "Open-weight", "cloud": "Managed" },
+        "updates": { "label": "Updates", "selfHosted": "You pull", "cloud": "Automatic" },
+        "pricing": { "label": "Pricing", "selfHosted": "License", "cloud": "Per minute" }
+      },
+      "chips": {
+        "encryption": "ENCRYPTION IN TRANSIT + AT REST",
+        "isolation": "TENANT ISOLATION",
+        "keys": "YOUR KEYS"
+      }
+    },
+    "license": {
+      "text": "Commercial license, no public pricing yet —",
+      "link": "talk to us"
+    }
+  },
+  "openSource": {
+    "meta": {
+      "title": "Open source — letsylabs",
+      "description": "The types, VAD and open-weight adapters are Apache 2.0. Build with the same contracts we build on."
+    },
+    "hero": {
+      "eyebrow": "DEVELOPERS · OPEN SOURCE",
+      "h1": "Built in Rust. Open at the contracts.",
+      "sub": "The types, VAD and open-weight adapters are Apache 2.0. Build with the same contracts we build on.",
+      "ctaCrates": "Browse the crates"
+    },
+    "crates": {
+      "types": {
+        "name": "letsy-types",
+        "text": "Session, event and audio-frame contracts. The types everything speaks."
+      },
+      "vad": {
+        "name": "letsy-vad",
+        "text": "Voice activity detection tuned for conversation, not dictation."
+      },
+      "adapters": {
+        "name": "letsy-adapters",
+        "text": "Open-weight model adapters — Voxtral and friends."
+      },
+      "license": "Apache-2.0",
+      "language": "Rust",
+      "stars": "☆ —",
+      "githubLabel": "GitHub → github.com/letsylabs",
+      "githubBadge": "COMING SOON",
+      "pythonBindings": "LETSY-PY: 2027"
+    },
+    "philosophy": {
+      "label": "PHILOSOPHY — HONESTLY STATED",
+      "line1": "Open contracts, so you're never locked in.",
+      "line2": "Closed runtime, so we can build a business.",
+      "line3": "More opens up as the community grows."
+    }
   }
 }
