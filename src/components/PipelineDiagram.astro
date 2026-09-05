@@ -42,7 +42,14 @@ interface Props {
   viewBox?: string;
   nodes: PipelineDiagramNode[];
   edges: PipelineDiagramEdge[];
-  centerBox?: { x: number; y: number; width: number; height: number; label: string; subLabel?: string };
+  centerBox?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    label: string;
+    subLabel?: string;
+  };
   size?: PipelineSize;
   ariaLabel: string;
   description?: string;
@@ -68,7 +75,10 @@ const NODE_HEIGHT = 44;
   <svg viewBox={viewBox} role="img" aria-label={ariaLabel} class="pipeline-diagram-svg">
     {
       edges.map((edge) => (
-        <path d={edge.path} class:list={['pipeline-edge', edge.accent && `pipeline-edge-${edge.accent}`]} />
+        <path
+          d={edge.path}
+          class:list={['pipeline-edge', edge.accent && `pipeline-edge-${edge.accent}`]}
+        />
       ))
     }
     {

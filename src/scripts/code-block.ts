@@ -11,9 +11,13 @@ export interface InitCopyButtonsOptions {
   clipboard?: Pick<Clipboard, 'writeText'>;
 }
 
-export function initCopyButtons(root: ParentNode, options: InitCopyButtonsOptions = {}): () => void {
+export function initCopyButtons(
+  root: ParentNode,
+  options: InitCopyButtonsOptions = {},
+): () => void {
   const resetMs = options.resetMs ?? 1600;
-  const clipboard = options.clipboard ?? (typeof navigator !== 'undefined' ? navigator.clipboard : undefined);
+  const clipboard =
+    options.clipboard ?? (typeof navigator !== 'undefined' ? navigator.clipboard : undefined);
 
   const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-copy-button]'));
   const timers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>();

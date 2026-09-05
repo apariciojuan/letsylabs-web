@@ -14,7 +14,9 @@ describe('SectionHeading', () => {
   });
 
   it('renders an <h2> for the default level="section"', async () => {
-    const body = await renderToBody(SectionHeading, { slots: { default: 'Bring your own intelligence.' } });
+    const body = await renderToBody(SectionHeading, {
+      slots: { default: 'Bring your own intelligence.' },
+    });
     const heading = getByRole(body, 'heading', { level: 2 });
     expect(heading.className).not.toContain('h2-minor');
   });
@@ -29,7 +31,12 @@ describe('SectionHeading', () => {
   });
 
   it('centers the heading when centered={true}', async () => {
-    const body = await renderToBody(SectionHeading, { props: { centered: true }, slots: { default: 'x' } });
-    expect(getByRole(body, 'heading', { level: 2 }).className).toContain('section-heading-centered');
+    const body = await renderToBody(SectionHeading, {
+      props: { centered: true },
+      slots: { default: 'x' },
+    });
+    expect(getByRole(body, 'heading', { level: 2 }).className).toContain(
+      'section-heading-centered',
+    );
   });
 });

@@ -19,7 +19,10 @@ import path from 'node:path';
 export function collectPaths(value, prefix = '') {
   if (Array.isArray(value)) {
     const lengthMarker = `${prefix}[]:${value.length}`;
-    return [lengthMarker, ...value.flatMap((item, index) => collectPaths(item, `${prefix}[${index}]`))];
+    return [
+      lengthMarker,
+      ...value.flatMap((item, index) => collectPaths(item, `${prefix}[${index}]`)),
+    ];
   }
   if (value !== null && typeof value === 'object') {
     return Object.keys(value).flatMap((key) => {
@@ -42,10 +45,14 @@ export function checkParity(baseCatalog, otherCatalog, baseLabel = 'en', otherLa
 
   const problems = [];
   if (missingInOther.length > 0) {
-    problems.push(`present in ${baseLabel} but missing in ${otherLabel}: ${missingInOther.join(', ')}`);
+    problems.push(
+      `present in ${baseLabel} but missing in ${otherLabel}: ${missingInOther.join(', ')}`,
+    );
   }
   if (missingInBase.length > 0) {
-    problems.push(`present in ${otherLabel} but missing in ${baseLabel}: ${missingInBase.join(', ')}`);
+    problems.push(
+      `present in ${otherLabel} but missing in ${baseLabel}: ${missingInBase.join(', ')}`,
+    );
   }
   return problems;
 }
@@ -65,7 +72,9 @@ function main() {
     process.exitCode = 1;
     return;
   }
-  console.log(`i18n:check OK — en.json and es.json are in parity (${collectPaths(en).length} key paths).`);
+  console.log(
+    `i18n:check OK — en.json and es.json are in parity (${collectPaths(en).length} key paths).`,
+  );
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);

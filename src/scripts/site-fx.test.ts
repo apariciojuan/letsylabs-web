@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { easeOutCubic, initCounters, initReveal, initSvgPulses, prefersReducedMotion } from './site-fx';
+import {
+  easeOutCubic,
+  initCounters,
+  initReveal,
+  initSvgPulses,
+  prefersReducedMotion,
+} from './site-fx';
 
 class FakeIntersectionObserver {
   static instances: FakeIntersectionObserver[] = [];
@@ -167,9 +173,9 @@ describe('initSvgPulses', () => {
     path.dataset.pulsePath = 'a';
     path.dataset.pulseMs = '1000';
     (path as unknown as { getTotalLength: () => number }).getTotalLength = () => 10;
-    (path as unknown as { getPointAtLength: (l: number) => { x: number; y: number } }).getPointAtLength = (
-      l,
-    ) => ({
+    (
+      path as unknown as { getPointAtLength: (l: number) => { x: number; y: number } }
+    ).getPointAtLength = (l) => ({
       x: l,
       y: l * 2,
     });

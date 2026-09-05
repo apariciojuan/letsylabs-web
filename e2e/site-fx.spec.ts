@@ -28,7 +28,9 @@ test.describe('site-fx under prefers-reduced-motion', () => {
     }
   });
 
-  test('counters show their final formatted value immediately (no count-up animation)', async ({ page }) => {
+  test('counters show their final formatted value immediately (no count-up animation)', async ({
+    page,
+  }) => {
     await page.goto('/dev/components');
     const counters = page.locator('[data-counter]');
     await expect(counters.nth(0)).toHaveText('<1s');
@@ -44,7 +46,9 @@ test.describe('site-fx under prefers-reduced-motion', () => {
 });
 
 test.describe('site-fx with motion allowed', () => {
-  test('[data-reveal] content still ends up visible (reveals on scroll into view)', async ({ page }) => {
+  test('[data-reveal] content still ends up visible (reveals on scroll into view)', async ({
+    page,
+  }) => {
     await page.goto('/dev/components');
     const firstReveal = page.locator('[data-reveal]').first();
     await firstReveal.scrollIntoViewIfNeeded();

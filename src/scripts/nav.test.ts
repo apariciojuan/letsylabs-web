@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createDisclosure, getFocusableElements, initMegaMenus, initMobileDrawer, trapFocus } from './nav';
+import {
+  createDisclosure,
+  getFocusableElements,
+  initMegaMenus,
+  initMobileDrawer,
+  trapFocus,
+} from './nav';
 
 beforeEach(() => {
   document.body.innerHTML = '';

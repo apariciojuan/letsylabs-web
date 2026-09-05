@@ -18,7 +18,9 @@ test.describe('SiteNav mega menu (desktop)', () => {
     await expect(panel).toBeHidden();
   });
 
-  test('click toggles it open independent of hover, and a second click closes it', async ({ page }) => {
+  test('click toggles it open independent of hover, and a second click closes it', async ({
+    page,
+  }) => {
     await page.goto('/dev/components');
     // SiteNav's <script> (initNav -> initMegaMenus) attaches the click listener asynchronously as
     // a module script; without this wait, a click issued right after `goto()` can land before the
@@ -77,7 +79,9 @@ test.describe('SiteNav mega menu (desktop)', () => {
 test.describe('SiteNav mobile drawer (380px)', () => {
   test.use({ viewport: { width: 380, height: 800 } });
 
-  test('shows the drawer toggle (desktop nav hidden) with no horizontal overflow', async ({ page }) => {
+  test('shows the drawer toggle (desktop nav hidden) with no horizontal overflow', async ({
+    page,
+  }) => {
     await page.goto('/dev/components');
     await expect(page.locator('[data-drawer-toggle]')).toBeVisible();
     await expect(page.locator('.site-nav-links')).toBeHidden();
@@ -89,7 +93,9 @@ test.describe('SiteNav mobile drawer (380px)', () => {
     expect(overflows).toBe(false);
   });
 
-  test('clicking the toggle opens the drawer (aria-expanded), Escape closes it', async ({ page }) => {
+  test('clicking the toggle opens the drawer (aria-expanded), Escape closes it', async ({
+    page,
+  }) => {
     await page.goto('/dev/components');
     await page.waitForLoadState('networkidle');
     const toggle = page.locator('[data-drawer-toggle]');

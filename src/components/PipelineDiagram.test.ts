@@ -70,7 +70,9 @@ describe('PipelineDiagram', () => {
 
   it('renders the center runtime box label/sub-label when centerBox is given', async () => {
     const body = await renderToBody(PipelineDiagram, { props: baseProps });
-    expect(body.querySelector('.pipeline-runtime-label')?.textContent?.trim()).toBe('letsylabs runtime');
+    expect(body.querySelector('.pipeline-runtime-label')?.textContent?.trim()).toBe(
+      'letsylabs runtime',
+    );
     expect(body.querySelector('.pipeline-runtime-sublabel')?.textContent?.trim()).toBe(
       'VAD · STT · turns · TTS · trace',
     );
@@ -86,7 +88,9 @@ describe('PipelineDiagram', () => {
   it('regression guard: the pulse dot is hidden outright under prefers-reduced-motion (CSS-only, no client JS)', () => {
     const source = readFileSync(SOURCE_PATH, 'utf8');
     expect(source).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
-    const reducedMotionBlock = source.slice(source.indexOf('@media (prefers-reduced-motion: reduce)'));
+    const reducedMotionBlock = source.slice(
+      source.indexOf('@media (prefers-reduced-motion: reduce)'),
+    );
     expect(reducedMotionBlock).toMatch(/\.pipeline-pulse-dot\s*{\s*display:\s*none;/);
   });
 });

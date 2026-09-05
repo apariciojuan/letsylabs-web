@@ -22,7 +22,10 @@ describe('Button', () => {
   });
 
   it('omits the arrow when arrow={false}', async () => {
-    const body = await renderToBody(Button, { props: { arrow: false }, slots: { default: 'Submit' } });
+    const body = await renderToBody(Button, {
+      props: { arrow: false },
+      slots: { default: 'Submit' },
+    });
     expect(body.querySelector('.btn-arrow')).toBeNull();
   });
 

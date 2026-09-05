@@ -34,7 +34,12 @@ describe('CodeBlock', () => {
 
   it('supports custom idle/done labels (for i18n callers)', async () => {
     const body = await renderToBody(CodeBlock, {
-      props: { language: 'bash', copyText: 'x', copyIdleLabel: 'copiar', copyDoneLabel: 'copiado ✓' },
+      props: {
+        language: 'bash',
+        copyText: 'x',
+        copyIdleLabel: 'copiar',
+        copyDoneLabel: 'copiado ✓',
+      },
       slots: { default: '<pre>x</pre>' },
     });
     expect(getByRole(body, 'button', { name: 'copiar' })).toBeTruthy();

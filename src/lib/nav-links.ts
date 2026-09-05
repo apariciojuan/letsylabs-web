@@ -24,7 +24,12 @@ export const ROUTES = {
 
 export type NavSection = 'product' | 'developers' | 'pricing' | 'company';
 
-const PRODUCT_PATHS: readonly string[] = [ROUTES.voice, ROUTES.telephony, ROUTES.compliance, ROUTES.selfHost];
+const PRODUCT_PATHS: readonly string[] = [
+  ROUTES.voice,
+  ROUTES.telephony,
+  ROUTES.compliance,
+  ROUTES.selfHost,
+];
 
 /**
  * Classifies an English-canonical (unprefixed) pathname into the top-level SiteNav section it

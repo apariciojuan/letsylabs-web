@@ -88,7 +88,11 @@ const platformVisionKeys = [
       <div class="nav-product" data-mega-menu-container>
         <button
           type="button"
-          class:list={['nav-link', 'nav-product-trigger', { 'is-active': activeSection === 'product' }]}
+          class:list={[
+            'nav-link',
+            'nav-product-trigger',
+            { 'is-active': activeSection === 'product' },
+          ]}
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="mega-menu-product"
@@ -164,11 +168,21 @@ const platformVisionKeys = [
     </button>
   </div>
 
-  <nav id="site-nav-drawer" class="site-nav-drawer" data-drawer-panel aria-label={t(locale, 'nav.product')}>
+  <nav
+    id="site-nav-drawer"
+    class="site-nav-drawer"
+    data-drawer-panel
+    aria-label={t(locale, 'nav.product')}
+  >
     <a href={href(ROUTES.voice)} class="drawer-link">{t(locale, 'nav.megaMenu.voiceTitle')}</a>
-    <a href={href(ROUTES.telephony)} class="drawer-link">{t(locale, 'nav.megaMenu.telephonyTitle')}</a>
-    <a href={href(ROUTES.compliance)} class="drawer-link">{t(locale, 'nav.megaMenu.complianceTitle')}</a>
-    <a href={href(ROUTES.selfHost)} class="drawer-link">{t(locale, 'nav.megaMenu.selfHostTitle')}</a>
+    <a href={href(ROUTES.telephony)} class="drawer-link"
+      >{t(locale, 'nav.megaMenu.telephonyTitle')}</a
+    >
+    <a href={href(ROUTES.compliance)} class="drawer-link"
+      >{t(locale, 'nav.megaMenu.complianceTitle')}</a
+    >
+    <a href={href(ROUTES.selfHost)} class="drawer-link">{t(locale, 'nav.megaMenu.selfHostTitle')}</a
+    >
     <a href={href(ROUTES.openSource)} class="drawer-link">{t(locale, 'nav.developers')}</a>
     <a href={href(ROUTES.pricing)} class="drawer-link">{t(locale, 'nav.pricing')}</a>
     <a href={href(ROUTES.company)} class="drawer-link">{t(locale, 'nav.company')}</a>

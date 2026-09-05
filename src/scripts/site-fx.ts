@@ -37,7 +37,10 @@ const COUNTER_DURATION_MS = 900;
  * `REVEAL_THRESHOLD` of the viewport, staggered by their own `data-delay` (ms). No-op under reduced
  * motion (elements are left exactly as authored -- already visible).
  */
-export function initReveal(root: ParentNode = document, reduced = prefersReducedMotion()): () => void {
+export function initReveal(
+  root: ParentNode = document,
+  reduced = prefersReducedMotion(),
+): () => void {
   const elements = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'));
   if (elements.length === 0 || reduced) return () => {};
 
@@ -83,7 +86,10 @@ export function initReveal(root: ParentNode = document, reduced = prefersReduced
  * (e.g. prefix "<" + target 1 + suffix "s" => "<1s"). No-op under reduced motion (the element's own
  * markup already shows the final formatted value, matching the handoff's fixture pattern).
  */
-export function initCounters(root: ParentNode = document, reduced = prefersReducedMotion()): () => void {
+export function initCounters(
+  root: ParentNode = document,
+  reduced = prefersReducedMotion(),
+): () => void {
   const elements = Array.from(root.querySelectorAll<HTMLElement>('[data-counter]'));
   if (elements.length === 0) return () => {};
 
@@ -131,7 +137,10 @@ export function initCounters(root: ParentNode = document, reduced = prefersReduc
  * (default 2600ms/loop). Under reduced motion the dots are hidden outright (handoff: "sin pulsos
  * (dots ocultos)") rather than frozen mid-path.
  */
-export function initSvgPulses(root: ParentNode = document, reduced = prefersReducedMotion()): () => void {
+export function initSvgPulses(
+  root: ParentNode = document,
+  reduced = prefersReducedMotion(),
+): () => void {
   const paths = Array.from(root.querySelectorAll<SVGPathElement>('[data-pulse-path]'));
   if (paths.length === 0) return () => {};
 

@@ -13,7 +13,9 @@ async function renderFooter(locale: 'en' | 'es', path = '/'): Promise<HTMLElemen
 describe('SiteFooter', () => {
   it('renders the 4 column labels (PRODUCT/DEVELOPERS/COMPANY/LEGAL)', async () => {
     const body = await renderFooter('en');
-    const labels = Array.from(body.querySelectorAll('.footer-column-label')).map((el) => el.textContent);
+    const labels = Array.from(body.querySelectorAll('.footer-column-label')).map(
+      (el) => el.textContent,
+    );
     expect(labels).toEqual(['PRODUCT', 'DEVELOPERS', 'COMPANY', 'LEGAL']);
   });
 

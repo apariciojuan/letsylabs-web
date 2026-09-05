@@ -15,14 +15,20 @@ describe('EventTimeline', () => {
     const rows = body.querySelectorAll('.event-timeline-row');
     expect(rows).toHaveLength(2);
     expect(rows[0].textContent).toBe('00:02 · stt.partial · 118ms');
-    expect(rows[0].querySelector('.event-timeline-dot')?.className).toContain('event-timeline-dot-event');
+    expect(rows[0].querySelector('.event-timeline-dot')?.className).toContain(
+      'event-timeline-dot-event',
+    );
     expect(rows[1].textContent).toBe('agent.first_token · 210ms');
-    expect(rows[1].querySelector('.event-timeline-dot')?.className).toContain('event-timeline-dot-signal');
+    expect(rows[1].querySelector('.event-timeline-dot')?.className).toContain(
+      'event-timeline-dot-signal',
+    );
   });
 
   it('defaults the dot to muted when no accent is given', async () => {
     const body = await renderToBody(EventTimeline, { props: { events: [{ type: 'call.ended' }] } });
-    expect(body.querySelector('.event-timeline-dot')?.className).toContain('event-timeline-dot-muted');
+    expect(body.querySelector('.event-timeline-dot')?.className).toContain(
+      'event-timeline-dot-muted',
+    );
   });
 
   it('renders an empty list without throwing (edge path)', async () => {

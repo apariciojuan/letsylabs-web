@@ -6,7 +6,8 @@
       "options": { "parser": "astro" }
     }
   ],
+  "semi": true,
   "singleQuote": true,
-  "printWidth": 110,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "printWidth": 100
 }

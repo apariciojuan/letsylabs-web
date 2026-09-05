@@ -67,7 +67,9 @@ const pipelineCenterBox = {
     <main class="dev-gallery">
       <section class="container dev-section" data-reveal>
         <SectionHeading level="hero">Component gallery (dev only)</SectionHeading>
-        <p class="dev-note">Not part of the production build -- see scripts/check_no_dev_pages.sh.</p>
+        <p class="dev-note">
+          Not part of the production build -- see scripts/check_no_dev_pages.sh.
+        </p>
       </section>
 
       <section class="container dev-section">
@@ -114,7 +116,10 @@ const pipelineCenterBox = {
       <section class="container dev-section">
         <SectionHeading>CodeBlock / Terminal</SectionHeading>
         <div class="dev-row dev-row-code">
-          <CodeBlock language="bash" copyText={'curl -X POST https://api.letsylabs.com/v1/sessions'}>
+          <CodeBlock
+            language="bash"
+            copyText={'curl -X POST https://api.letsylabs.com/v1/sessions'}
+          >
             <Fragment
               set:html={`<pre>curl <span class="tok-keyword">-X</span> POST https://api.letsylabs.com/v1/sessions \\
   <span class="tok-keyword">-H</span> <span class="tok-string">"Authorization: Bearer $LETSY_KEY"</span>
@@ -208,7 +213,9 @@ const pipelineCenterBox = {
       <section class="container dev-section">
         <SectionHeading>site-fx: counters (data-counter)</SectionHeading>
         <div class="dev-row">
-          <div class="dev-counter" data-counter data-target="1" data-prefix="<" data-suffix="s">&lt;1s</div>
+          <div class="dev-counter" data-counter data-target="1" data-prefix="<" data-suffix="s">
+            &lt;1s
+          </div>
           <div class="dev-counter" data-counter data-target="20" data-suffix="ms">20ms</div>
           <div class="dev-counter" data-counter data-target="100" data-suffix="%">100%</div>
         </div>

@@ -170,7 +170,11 @@ export default function PipelineDiagramInteractive({
                 y={38}
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: active ? '#E8EDF2' : '#8B96A5', fontFamily: 'var(--font-mono)', fontSize: 14 }}
+                style={{
+                  fill: active ? '#E8EDF2' : '#8B96A5',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 14,
+                }}
               >
                 {source.label}
               </text>
@@ -189,7 +193,12 @@ export default function PipelineDiagramInteractive({
           x={400}
           y={185}
           textAnchor="middle"
-          style={{ fill: '#E8EDF2', fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 600 }}
+          style={{
+            fill: '#E8EDF2',
+            fontFamily: 'var(--font-display)',
+            fontSize: 17,
+            fontWeight: 600,
+          }}
         >
           {centerLabel}
         </text>

@@ -19,7 +19,11 @@ const pathname = Astro.url.pathname;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
-    {locales.map((loc) => <link rel="alternate" hreflang={loc} href={localizePath(pathname, loc)} />)}
+    {
+      locales.map((loc) => (
+        <link rel="alternate" hreflang={loc} href={localizePath(pathname, loc)} />
+      ))
+    }
     <link rel="alternate" hreflang="x-default" href={localizePath(pathname, 'en')} />
   </head>
   <body>

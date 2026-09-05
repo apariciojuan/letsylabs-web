@@ -193,7 +193,8 @@ export function initMegaMenus(root: ParentNode): () => void {
       const id = trigger.getAttribute('aria-controls');
       const panel = id ? root.querySelector<HTMLElement>(`#${CSS.escape(id)}`) : null;
       if (!panel) return null;
-      const hoverContainer = trigger.closest<HTMLElement>('[data-mega-menu-container]') ?? undefined;
+      const hoverContainer =
+        trigger.closest<HTMLElement>('[data-mega-menu-container]') ?? undefined;
       return createDisclosure(trigger, panel, { closeOnOutsideClick: true, hoverContainer });
     })
     .filter((d): d is Disclosure => d !== null);
