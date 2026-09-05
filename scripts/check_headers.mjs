@@ -1,17 +1,30 @@
 #!/usr/bin/env node
 /**
- * Ratchet (brief W-7, spec D-W7-4): after `pnpm build`, `dist/_headers` must exist and contain every
- * mandatory directive from the policy `scripts/security-headers.mjs` writes, and no
- * `dist/**\/*.html` file may ship an inline `<script>` (one with no `src` attribute) -- D-W7-4's
- * `script-src 'self'` is strict, so a shipped inline script would be silently no-op'd by any real
- * browser's CSP enforcement while looking fine in a build that never checks for it. Run as
- * `pnpm headers:check` (== `node scripts/check_headers.mjs`). Same shape as
+ * Ratchet (brief W-7, hardened W-7b, spec D-W7-4): after `pnpm build`, `dist/_headers` must exist
+ * and contain every mandatory directive from the policy `scripts/security-headers.mjs` writes, and
+ * every inline `<script>` (one with no `src` attribute) in any `dist/**\/*.html` file must have its
+ * exact `sha256-<base64>` hash present in `_headers`' `script-src` directive -- D-W7-4's
+ * `script-src 'self'` is strict, so a shipped inline script with no matching hash would be silently
+ * no-op'd by any real browser's CSP enforcement while looking fine in a build that never checks for
+ * it. Run as `pnpm headers:check` (== `node scripts/check_headers.mjs`). Same shape as
  * `scripts/check_placeholders.mjs`: logic exported for `scripts/check_headers.test.mjs`, `main()`
  * walks the real `dist/` tree.
+ *
+ * W-7b hardening: this used to special-case Astro's own two core inline scripts (the
+ * client-hydration bootstrap and the `<astro-island>` custom element definition) by regex
+ * fingerprint, letting them through with NO hash in `_headers` at all -- which a real browser would
+ * still have blocked (§6.5: the determinism check was weakened to pass instead of the underlying
+ * fact being fixed). The real guarantee is the hash, not the script's origin: this file no longer
+ * has ANY exception. `security-headers.mjs` computes and writes the hashes; this file recomputes
+ * them from the built HTML (via the shared `csp_hash.mjs`) and verifies each one made it into
+ * `_headers`. No script in this repo should be inline in the first place (every author-written
+ * script is forced external by `astro.config.mjs`'s `assetsInlineLimit: 0`) -- Astro's own core
+ * runtime scripts are the sole reason any inline `<script>` ships at all.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { findInlineScripts, hashInlineScript } from './csp_hash.mjs';
 
 // Every directive/value `scripts/security-headers.mjs`'s `buildHeaders()` always writes, regardless
 // of whether an endpoint is configured (the endpoint-derived origin in connect-src/form-action is
@@ -41,46 +54,37 @@ export function findMissingHeaderDirectives(headersContent) {
   return REQUIRED_HEADER_FRAGMENTS.filter((fragment) => !headersContent.includes(fragment));
 }
 
-// Matches a whole <script ...>...</script> element (open tag, body, close tag). Non-greedy body so
-// it stops at the first close tag; every <script> element this repo's own build ever emits is a
-// single, non-nested element.
-const SCRIPT_ELEMENT_PATTERN = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-
-// Astro's own core build ALWAYS emits two specific inline <script> elements on any page that
-// hydrates a `client:*`-directive island (this repo's homepage has exactly one: `HomePage.astro`'s
-// PipelineDiagramInteractive, `client:load`, brief W-3) -- there is no supported Astro/Vite option
-// to externalize either (unlike every OTHER script in this repo, which astro.config.mjs's
-// `assetsInlineLimit: 0` already forces external; confirmed against Astro 7.3's
-// `core/build/plugins/plugin-scripts.js`, which this pair of scripts never goes through):
-//   1. the client-hydration bootstrap that dispatches the `astro:load` event;
-//   2. the `<astro-island>` custom element definition (registers `customElements.define(...)`).
-// These two fingerprints (Astro's own internal APIs, never written by this repo's own code) are the
-// ONLY documented exceptions -- any other un-sourced inline script still fails below. Discovered
-// while implementing D-W7-4 (brief W-7): flagged to the controller as a spec-vs-reality gap (the
-// spec's "cero scripts inline" cannot be 100% literal on a page using client-hydrated islands).
-const ASTRO_CORE_INLINE_SCRIPT_FINGERPRINTS = [
-  // `s` (dotAll) flag: the minified production build is single-line, but Prettier reformats the
-  // fixture's copy across several lines (`check_headers.test.mjs`/its "OK" fixture) -- without
-  // dotAll, `.` never matches the newlines in between, so this failed to recognize its own fixture.
-  /self\.Astro\b.*astro:load/s,
-  /customElements\.(?:get|define)\(["']astro-island["']\)/,
-];
-
-function isAstroCoreInlineScript(body) {
-  return ASTRO_CORE_INLINE_SCRIPT_FINGERPRINTS.some((pattern) => pattern.test(body));
+/**
+ * Every source expression (`'self'`, `'sha256-...'`, ...) listed in `headersContent`'s script-src
+ * directive. Returns `[]` when the directive is absent.
+ * @param {string} headersContent
+ * @returns {string[]}
+ */
+export function extractScriptSrcSources(headersContent) {
+  const match = /script-src([^;\n]*)/.exec(headersContent);
+  if (!match) return [];
+  return match[1].trim().split(/\s+/).filter(Boolean);
 }
 
-/** Returns every inline (no `src`) `<script>` open tag in `html`, except Astro's own core scripts. */
-export function findInlineScriptTags(html) {
-  const offenders = [];
-  let match;
-  while ((match = SCRIPT_ELEMENT_PATTERN.exec(html)) !== null) {
-    const [fullElement, attrs, body] = match;
-    if (/\bsrc\s*=/.test(attrs)) continue; // has a src -- not inline, nothing to flag
-    if (isAstroCoreInlineScript(body)) continue; // one of the two documented exceptions
-    offenders.push(fullElement.slice(0, fullElement.indexOf('>') + 1));
-  }
-  return offenders;
+/**
+ * Every inline (no `src`) `<script>` element in `html` whose exact sha256 hash is NOT present in
+ * `headersContent`'s script-src directive -- these are the ones a browser under D-W7-4's
+ * `script-src 'self'` (+ hashes) policy would silently refuse to execute. No exception for Astro's
+ * own core scripts (W-7b): every inline script, regardless of where it came from, must clear this
+ * same check.
+ * @param {string} html
+ * @param {string} headersContent
+ * @returns {string[]}
+ */
+export function findUnhashedInlineScripts(html, headersContent) {
+  const allowedHashes = new Set(
+    extractScriptSrcSources(headersContent)
+      .filter((source) => source.startsWith("'sha256-"))
+      .map((source) => source.slice(1, -1)),
+  );
+  return findInlineScripts(html)
+    .filter(({ body }) => !allowedHashes.has(hashInlineScript(body)))
+    .map(({ tag, body }) => `${tag} (no '${hashInlineScript(body)}' in script-src)`);
 }
 
 function listHtmlFiles(dir) {
@@ -128,10 +132,10 @@ function main() {
   const htmlFiles = listHtmlFiles(resolvedDist);
   for (const file of htmlFiles) {
     const html = readFileSync(file, 'utf8');
-    const inlineScripts = findInlineScriptTags(html);
-    if (inlineScripts.length > 0) {
+    const unhashed = findUnhashedInlineScripts(html, headersContent ?? '');
+    if (unhashed.length > 0) {
       problems.push(
-        `${path.relative(resolvedDist, file)}: inline <script> tag(s) violate script-src 'self': ${inlineScripts.join(', ')}`,
+        `${path.relative(resolvedDist, file)}: inline <script> tag(s) violate script-src 'self' (no matching hash): ${unhashed.join(', ')}`,
       );
     }
   }
@@ -144,7 +148,7 @@ function main() {
   }
 
   console.log(
-    `check_headers: OK -- '${distDir}/_headers' has every mandatory directive and no inline <script> found in ${htmlFiles.length} HTML file(s).`,
+    `check_headers: OK -- '${distDir}/_headers' has every mandatory directive, and every inline <script> in ${htmlFiles.length} HTML file(s) has its sha256 hash in script-src.`,
   );
 }
 

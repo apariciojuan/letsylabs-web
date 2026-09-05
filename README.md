@@ -29,19 +29,19 @@ Edita cualquier fichero bajo `src/` con el servicio `web` levantado y el navegad
 
 Todos se ejecutan con `docker compose -f compose.dev.yml run --rm dev corepack pnpm <script>`:
 
-| Script               | Qué hace                                                                        |
-| -------------------- | ------------------------------------------------------------------------------- |
-| `dev`                | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`)         |
-| `build`              | Build de producción a `dist/` (`astro build`)                                   |
-| `preview`            | Sirve `dist/` para revisar el build                                             |
-| `typecheck`          | `astro check` (TypeScript + diagnósticos de Astro)                              |
-| `lint`               | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)              |
-| `format:check`       | Prettier en modo comprobación (`prettier-plugin-astro` incluido)                |
-| `test`               | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)             |
-| `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                            |
-| `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                   |
-| `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder` |
-| `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` (brief W-7)      |
+| Script               | Qué hace                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `dev`                | Servidor de desarrollo con HMR (`astro dev --host 0.0.0.0 --port 4321`)                                             |
+| `build`              | Build de producción a `dist/` (`astro build`)                                                                       |
+| `preview`            | Sirve `dist/` para revisar el build                                                                                 |
+| `typecheck`          | `astro check` (TypeScript + diagnósticos de Astro)                                                                  |
+| `lint`               | ESLint (flat config + `eslint-plugin-astro` + `typescript-eslint`)                                                  |
+| `format:check`       | Prettier en modo comprobación (`prettier-plugin-astro` incluido)                                                    |
+| `test`               | Vitest — tests unitarios (`src/**/*.test.*`, `scripts/**/*.test.*`)                                                 |
+| `e2e`                | Playwright — ver más abajo, necesita el perfil `e2e`                                                                |
+| `i18n:check`         | Paridad de claves/arrays entre `src/i18n/en.json` y `es.json`                                                       |
+| `placeholders:check` | Ningún `{TOKEN}` (p. ej. `{PRICE}`) suelto en `dist/` fuera de un `Placeholder`                                     |
+| `headers:check`      | `dist/_headers` completo y ningún `<script>` inline en `dist/` sin su hash sha256 en `script-src` (brief W-7, W-7b) |
 
 Ratchets adicionales (no son scripts de `package.json`, se invocan directos):
 
@@ -74,13 +74,19 @@ en `.env.example`:
 ### Cabeceras de seguridad
 
 Brief W-7 (D-W7-4): `astro build` escribe `dist/_headers` (convención de Netlify/Cloudflare Pages,
-`scripts/security-headers.mjs`) con CSP estricta (`script-src 'self'`, cero scripts inline), HSTS,
-`X-Frame-Options: DENY`, `Referrer-Policy` y `Permissions-Policy`. Si el hosting final NO es
-Netlify/Cloudflare Pages, aplica la política equivalente en la config del servidor -- por ejemplo,
-nginx:
+`scripts/security-headers.mjs`) con CSP estricta, HSTS, `X-Frame-Options: DENY`, `Referrer-Policy` y
+`Permissions-Policy`. `script-src` es `'self'` **más un `'sha256-...'` por cada `<script>` en línea
+que el build realmente emita** (W-7b): Astro core siempre inserta dos scripts en línea propios para
+hidratar cualquier isla `client:*` (el bootstrap de `astro:load` y la definición del elemento
+`<astro-island>`) -- `scripts/security-headers.mjs` los hashea desde el HTML ya generado en
+`astro:build:done`, nunca `'unsafe-inline'`. Esa lista de hashes **es propia de cada build** (varía
+si Astro cambia esos scripts en una versión futura, o si el propio build cambia). Si el hosting
+final NO es Netlify/Cloudflare Pages, aplica la política equivalente en la config del servidor --
+por ejemplo, nginx -- copiando el `script-src` **exacto** que trae el `dist/_headers` de ESE build
+(no lo hardcodees, se queda desactualizado en el siguiente build):
 
 ```nginx
-add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' <origen del endpoint, si lo hay>; form-action 'self' <origen del endpoint, si lo hay>; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' <hashes de este build, ver dist/_headers>; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' <origen del endpoint, si lo hay>; form-action 'self' <origen del endpoint, si lo hay>; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests" always;
 add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
 add_header X-Content-Type-Options "nosniff" always;
 add_header X-Frame-Options "DENY" always;
