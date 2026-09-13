@@ -116,17 +116,21 @@ const timelineEvents = TIMELINE_EVENTS.map(({ ts, type, detailKey, accent }) => 
 const EXPORT_CHECK_KEYS = ['deletion', 'retention', 'aiAct'] as const;
 const FAQ_KEYS = ['autoCompliance', 'outsideEs', 'ownDisclosure'] as const;
 
-// Illustrative export sample (brief decision: the real format is set by C-6/R-13; this JSON is a
+// Illustrative export sample (shape follows the sealed contracts: C-3 trace/export, C-6 D-C6-3.7 hybrid
+// signatures per SEC-PQ-1; the real document is set by R-13; this JSON is a
 // literal, not i18n, marked with the `ILLUSTRATIVE` badge in its header -- same treatment as the
 // Hero/Developers code snippets, which are also not translated).
-const EXPORT_ENDPOINT = 'GET /v1/sessions/01JD…/trace?format=audit';
+const EXPORT_ENDPOINT = 'POST /v1/sessions/01JD…/trace/export · format: audit_json';
 const EXPORT_JSON = `{
   <span class="tok-keyword">"session"</span>: <span class="tok-string">"01JD…"</span>,
   <span class="tok-keyword">"disclosure"</span>: { <span class="tok-keyword">"played_at"</span>: <span class="tok-string">"00:00.4"</span>, <span class="tok-keyword">"verified"</span>: true },
   <span class="tok-keyword">"human_handoff"</span>: { <span class="tok-keyword">"offered"</span>: true, <span class="tok-keyword">"completed"</span>: true },
   <span class="tok-keyword">"synthetic_audio_marked"</span>: true,
   <span class="tok-keyword">"events"</span>: <span class="tok-number">47</span>,
-  <span class="tok-keyword">"signature"</span>: <span class="tok-string">"ed25519:9f2c…"</span>
+  <span class="tok-keyword">"signatures"</span>: [
+    { <span class="tok-keyword">"alg"</span>: <span class="tok-string">"ed25519"</span>, <span class="tok-keyword">"value"</span>: <span class="tok-string">"9f2c…"</span> },
+    { <span class="tok-keyword">"alg"</span>: <span class="tok-string">"ml-dsa-87"</span>, <span class="tok-keyword">"value"</span>: <span class="tok-string">"7a1e…"</span> }
+  ]
 }`;
 ---
 

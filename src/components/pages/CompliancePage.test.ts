@@ -96,12 +96,13 @@ describe('CompliancePage', () => {
     expect(badge?.className).toContain('badge-coming-soon');
     const pre = body.querySelector('.cmp-export-pre');
     expect(pre?.textContent).toContain('"session"');
-    expect(pre?.textContent).toContain('ed25519:9f2c…');
+    expect(pre?.textContent).toContain('"ed25519"');
+    expect(pre?.textContent).toContain('"ml-dsa-87"');
     expect(pre?.querySelector('.tok-keyword')).not.toBeNull();
     expect(pre?.querySelector('.tok-string')).not.toBeNull();
     expect(pre?.querySelector('.tok-number')?.textContent).toBe('47');
     expect(body.querySelector('.cmp-export-endpoint')?.textContent).toBe(
-      'GET /v1/sessions/01JD…/trace?format=audit',
+      'POST /v1/sessions/01JD…/trace/export · format: audit_json',
     );
   });
 
