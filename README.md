@@ -79,6 +79,7 @@ en `.env.example`. `PUBLIC_SITE_URL` (nueva en brief W-8): origen absoluto para 
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PUBLIC_GA_LAUNCHED`       | `true`/`false` (default `false`). Cambia el CTA global ("Get early access" → "Start building") y el layout de `/pricing`.                                                                                                                                                                                                                                                                           |
 | `PUBLIC_WAITLIST_ENDPOINT` | Destino del formulario de acceso anticipado (`EarlyAccessForm`, brief W-7). Vacío/no definido (default) ⇒ **fail-closed**: no se renderiza `<form>`, solo el CTA `mailto:`. En producción, una URL `https://` absoluta (Formspree) — `astro build` **falla** si no lo es. El servicio `web` de `compose.dev.yml` la fija a `/__dev/waitlist` (mock de desarrollo, `scripts/dev/waitlist-mock.mjs`). |
+| `PUBLIC_BASE_PATH`         | Sub-ruta bajo la que se sirve el sitio (`base` de Astro, `src/lib/base.ts`). Vacío (default) ⇒ raíz del dominio. Solo la fija el workflow de GitHub Pages (`/letsylabs-web`, ver «Vista previa en GitHub Pages»): prefija todos los enlaces, hreflang, OG, fuentes, favicon, sitemap y robots que se escriben a mano; los assets empaquetados ya los prefija Vite.                                  |
 
 ### Cabeceras de seguridad
 
@@ -136,6 +137,19 @@ pre-código, sin producción"; casi todo el producto está sin sellar). Antes de
 `providers:check` (nombres de proveedor por ruta) y las filas `target` (cifras sin medición sellada,
 regla 6 de la matriz) NO dependen de `PUBLIC_SITE_ENV`: se exigen siempre, en desarrollo y en
 producción por igual — solo el bloqueo por filas `bloqueante` distingue entre ambos modos.
+
+### Vista previa en GitHub Pages
+
+`.github/workflows/deploy-pages.yml` compila el sitio en cada push a `main` y lo publica en
+`https://<owner>.github.io/letsylabs-web/` con el build de desarrollo (`pnpm build` + `claims:check`,
+`providers:check` y `check_third_party.sh`; sin formulario de acceso anticipado: fail-closed al
+`mailto:`). **No es el despliegue de producción** (ver «Publicar el sitio»): es una vista previa
+pública del estado actual. Requisitos en el repo de GitHub, una sola vez: Settings → Pages → Source =
+**GitHub Actions** (el workflow lo intenta activar solo con `configure-pages`, `enablement: true`).
+El workflow pasa a la build el origen y la sub-ruta que Pages reporta (`PUBLIC_SITE_URL`,
+`PUBLIC_BASE_PATH`); con un dominio propio en Pages la sub-ruta queda vacía y el sitio vuelve a la
+raíz sin tocar nada más. Pages no lee `dist/_headers`: la CSP de «Cabeceras de seguridad» solo
+aplica en el hosting final.
 
 ### Métricas y límites
 

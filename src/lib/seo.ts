@@ -17,6 +17,7 @@
 // app itself builds.
 import { locales, defaultLocale, type Locale } from '../i18n/index.ts';
 import { localizePath, stripLocalePrefix } from '../i18n/routing.ts';
+import { withBase } from './base.ts';
 
 /** hreflang value for Astro's own locale plus the one extra 'x-default' entry. */
 export type HreflangCode = Locale | 'x-default';
@@ -83,7 +84,7 @@ export function ogSlugFor(pathname: string): string {
 
 /** The absolute URL of the pre-rendered OG image for `pathname` in `locale` (see scripts/og/render.mjs). */
 export function ogImageFor(pathname: string, locale: Locale, origin: string): string {
-  return `${origin}/og/${ogSlugFor(pathname)}-${locale}.png`;
+  return `${origin}${withBase(ogImagePathFor(pathname, locale))}`;
 }
 
 /** The public/dist-relative path (no origin) of the same OG image, for filesystem existence checks. */

@@ -1,0 +1,70 @@
+# Builds the Astro site and publishes `dist/` to GitHub Pages through Actions (Pages source must be
+# "GitHub Actions" -- `actions/configure-pages` with `enablement: true` switches it on the first run).
+# The site is served at https://<owner>.github.io/<repo>/ unless a custom domain is configured, so
+# the build receives the origin and base path Pages reports (`PUBLIC_SITE_URL` / `PUBLIC_BASE_PATH`,
+# see astro.config.mjs and src/lib/base.ts). Same Node/pnpm as the dev container (package.json
+# `engines` / `packageManager`). No early-access endpoint is configured here on purpose: the form
+# fails closed to the mailto CTA (D-W7-1) -- this is a preview deployment, not the production launch.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Build
+        run: pnpm build
+        env:
+          PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
+          PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PUBLIC_GA_LAUNCHED: 'false'
+          PUBLIC_WAITLIST_ENDPOINT: ''
+
+      - name: Honesty ratchets on the built site
+        run: |
+          pnpm claims:check
+          pnpm providers:check
+          scripts/check_third_party.sh dist
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

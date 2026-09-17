@@ -19,6 +19,13 @@ const waitlistEndpoint = process.env.PUBLIC_WAITLIST_ENDPOINT ?? '';
 // (workspace 🔴) is confirmed.
 const siteUrl = process.env.PUBLIC_SITE_URL ?? 'https://letsylabs.com';
 
+// Deploy base path (`src/lib/base.ts`): empty/unset means the site lives at the origin's root (the
+// production domain, the dev server, every ratchet). A GitHub Pages *project* site is served under
+// `/<repo>/` instead, so `.github/workflows/deploy-pages.yml` passes the path Pages reports for the
+// repository (`/letsylabs-web`); a custom domain on Pages reports an empty path and lands on root
+// again with no other change.
+const basePath = process.env.PUBLIC_BASE_PATH || '/';
+
 /**
  * `src/pages/dev/components.astro` is a dev-only visual QA harness (brief W-2 entregable 7): it
  * mounts every shared component against the design handoff for a visual pass, and e2e specs drive
@@ -43,6 +50,7 @@ function stripDevPages() {
 // https://astro.build/config
 export default defineConfig({
   site: siteUrl,
+  base: basePath,
   integrations: [react(), stripDevPages(), securityHeaders({ endpoint: waitlistEndpoint })],
   i18n: {
     defaultLocale: 'en',

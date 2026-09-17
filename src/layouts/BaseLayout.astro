@@ -21,6 +21,7 @@ import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import type { Locale } from '../i18n';
 import { alternatesFor, canonicalFor, ogImageFor, ogLocaleFor, siteOrigin } from '../lib/seo';
+import { withBase } from '../lib/base';
 
 interface Props {
   locale: Locale;
@@ -54,14 +55,26 @@ const otherLocale: Locale = locale === 'en' ? 'es' : 'en';
         UI-chrome-only (nav labels, mono code/labels) and are left to load normally.
       */
     }
-    <link rel="preload" href="/fonts/space-grotesk-600.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin />
+    <link
+      rel="preload"
+      href={withBase('/fonts/space-grotesk-600.ttf')}
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={withBase('/fonts/inter-400.ttf')}
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="alternate icon" href={withBase('/favicon.ico')} />
     {locales.map((loc) => <link rel="alternate" hreflang={loc} href={alternates[loc]} />)}
     <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
 

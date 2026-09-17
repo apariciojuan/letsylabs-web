@@ -8,6 +8,14 @@
  * (https://www.rfc-editor.org/rfc/rfc9309), which requires the sitemap directive's URL to be
  * absolute.
  */
+import { withBase } from './base.ts';
+
 export function buildRobotsTxt(origin: string): string {
-  return ['User-agent: *', 'Allow: /', '', `Sitemap: ${origin}/sitemap.xml`, ''].join('\n');
+  return [
+    'User-agent: *',
+    'Allow: /',
+    '',
+    `Sitemap: ${origin}${withBase('/sitemap.xml')}`,
+    '',
+  ].join('\n');
 }
