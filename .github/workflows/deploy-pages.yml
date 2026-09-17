@@ -32,9 +32,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      # pnpm-workspace.yaml pins `storeDir: /pnpm-store` (a named volume of the dev container) and
+      # only the CLI flag overrides it -- env vars and .npmrc do not -- so the runner gets its own
+      # writable store here. No `cache: pnpm` on setup-node for the same reason: it would resolve the
+      # store through `pnpm store path` and land on that unwritable path.
+      - run: pnpm install --frozen-lockfile --store-dir "$RUNNER_TEMP/pnpm-store"
 
       - id: pages
         uses: actions/configure-pages@v5
